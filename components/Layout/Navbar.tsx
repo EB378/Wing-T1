@@ -122,6 +122,7 @@ const Navbar = ({
           <Link
             href={`/${currentLocale}/protected`}
             className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
+            onClick={() => setIsMobileMenuOpen(false)}
           >
             Protected
           </Link>
