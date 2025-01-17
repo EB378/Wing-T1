@@ -11,7 +11,7 @@ const Navbar = ({
   locale,
 }: {
   children: React.ReactNode;
-  locale: string
+  locale: string;
 }) => {
   const t = useTranslations("NavbarLinks");
   const pathname = usePathname();
@@ -70,7 +70,7 @@ const Navbar = ({
           >
             {t("bookFlight")}
           </Link>
-          <Link 
+          <Link
             href={`/${currentLocale}/protected`}
             className="text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
           >
@@ -119,7 +119,7 @@ const Navbar = ({
           >
             {t("bookFlight")}
           </Link>
-          <Link 
+          <Link
             href={`/${currentLocale}/protected`}
             className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
           >

@@ -4,8 +4,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Image from "next/image";
-import React from 'react';
-
+import React from "react";
 
 export default function AircraftOptions() {
   const t = useTranslations("AircraftOptions");
@@ -15,26 +14,27 @@ export default function AircraftOptions() {
       id: 1,
       name: "Cessna 172",
       description: t("aircraft1Description"),
-      image: "/aircraft1.png"
+      image: "/aircraft1.png",
     },
     {
       id: 2,
       name: "Piper PA-28",
       description: t("aircraft2Description"),
-      image: "/aircraft2.png"
+      image: "/aircraft2.png",
     },
     {
       id: 3,
       name: "Diamond DA40",
       description: t("aircraft3Description"),
-      image: "/aircraft3.png"
+      image: "/aircraft3.png",
     },
   ];
 
   const [current, setCurrent] = useState(0);
 
   const nextSlide = () => setCurrent((prev) => (prev + 1) % aircrafts.length);
-  const prevSlide = () => setCurrent((prev) => (prev - 1 + aircrafts.length) % aircrafts.length);
+  const prevSlide = () =>
+    setCurrent((prev) => (prev - 1 + aircrafts.length) % aircrafts.length);
 
   return (
     <section className="py-16 bg-neutral-900 text-white" id="aircraft-options">

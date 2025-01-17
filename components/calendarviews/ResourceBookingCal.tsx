@@ -3,13 +3,18 @@
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
-import { getBookings, createBooking, updateBooking, deleteBooking } from "@/app/actions";
+import {
+  getBookings,
+  createBooking,
+  updateBooking,
+  deleteBooking,
+} from "@/app/actions";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { formatISO, parseISO } from "date-fns";
-import { EventClickArg } from "@fullcalendar/core"
+import { EventClickArg } from "@fullcalendar/core";
 
 interface Event {
   id: number;
@@ -29,16 +34,19 @@ const ResourceBookingCal: React.FC<CalProps> = ({ user }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const t = useTranslations("HomePage");
 
-  const { data, mutate: server_getBookings, isPending } =
-    useMutation({
-      mutationFn: getBookings,
-      onSuccess: () => {
-        // Success callback
-      },
-      onError: () => {
-        // Error handling
-      }
-    });
+  const {
+    data,
+    mutate: server_getBookings,
+    isPending,
+  } = useMutation({
+    mutationFn: getBookings,
+    onSuccess: () => {
+      // Success callback
+    },
+    onError: () => {
+      // Error handling
+    },
+  });
 
   useEffect(() => {
     server_getBookings({
@@ -48,7 +56,7 @@ const ResourceBookingCal: React.FC<CalProps> = ({ user }) => {
       starttime: "",
       endtime: "",
       created_at: "",
-      user: ""
+      user: "",
     });
   }, [server_getBookings]);
 
@@ -83,20 +91,19 @@ const ResourceBookingCal: React.FC<CalProps> = ({ user }) => {
 
   const deletebooking = async () => {
     if (selectedEvent?.id) {
-        await deleteBooking({ id: selectedEvent.id });
-        closeModal();
-        server_getBookings({
-            id: 0,
-            title: "",
-            details: "",
-            starttime: "",
-            endtime: "",
-            created_at: "",
-            user: ""
-          });
-      }
-  }
-
+      await deleteBooking({ id: selectedEvent.id });
+      closeModal();
+      server_getBookings({
+        id: 0,
+        title: "",
+        details: "",
+        starttime: "",
+        endtime: "",
+        created_at: "",
+        user: "",
+      });
+    }
+  };
 
   const savebooking = async () => {
     if (selectedEvent) {
@@ -107,22 +114,22 @@ const ResourceBookingCal: React.FC<CalProps> = ({ user }) => {
           details: selectedEvent.details,
           starttime: selectedEvent.starttime,
           endtime: selectedEvent.endtime,
-          user: user.id,  // Assuming `user.id` is accessible from your component's props or context
+          user: user.id, // Assuming `user.id` is accessible from your component's props or context
         });
         closeModal();
         server_getBookings({
-            id: 0,
-            title: "",
-            details: "",
-            starttime: "",
-            endtime: "",
-            created_at: "",
-            user: ""
-          });
+          id: 0,
+          title: "",
+          details: "",
+          starttime: "",
+          endtime: "",
+          created_at: "",
+          user: "",
+        });
       } else {
         // Handle updating an existing booking
         await updateBooking({
-          id: selectedEvent.id,  // Ensure `id` is provided for an update
+          id: selectedEvent.id, // Ensure `id` is provided for an update
           title: selectedEvent.title,
           details: selectedEvent.details,
           starttime: selectedEvent.starttime,
@@ -131,53 +138,49 @@ const ResourceBookingCal: React.FC<CalProps> = ({ user }) => {
         });
         closeModal();
         server_getBookings({
-            id: 0,
-            title: "",
-            details: "",
-            starttime: "",
-            endtime: "",
-            created_at: "",
-            user: ""
-          });
+          id: 0,
+          title: "",
+          details: "",
+          starttime: "",
+          endtime: "",
+          created_at: "",
+          user: "",
+        });
       }
     }
-  }
-  
+  };
 
   const events = data?.map((booking: Event) => ({
     id: String(booking.id),
     title: booking.title,
     start: booking.starttime
-        ? parseISO(booking.starttime).toISOString()
-        : undefined,
-    end: booking.endtime
-        ? parseISO(booking.endtime).toISOString()
-        : undefined,
+      ? parseISO(booking.starttime).toISOString()
+      : undefined,
+    end: booking.endtime ? parseISO(booking.endtime).toISOString() : undefined,
     extendedProps: {
-        details: booking.details,
-        user: booking.user
-    }
-}));
-
+      details: booking.details,
+      user: booking.user,
+    },
+  }));
 
   return (
     <>
-        <div className="m-10">
-            <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
-            headerToolbar={{
-                left: "prev,next today",
-                center: "title",
-                right: "dayGridMonth,timeGridWeek,timeGridDay",
-            }}
-            editable={true}
-            selectable={true}
-            eventClick={handleEventClick}
-            select={handleDateSelect}
-            events={events || []}
-            height="auto"
-            />
+      <div className="m-10">
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          initialView="dayGridMonth"
+          headerToolbar={{
+            left: "prev,next today",
+            center: "title",
+            right: "dayGridMonth,timeGridWeek,timeGridDay",
+          }}
+          editable={true}
+          selectable={true}
+          eventClick={handleEventClick}
+          select={handleDateSelect}
+          events={events || []}
+          height="auto"
+        />
       </div>
       {modalOpen && selectedEvent && (
         <div className="fixed inset-0 bg-black text-black bg-opacity-50 flex items-center justify-center z-10">
@@ -205,9 +208,14 @@ const ResourceBookingCal: React.FC<CalProps> = ({ user }) => {
             <input
               type="datetime-local"
               className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
-              value={parseISO(selectedEvent.starttime).toISOString().slice(0, -8)} // Formatting to fit datetime-local input
+              value={parseISO(selectedEvent.starttime)
+                .toISOString()
+                .slice(0, -8)} // Formatting to fit datetime-local input
               onChange={(e) =>
-                setSelectedEvent({ ...selectedEvent, starttime: e.target.value + ":00Z" })
+                setSelectedEvent({
+                  ...selectedEvent,
+                  starttime: e.target.value + ":00Z",
+                })
               }
             />
             <input
@@ -215,7 +223,10 @@ const ResourceBookingCal: React.FC<CalProps> = ({ user }) => {
               className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
               value={parseISO(selectedEvent.endtime).toISOString().slice(0, -8)} // Formatting to fit datetime-local input
               onChange={(e) =>
-                setSelectedEvent({ ...selectedEvent, endtime: e.target.value + ":00Z" })
+                setSelectedEvent({
+                  ...selectedEvent,
+                  endtime: e.target.value + ":00Z",
+                })
               }
             />
             <div className="flex justify-between">

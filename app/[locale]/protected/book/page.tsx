@@ -1,5 +1,5 @@
-import React from 'react'
-import ResourceBookingCal from '@/components/calendarviews/ResourceBookingCal'
+import React from "react";
+import ResourceBookingCal from "@/components/calendarviews/ResourceBookingCal";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -27,10 +27,8 @@ export default async function ResourceBookingCalPage({
 
   return (
     <div className="flex-1 w-screen flex flex-col gap-12 my-4">
-
-        {/* Pass only data */}
-        <ResourceBookingCal user={userForCal}/>
-
+      {/* Pass only data */}
+      <ResourceBookingCal user={userForCal} />
     </div>
   );
 }

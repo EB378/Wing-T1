@@ -53,6 +53,12 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      skew: {
+        "45": "45deg",
+      },
+      translate: {
+        "50": "12.5rem",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -67,10 +73,23 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        circleExpand: {
+          "0%": { transform: "scale(0)", opacity: "0.8" },
+          "100%": { transform: "scale(2.5)", opacity: "0" },
+        },
+        border: {
+          "0%": { "border-color": "rgb(255, 105, 180)" }, // Pink
+          "25%": { "border-color": "rgb(138, 43, 226)" }, // Blue
+          "50%": { "border-color": "rgb(75, 0, 130)" }, // Indigo
+          "75%": { "border-color": "rgb(255, 105, 180)" }, // Pink
+          "100%": { "border-color": "rgb(138, 43, 226)" }, // Blue
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        circleExpand: "circleExpand 1s ease-out forwards",
+        border: "border 2s linear infinite",
       },
     },
   },

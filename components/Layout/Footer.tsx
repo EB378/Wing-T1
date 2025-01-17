@@ -25,9 +25,7 @@ const Footer = ({ locale }: { locale: string }) => {
                 className="h-10 mx-auto md:mx-0"
               />
             </Link>
-            <p className="text-sm text-gray-300">
-              {t("aboutText")}
-            </p>
+            <p className="text-sm text-gray-300">{t("aboutText")}</p>
           </div>
 
           {/* Links Section */}
@@ -35,16 +33,33 @@ const Footer = ({ locale }: { locale: string }) => {
             <h3 className="text-lg font-bold">{t("navigation")}</h3>
             <ul className="mt-4 space-y-2 text-sm text-gray-300">
               <li>
-                <Link href="/book-flight" className="hover:underline">{t("book a flight")}</Link>
+                <Link href="/book-flight" className="hover:underline">
+                  {t("book a flight")}
+                </Link>
               </li>
               <li>
-                <Link href={`/${locale}/#aircraft-options`} className="hover:underline">{t("aircraft options")}</Link>
+                <Link
+                  href={`/${locale}/#aircraft-options`}
+                  className="hover:underline"
+                >
+                  {t("aircraft options")}
+                </Link>
               </li>
               <li>
-                <Link href={`/${locale}/#testimonials`} className="hover:underline">{t("testimonials")}</Link>
+                <Link
+                  href={`/${locale}/#testimonials`}
+                  className="hover:underline"
+                >
+                  {t("testimonials")}
+                </Link>
               </li>
               <li>
-                <Link href={`/${locale}/#contactsec`} className="hover:underline">{t("contact")}</Link>
+                <Link
+                  href={`/${locale}/#contactsec`}
+                  className="hover:underline"
+                >
+                  {t("contact")}
+                </Link>
               </li>
             </ul>
           </div>
@@ -53,13 +68,28 @@ const Footer = ({ locale }: { locale: string }) => {
             <h3 className="text-lg font-bold">{t("socialmedia")}</h3>
             <ul className="mt-4 space-y-2 text-sm text-gray-300">
               <li>
-                <Link href="https://www.instagram.com/aircraft_rentals/" className="hover:underline">{t("instagram")}</Link>
+                <Link
+                  href="https://www.instagram.com/aircraft_rentals/"
+                  className="hover:underline"
+                >
+                  {t("instagram")}
+                </Link>
               </li>
               <li>
-                <Link href="https://www.facebook.com/aircraft_rentals" className="hover:underline">{t("facebook")}</Link>
+                <Link
+                  href="https://www.facebook.com/aircraft_rentals"
+                  className="hover:underline"
+                >
+                  {t("facebook")}
+                </Link>
               </li>
               <li>
-                <Link href="https://www.linkedin.com/company/aircraft-rentals" className="hover:underline">{t("linkedin")}</Link>
+                <Link
+                  href="https://www.linkedin.com/company/aircraft-rentals"
+                  className="hover:underline"
+                >
+                  {t("linkedin")}
+                </Link>
               </li>
             </ul>
           </div>
@@ -68,7 +98,9 @@ const Footer = ({ locale }: { locale: string }) => {
             <h3 className="text-lg font-bold">{t("company")}</h3>
             <ul className="mt-4 space-y-2 text-sm text-gray-300">
               <li>
-                <Link href={`/${locale}/about`} className="hover:underline">{t("about")}</Link>
+                <Link href={`/${locale}/about`} className="hover:underline">
+                  {t("about")}
+                </Link>
               </li>
             </ul>
           </div>
@@ -77,13 +109,19 @@ const Footer = ({ locale }: { locale: string }) => {
             <h3 className="text-lg font-bold">{t("legal")}</h3>
             <ul className="mt-4 space-y-2 text-sm text-gray-300">
               <li>
-                <Link href={`/${locale}/terms`} className="hover:underline">{t("terms")}</Link>
+                <Link href={`/${locale}/terms`} className="hover:underline">
+                  {t("terms")}
+                </Link>
               </li>
               <li>
-                <Link href={`/${locale}/privacy`} className="hover:underline">{t("privacy")}</Link>
+                <Link href={`/${locale}/privacy`} className="hover:underline">
+                  {t("privacy")}
+                </Link>
               </li>
               <li>
-                <Link href={`/${locale}/license`} className="hover:underline">{t("license")}</Link>
+                <Link href={`/${locale}/license`} className="hover:underline">
+                  {t("license")}
+                </Link>
               </li>
             </ul>
           </div>
@@ -91,7 +129,8 @@ const Footer = ({ locale }: { locale: string }) => {
 
         {/* Footer Bottom */}
         <div className="mt-8 border-t border-gray-700 pt-6 text-center text-sm text-gray-300">
-          © {new Date().getFullYear()} Southern Finland Aircraft Rentals. {t("rights")}
+          © {new Date().getFullYear()} Southern Finland Aircraft Rentals.{" "}
+          {t("rights")}
           <ThemeSwitcher />
         </div>
       </div>

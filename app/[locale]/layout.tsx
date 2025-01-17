@@ -10,8 +10,6 @@ import type { Metadata, Viewport } from "next";
 import React from "react";
 import ClientOnlyQueryProvider from "@/utils/Providers";
 
-
-
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "https://wingtemplate.netlify.app";
@@ -72,7 +70,7 @@ export default async function RootLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }) {
   // Providing all messages to the client
   // side is the easiest way to get started
@@ -80,7 +78,11 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={geistSans.className} suppressHydrationWarning>
+    <html
+      lang={locale}
+      className={geistSans.className}
+      suppressHydrationWarning
+    >
       <body className="bg-background text-foreground">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider
@@ -91,17 +93,17 @@ export default async function RootLayout({
           >
             <main>
               <Navbar locale={""}>
-                <HeaderAuth params={{
-                      locale: ""
-                    }}/>
+                <HeaderAuth
+                  params={{
+                    locale: "",
+                  }}
+                />
               </Navbar>
-                <div className="w-screen sm:max-w-4xl mx-0 min-h-screen">
-                  <ClientOnlyQueryProvider>
-                    {children}
-                  </ClientOnlyQueryProvider>
-                </div>
+              <div className="w-screen sm:max-w-4xl mx-0 min-h-screen">
+                <ClientOnlyQueryProvider>{children}</ClientOnlyQueryProvider>
+              </div>
 
-                <Footer locale={""}/>
+              <Footer locale={""} />
             </main>
           </ThemeProvider>
         </NextIntlClientProvider>

@@ -50,9 +50,20 @@ const Main = () => {
               className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center"
             >
               {[
-                { title: t("Flexible Booking"), detail: t("Choose rental times that fit your schedule") },
-                { title: t("Cost-Effective Pricing"), detail: t("Enjoy premium services at affordable rates") },
-                { title: t("Beautiful Destinations"), detail: t("Fly to stunning locations around Southern Finland") },
+                {
+                  title: t("Flexible Booking"),
+                  detail: t("Choose rental times that fit your schedule"),
+                },
+                {
+                  title: t("Cost-Effective Pricing"),
+                  detail: t("Enjoy premium services at affordable rates"),
+                },
+                {
+                  title: t("Beautiful Destinations"),
+                  detail: t(
+                    "Fly to stunning locations around Southern Finland",
+                  ),
+                },
               ].map((item, index) => (
                 <motion.div
                   key={index}
@@ -65,12 +76,16 @@ const Main = () => {
                     index === 0
                       ? "bg-gradient-to-b from-blue-700 to-indigo-900"
                       : index === 1
-                      ? "bg-gradient-to-b from-indigo-800 to-blue-800"
-                      : "bg-gradient-to-b from-blue-600 to-cyan-800"
+                        ? "bg-gradient-to-b from-indigo-800 to-blue-800"
+                        : "bg-gradient-to-b from-blue-600 to-cyan-800"
                   } rounded-2xl shadow-2xl transition-transform duration-300`}
                 >
-                  <h3 className="text-white text-2xl font-bold mb-4">{item.title}</h3>
-                  <p className="text-gray-200 text-base leading-relaxed">{item.detail}</p>
+                  <h3 className="text-white text-2xl font-bold mb-4">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-200 text-base leading-relaxed">
+                    {item.detail}
+                  </p>
                 </motion.div>
               ))}
             </motion.div>
@@ -83,8 +98,12 @@ const Main = () => {
             variants={slideInRight}
             className="my-16 text-center px-6 sm:px-12 lg:px-24"
           >
-            <h2 className="text-2xl sm:text-4xl font-bold">{t("Start Your Adventure Today")}</h2>
-            <p className="my-4 text-lg sm:text-xl">{t("Discover the freedom of flight")}</p>
+            <h2 className="text-2xl sm:text-4xl font-bold">
+              {t("Start Your Adventure Today")}
+            </h2>
+            <p className="my-4 text-lg sm:text-xl">
+              {t("Discover the freedom of flight")}
+            </p>
             <Link href="/book-flight">
               <motion.button
                 whileHover={{ scale: 1.05 }}

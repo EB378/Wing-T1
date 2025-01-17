@@ -4,8 +4,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import React from 'react';
-
+import React from "react";
 
 const Hero = () => {
   const t = useTranslations("HomePage");

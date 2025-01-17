@@ -192,44 +192,44 @@ export const getBookings = async ({
   starttime,
   endtime,
   created_at,
-  user
+  user,
 }: {
-  id: number
-  title: string
-  details: string
-  starttime: string
-  endtime: string
-  created_at: string
-  user: string
+  id: number;
+  title: string;
+  details: string;
+  starttime: string;
+  endtime: string;
+  created_at: string;
+  user: string;
 }) => {
   const supabase = await createClient();
   let query = supabase.from("bookings").select("*");
 
   // Add filters based on provided parameters
-  if (id) query = query.eq('id', id);
-  if (title) query = query.ilike('title', `%${title}%`);
-  if (details) query = query.ilike('details', `%${details}%`);
-  if (starttime) query = query.gte('starttime', starttime);
-  if (endtime) query = query.lte('endtime', endtime);
-  if (created_at) query = query.eq('created_at', created_at);
-  if (user) query = query.eq('user', user);
+  if (id) query = query.eq("id", id);
+  if (title) query = query.ilike("title", `%${title}%`);
+  if (details) query = query.ilike("details", `%${details}%`);
+  if (starttime) query = query.gte("starttime", starttime);
+  if (endtime) query = query.lte("endtime", endtime);
+  if (created_at) query = query.eq("created_at", created_at);
+  if (user) query = query.eq("user", user);
 
   const { data: bookings, error } = await query;
 
   if (error) {
-    console.error('Error fetching bookings:', error);
-    throw new Error('Failed to fetch bookings');
+    console.error("Error fetching bookings:", error);
+    throw new Error("Failed to fetch bookings");
   }
 
   return bookings; // Assuming bookings is an array of booking records
-}
+};
 
 export const createBooking = async ({
   title,
   details,
   starttime,
   endtime,
-  user
+  user,
 }: {
   title: string;
   details: string;
@@ -238,21 +238,23 @@ export const createBooking = async ({
   user: string;
 }) => {
   const supabase = await createClient();
-  const { data: booking, error } = await supabase.from("bookings").insert([{
-    title,
-    details,
-    starttime,
-    endtime,
-    user
-  }]);
+  const { data: booking, error } = await supabase.from("bookings").insert([
+    {
+      title,
+      details,
+      starttime,
+      endtime,
+      user,
+    },
+  ]);
 
   if (error) {
-    console.error('Error creating booking:', error);
-    throw new Error('Failed to create booking');
+    console.error("Error creating booking:", error);
+    throw new Error("Failed to create booking");
   }
 
   return booking;
-}
+};
 
 export const updateBooking = async ({
   id,
@@ -260,7 +262,7 @@ export const updateBooking = async ({
   details,
   starttime,
   endtime,
-  user
+  user,
 }: {
   id: number;
   title?: string;
@@ -270,33 +272,36 @@ export const updateBooking = async ({
   user?: string;
 }) => {
   const supabase = await createClient();
-  const { data: updatedBooking, error } = await supabase.from("bookings").update({
-    title,
-    details,
-    starttime,
-    endtime,
-    user
-  }).match({ id });
+  const { data: updatedBooking, error } = await supabase
+    .from("bookings")
+    .update({
+      title,
+      details,
+      starttime,
+      endtime,
+      user,
+    })
+    .match({ id });
 
   if (error) {
-    console.error('Error updating booking:', error);
-    throw new Error('Failed to update booking');
+    console.error("Error updating booking:", error);
+    throw new Error("Failed to update booking");
   }
 
   return updatedBooking;
-}
+};
 
 export const deleteBooking = async ({ id }: { id: number }) => {
   const supabase = await createClient();
-  const { data: deletedBooking, error } = await supabase.from("bookings").delete().match({ id });
+  const { data: deletedBooking, error } = await supabase
+    .from("bookings")
+    .delete()
+    .match({ id });
 
   if (error) {
-    console.error('Error deleting booking:', error);
-    throw new Error('Failed to delete booking');
+    console.error("Error deleting booking:", error);
+    throw new Error("Failed to delete booking");
   }
 
   return deletedBooking; // This will return the details of the deleted booking.
-}
-
-
-
+};

@@ -16,7 +16,10 @@ const Contact = () => {
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify({
           access_key: "f1363286-3773-4366-a303-f62f033511e6",
           name: formData.get("name"),
@@ -35,7 +38,10 @@ const Contact = () => {
   };
 
   return (
-    <div className="relative py-16 px-6 bg-gradient-to-b from-background to-blue-900/80 text-foreground" id="contactsec">
+    <div
+      className="relative py-16 px-6 bg-gradient-to-b from-background to-blue-900/80 text-foreground"
+      id="contactsec"
+    >
       <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         {/* Contact Form */}
         <motion.div
@@ -142,7 +148,9 @@ const Contact = () => {
           transition={{ duration: 1 }}
           className="space-y-6 text-center lg:text-left"
         >
-          <h2 className="text-3xl font-extrabold text-yellow-400">{t("contact information")}</h2>
+          <h2 className="text-3xl font-extrabold text-yellow-400">
+            {t("contact information")}
+          </h2>
           <motion.div
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.3 }}
