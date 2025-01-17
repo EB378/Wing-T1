@@ -10,7 +10,8 @@ const Footer = ({ locale }: { locale: string }) => {
   const t = useTranslations("Footer");
 
   return (
-    <footer className="bg-background text-white w-screen py-10">
+    <footer className="bg-blue-900/80 text-white w-screen py-10">
+      <hr className="mb-3"></hr>
       <div className="w-full px-6 lg:px-12">
         {/* Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-6 gap-8 text-center md:text-left">
