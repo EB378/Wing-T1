@@ -224,6 +224,41 @@ export const getBookings = async ({
   return bookings; // Assuming bookings is an array of booking records
 };
 
+
+export const hasOverlappingBookings = async ({
+  starttime = new Date().toISOString(), // provide default values if undefined
+  endtime = new Date().toISOString(),
+  user = 'defaultUser',
+  excludeBookingId = null,
+}: {
+  starttime?: string;
+  endtime?: string;
+  user?: string;
+  excludeBookingId?: number | null;
+}) => {
+  const supabase = await createClient();
+  let query = supabase
+    .from("bookings")
+    .select("*")
+    .gte("endtime", starttime)
+    .lte("starttime", endtime)
+    .eq("user", user);
+
+  if (excludeBookingId) {
+    query = query.not("id", 'eq', excludeBookingId);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("Error checking for overlapping bookings:", error);
+    throw new Error("Failed to check for overlapping bookings");
+  }
+
+  return data.length > 0;
+};
+
+
 export const createBooking = async ({
   title,
   details,
@@ -238,6 +273,11 @@ export const createBooking = async ({
   user: string;
 }) => {
   const supabase = await createClient();
+  const isOverlapping = await hasOverlappingBookings({ starttime, endtime, user });
+
+  if (isOverlapping) {
+    throw new Error("Booking overlaps with existing booking");
+  }
   const { data: booking, error } = await supabase.from("bookings").insert([
     {
       title,
@@ -256,6 +296,7 @@ export const createBooking = async ({
   return booking;
 };
 
+
 export const updateBooking = async ({
   id,
   title,
@@ -272,6 +313,11 @@ export const updateBooking = async ({
   user?: string;
 }) => {
   const supabase = await createClient();
+  const isOverlapping = await hasOverlappingBookings({ starttime, endtime, user, excludeBookingId: id });
+
+  if (isOverlapping) {
+    throw new Error("Booking overlaps with existing booking");
+  }
   const { data: updatedBooking, error } = await supabase
     .from("bookings")
     .update({
