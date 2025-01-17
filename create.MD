@@ -1,6 +1,5 @@
 npx create-next-app -e with-supabase
 
-
 npm i eslint-plugin-import
 npm i eslint-plugin-react
 npm i @typescript-eslint/eslint-plugin
