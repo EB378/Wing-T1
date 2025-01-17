@@ -10,7 +10,11 @@ npm i next-intl
 npm i framer-motion
 npm i react-icons
 npm i @fullcalendar
+npm i @fullcalendar/daygrid
+npm i @fullcalendar/timegrid
+npm i @fullcalendar/interaction
 npm i @fullcalendar/react
 npm i date-fns
 npm i @ducanh2912/next-pwa && npm i -D webpack
 npm i @tanstack/react-query
+npm i @tanstack/react-query-devtools
