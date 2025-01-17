@@ -9,16 +9,19 @@ import React from "react";
 
 export default async function ForgotPassword(props: {
   searchParams: Promise<Message>;
+  params: Promise<{ locale: string }>;
 }) {
   const searchParams = await props.searchParams;
+  const paramDetails = await props.params;   // Await the resolution of the params promise
+  const locale = paramDetails.locale;  
   return (
     <>
-      <form className="flex-1 flex flex-col w-screen gap-2 text-foreground [&>input]:mb-6 min-w-64 max-w-64 mx-auto">
+      <form className="flex-1 flex flex-col mt-10 w-screen gap-2 text-foreground [&>input]:mb-6 min-w-64 max-w-64 mx-auto">
         <div>
           <h1 className="text-2xl font-medium">Reset Password</h1>
           <p className="text-sm text-secondary-foreground">
             Already have an account?{" "}
-            <Link className="text-primary underline" href="/sign-in">
+            <Link className="text-primary underline" href={`/${locale}/sign-in`}>
               Sign in
             </Link>
           </p>

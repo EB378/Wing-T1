@@ -6,9 +6,9 @@ import React from "react";
 export default async function ProtectedPage({
   params,
 }: {
-  params: { locale?: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const locale = params?.locale || "en"; // Fallback to 'en' if locale is undefined
+  const locale  = (await params).locale
   const supabase = await createClient();
 
   const {
