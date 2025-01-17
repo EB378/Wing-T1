@@ -27,14 +27,15 @@ interface Event {
 }
 
 interface CalProps {
-  user: { id: string; email?: string };
+  currentUser: { id: string; email?: string };
 }
 
-const ResourceBookingCal: React.FC<CalProps> = ({ user }) => {
+const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const t = useTranslations("HomePage");
   const [error, setError] = useState("");
+  const [isEditable, setIsEditable] = useState(false);
 
   const {
     data,
@@ -68,8 +69,9 @@ const ResourceBookingCal: React.FC<CalProps> = ({ user }) => {
       details: info.event.extendedProps.details,
       starttime: info.event.startStr,
       endtime: info.event.endStr,
-      user: user.id,
+      user: currentUser.id,
     });
+    setIsEditable(selectedEvent?.user === currentUser.id);
     setModalOpen(true);
   };
   
@@ -81,7 +83,7 @@ const ResourceBookingCal: React.FC<CalProps> = ({ user }) => {
       details: "",
       starttime: formatISO(selection.start),
       endtime: formatISO(selection.end),
-      user: user.id,
+      user: currentUser.id,
     });
     setModalOpen(true);
   };
@@ -90,6 +92,7 @@ const ResourceBookingCal: React.FC<CalProps> = ({ user }) => {
     setModalOpen(false);
     setError("");
     setSelectedEvent(null);
+    setIsEditable(false);
   };
 
   const deletebooking = async () => {
@@ -118,7 +121,7 @@ const ResourceBookingCal: React.FC<CalProps> = ({ user }) => {
             details: selectedEvent.details,
             starttime: selectedEvent.starttime,
             endtime: selectedEvent.endtime,
-            user: user.id, // Assuming `user.id` is accessible from your component's props or context
+            user: currentUser.id, // Assuming `user.id` is accessible from your component's props or context
           });
           closeModal();
         } else {
@@ -194,75 +197,70 @@ const ResourceBookingCal: React.FC<CalProps> = ({ user }) => {
           <div className="bg-white p-6 rounded-lg max-w-md w-full shadow-lg">
             <h2 className="text-xl font-bold mb-4">
               {selectedEvent.id === 0 ? "New Booking" : "Edit Booking"}
-            </h2>        
+            </h2>
             <input
               type="text"
               placeholder="Title"
               className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
               value={selectedEvent.title}
-              onChange={(e) =>
-                setSelectedEvent({ ...selectedEvent, title: e.target.value })
-              }
+              onChange={(e) => isEditable && setSelectedEvent({ ...selectedEvent, title: e.target.value })}
+              disabled={!isEditable}
             />
             <textarea
               placeholder="Details"
               className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
               value={selectedEvent.details}
-              onChange={(e) =>
-                setSelectedEvent({ ...selectedEvent, details: e.target.value })
-              }
+              onChange={(e) => isEditable && setSelectedEvent({ ...selectedEvent, details: e.target.value })}
+              disabled={!isEditable}
             />
             <input
               type="datetime-local"
               className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
-              value={parseISO(selectedEvent.starttime)
-                .toISOString()
-                .slice(0, -8)} // Formatting to fit datetime-local input
-              onChange={(e) =>
-                setSelectedEvent({
-                  ...selectedEvent,
-                  starttime: e.target.value + ":00Z",
-                })
-              }
+              value={parseISO(selectedEvent.starttime).toISOString().slice(0, -8)}
+              onChange={(e) => isEditable && setSelectedEvent({ ...selectedEvent, starttime: e.target.value + ":00Z" })}
+              disabled={!isEditable}
             />
             <input
               type="datetime-local"
               className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
-              value={parseISO(selectedEvent.endtime).toISOString().slice(0, -8)} // Formatting to fit datetime-local input
-              onChange={(e) =>
-                setSelectedEvent({
-                  ...selectedEvent,
-                  endtime: e.target.value + ":00Z",
-                })
-              }
+              value={parseISO(selectedEvent.endtime).toISOString().slice(0, -8)}
+              onChange={(e) => isEditable && setSelectedEvent({ ...selectedEvent, endtime: e.target.value + ":00Z" })}
+              disabled={!isEditable}
             />
             {error && (
               <div className="p-3 text-red-700 text-center">
                 Error: {error}
               </div>
             )}
-            <div className="flex justify-between">
-              <button
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
-                onClick={savebooking}
-              >
-                Save
-              </button>
-              {selectedEvent.id !== 0 && (
+            {isEditable && (
+              <div className="flex justify-between">
                 <button
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
-                  onClick={deletebooking}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+                  onClick={savebooking}
                 >
-                  Delete
+                  Save
                 </button>
-              )}
-              <button
-                className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md"
-                onClick={closeModal}
-              >
-                Cancel
-              </button>
-            </div>
+                {selectedEvent.id !== 0 && (
+                  <button
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+                    onClick={deletebooking}
+                  >
+                    Delete
+                  </button>
+                )}
+                <button
+                  className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md"
+                  onClick={closeModal}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+            {!isEditable && (
+              <div className="text-center text-sm text-gray-500 mt-4">
+                You do not have permission to edit this event.
+              </div>
+            )}
           </div>
         </div>
       )}
