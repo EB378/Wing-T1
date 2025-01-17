@@ -34,7 +34,7 @@ const Footer = ({ locale }: { locale: string }) => {
             <h3 className="text-lg font-bold">{t("navigation")}</h3>
             <ul className="mt-4 space-y-2 text-sm text-gray-300">
               <li>
-                <Link href="/book-flight" className="hover:underline">
+                <Link href={`/${locale}/book`} className="hover:underline">
                   {t("book a flight")}
                 </Link>
               </li>
@@ -70,7 +70,7 @@ const Footer = ({ locale }: { locale: string }) => {
             <ul className="mt-4 space-y-2 text-sm text-gray-300">
               <li>
                 <Link
-                  href="https://www.instagram.com/aircraft_rentals/"
+                  href="https://www.instagram.com/pilotpathwayhel/"
                   className="hover:underline"
                 >
                   {t("instagram")}
@@ -78,7 +78,7 @@ const Footer = ({ locale }: { locale: string }) => {
               </li>
               <li>
                 <Link
-                  href="https://www.facebook.com/aircraft_rentals"
+                  href="https://www.facebook.com/pilotpathwayhel"
                   className="hover:underline"
                 >
                   {t("facebook")}
@@ -86,7 +86,7 @@ const Footer = ({ locale }: { locale: string }) => {
               </li>
               <li>
                 <Link
-                  href="https://www.linkedin.com/company/aircraft-rentals"
+                  href="https://www.linkedin.com/company/pilotpathwayhel"
                   className="hover:underline"
                 >
                   {t("linkedin")}
@@ -130,7 +130,7 @@ const Footer = ({ locale }: { locale: string }) => {
 
         {/* Footer Bottom */}
         <div className="mt-8 border-t border-gray-700 pt-6 text-center text-sm text-gray-300">
-          © {new Date().getFullYear()} Southern Finland Aircraft Rentals.{" "}
+          © {new Date().getFullYear()} Wing Aviators{" "}
           {t("rights")}
           <ThemeSwitcher />
         </div>

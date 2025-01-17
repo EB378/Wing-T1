@@ -27,7 +27,7 @@ const Main = () => {
       <div className="flex flex-col items-center justify-center w-screen text-white overflow-hidden">
         <main className="w-full bg-background relative">
           {/* Hero Section */}
-          <Hero />
+          <Hero locale={""} />
 
           {/* Problem-Solution Section */}
           <div className="relative px-6 sm:px-12 lg:px-24 mt-16 text-center">
