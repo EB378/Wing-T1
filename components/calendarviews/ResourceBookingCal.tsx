@@ -69,9 +69,9 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
       details: info.event.extendedProps.details,
       starttime: info.event.startStr,
       endtime: info.event.endStr,
-      user: currentUser.id,
+      user: info.event.extendedProps.user,
     });
-    setIsEditable(selectedEvent?.user === currentUser.id);
+    setIsEditable(String(selectedEvent?.user) != String(currentUser.id));
     setModalOpen(true);
   };
   
@@ -174,6 +174,15 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
   return (
     <>
       <div className="m-10 text-black bg-white rounded p-4">
+      <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-hidden">
+          {JSON.stringify(selectedEvent?.user, null, 2)}
+        </pre>
+        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-hidden">
+          {JSON.stringify(currentUser.id, null, 2)}
+        </pre>
+        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-hidden">
+          {JSON.stringify(isEditable, null, 2)}
+        </pre>
         <FullCalendar
           timeZone="UTC"
           nowIndicator={true}
@@ -227,6 +236,7 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
               onChange={(e) => isEditable && setSelectedEvent({ ...selectedEvent, endtime: e.target.value + ":00Z" })}
               disabled={!isEditable}
             />
+            <p>{selectedEvent.user}</p>
             {error && (
               <div className="p-3 text-red-700 text-center">
                 Error: {error}
@@ -259,7 +269,16 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
             {!isEditable && (
               <div className="text-center text-sm text-gray-500 mt-4">
                 You do not have permission to edit this event.
+                <div>
+                  <button
+                    className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md"
+                    onClick={closeModal}
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
+              
             )}
           </div>
         </div>
