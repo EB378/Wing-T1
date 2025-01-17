@@ -38,7 +38,7 @@ const Main = () => {
               className="text-4xl sm:text-5xl font-extrabold text-foreground mb-12"
             >
               {t("Affordable Aircraft Rentals")}
-              <span className="bg-blue-800 px-3 py-2 text-background rounded-lg inline-block ml-2 shadow-md">
+              <span className="bg-blue-800 px-3 py-2 text-white rounded-lg inline-block ml-2 shadow-md">
                 {t("In Southern Finland")}
               </span>
             </motion.h2>

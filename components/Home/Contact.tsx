@@ -39,7 +39,7 @@ const Contact = () => {
 
   return (
     <div
-      className="relative py-16 px-6 bg-gradient-to-b from-background to-blue-900/80 text-foreground"
+      className="relative py-16 px-6 bg-gradient-to-b from-background to-blue-900 text-foreground"
       id="contactsec"
     >
       <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
