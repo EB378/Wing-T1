@@ -9,7 +9,7 @@ import React from "react";
 export default async function Login(props: { searchParams: Promise<Message> }) {
   const searchParams = await props.searchParams;
   return (
-    <form className="flex-1 flex flex-col min-w-64 justify-center">
+    <form className="flex flex-col min-w-64 max-w-64 mx-auto allign-center">
       <h1 className="text-2xl font-medium">Sign in</h1>
       <p className="text-sm text-foreground">
         Don&apos;t have an account?{" "}

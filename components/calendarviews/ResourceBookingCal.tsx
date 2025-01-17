@@ -167,6 +167,7 @@ const ResourceBookingCal: React.FC<CalProps> = ({ user }) => {
     <>
       <div className="m-10">
         <FullCalendar
+          timeZone="UTC"
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
           headerToolbar={{
