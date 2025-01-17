@@ -160,6 +160,7 @@ export const signOutAction = async () => {
 export const googleAuthAction = async () => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
+  const locale = await getLocaleFromHeaders();
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
@@ -170,7 +171,7 @@ export const googleAuthAction = async () => {
 
   if (error) {
     console.error("Google Auth Error:", error);
-    return encodedRedirect("error", "/sign-in", error.message);
+    return encodedRedirect("error", `${locale}/sign-in`, error.message);
   }
 
   // Redirect user to Google OAuth URL
@@ -180,7 +181,7 @@ export const googleAuthAction = async () => {
 
   return encodedRedirect(
     "error",
-    "/sign-in",
+    `/${locale}/protected`,
     "Failed to initialize Google authentication.",
   );
 };
