@@ -24,7 +24,7 @@ const Main = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-screen text-white overflow-hidden">
+      <div className="flex flex-col items-center justify-center w-screen text-foreground overflow-hidden">
         <main className="w-full bg-background relative">
           {/* Hero Section */}
           <Hero locale={""} />
@@ -35,10 +35,10 @@ const Main = () => {
               initial="hidden"
               whileInView="visible"
               variants={slideInRight}
-              className="text-4xl sm:text-5xl font-extrabold text-white mb-12"
+              className="text-4xl sm:text-5xl font-extrabold text-foreground mb-12"
             >
               {t("Affordable Aircraft Rentals")}
-              <span className="bg-blue-800 px-3 py-2 rounded-lg inline-block ml-2 shadow-md">
+              <span className="bg-blue-800 px-3 py-2 text-background rounded-lg inline-block ml-2 shadow-md">
                 {t("In Southern Finland")}
               </span>
             </motion.h2>

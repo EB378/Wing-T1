@@ -27,7 +27,7 @@ const Hero = ({locale}: {locale: string}) => {
         initial="hidden"
         animate="visible"
         variants={fadeIn}
-        className="absolute inset-0"
+        className="absolute inset-0 bg-black"
       >
         <Image
           src="/aircraft-hero-background.jpg" // Update to a relevant background image

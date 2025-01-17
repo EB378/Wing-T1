@@ -37,7 +37,7 @@ export default function AircraftOptions() {
     setCurrent((prev) => (prev - 1 + aircrafts.length) % aircrafts.length);
 
   return (
-    <section className="py-16 bg-background text-white" id="aircraft-options">
+    <section className="py-16 bg-background text-foreground" id="aircraft-options">
       <h2 className="text-4xl text-center mb-12">{t("title")}</h2>
       <div className="relative w-4/5 mx-auto overflow-hidden">
         {/* Aircraft Slide */}
