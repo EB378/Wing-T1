@@ -71,7 +71,9 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
       endtime: info.event.endStr,
       user: info.event.extendedProps.user,
     });
-    setIsEditable(String(selectedEvent?.user) != String(currentUser.id));
+    setIsEditable(String(selectedEvent?.user) === String(currentUser.id));
+    const a = selectedEvent?.id === 0
+    setIsEditable(true);
     setModalOpen(true);
   };
   
