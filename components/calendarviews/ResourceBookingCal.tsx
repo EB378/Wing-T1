@@ -62,20 +62,6 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
     });
   }, [server_getBookings]);
 
-  const handleEventClick = (info: EventClickArg) => {
-    setSelectedEvent({
-      id: Number(info.event.id),
-      title: info.event.title,
-      details: info.event.extendedProps.details,
-      starttime: info.event.startStr,
-      endtime: info.event.endStr,
-      user: info.event.extendedProps.user,
-    });
-    setIsEditable(String(selectedEvent?.user) === String(currentUser.id));
-    const a = selectedEvent?.id === 0
-    setIsEditable(true);
-    setModalOpen(true);
-  };
   
 
   const handleDateSelect = (selection: { start: Date; end: Date }) => {
@@ -173,6 +159,20 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
     },
   }));
 
+  const handleEventClick = (info: EventClickArg) => {
+    setSelectedEvent({
+      id: Number(info.event.id),
+      title: info.event.title,
+      details: info.event.extendedProps.details,
+      starttime: info.event.startStr,
+      endtime: info.event.endStr,
+      user: info.event.extendedProps.user,
+    });
+    console.log(info.event.extendedProps.user);
+    setIsEditable(String(info.event.extendedProps.user) === String(currentUser.id));
+    setModalOpen(true);
+  };
+
   return (
     <>
       <div className="m-10 text-black bg-white rounded p-4">
@@ -191,9 +191,9 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
           headerToolbar={{
-            left: "prev,next today",
-            center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay",
+            left: "title",
+            center: "dayGridMonth,timeGridWeek,timeGridDay",
+            right: "prev,next today",
           }}
           editable={true}
           selectable={true}
@@ -205,73 +205,56 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
       </div>
       {modalOpen && selectedEvent && (
         <div className="fixed inset-0 bg-black text-black bg-opacity-50 flex items-center justify-center z-10">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full shadow-lg">
-            <h2 className="text-xl font-bold mb-4">
-              {selectedEvent.id === 0 ? "New Booking" : "Edit Booking"}
-            </h2>
-            <input
-              type="text"
-              placeholder="Title"
-              className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
-              value={selectedEvent.title}
-              onChange={(e) => isEditable && setSelectedEvent({ ...selectedEvent, title: e.target.value })}
-              disabled={!isEditable}
-            />
-            <textarea
-              placeholder="Details"
-              className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
-              value={selectedEvent.details}
-              onChange={(e) => isEditable && setSelectedEvent({ ...selectedEvent, details: e.target.value })}
-              disabled={!isEditable}
-            />
-            <input
-              type="datetime-local"
-              className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
-              value={parseISO(selectedEvent.starttime).toISOString().slice(0, -8)}
-              onChange={(e) => isEditable && setSelectedEvent({ ...selectedEvent, starttime: e.target.value + ":00Z" })}
-              disabled={!isEditable}
-            />
-            <input
-              type="datetime-local"
-              className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
-              value={parseISO(selectedEvent.endtime).toISOString().slice(0, -8)}
-              onChange={(e) => isEditable && setSelectedEvent({ ...selectedEvent, endtime: e.target.value + ":00Z" })}
-              disabled={!isEditable}
-            />
-            <p>{selectedEvent.user}</p>
-            {error && (
-              <div className="p-3 text-red-700 text-center">
-                Error: {error}
-              </div>
-            )}
-            {isEditable && (
-              <div className="flex justify-between">
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
-                  onClick={savebooking}
-                >
-                  Save
-                </button>
-                {selectedEvent.id !== 0 && (
-                  <button
-                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
-                    onClick={deletebooking}
-                  >
-                    Delete
-                  </button>
+{/* ID=0 is new booking */}
+          {selectedEvent.id === 0 && (
+            <>
+              <div className="bg-white p-6 rounded-lg max-w-md w-full shadow-lg">
+                <h2 className="text-xl font-bold mb-4">
+                  {selectedEvent.id === 0 ? "New Booking" : "Edit Booking"}
+                </h2>
+                <input
+                  type="text"
+                  placeholder="Title"
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
+                  value={selectedEvent.title}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, title: e.target.value })} />
+                <textarea
+                  placeholder="Details"
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
+                  value={selectedEvent.details}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, details: e.target.value })} />
+                <input
+                  type="datetime-local"
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
+                  value={parseISO(selectedEvent.starttime).toISOString().slice(0, -8)}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, starttime: e.target.value + ":00Z" })} />
+                <input
+                  type="datetime-local"
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
+                  value={parseISO(selectedEvent.endtime).toISOString().slice(0, -8)}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, endtime: e.target.value + ":00Z" })} />
+                <p>{selectedEvent.user}</p>
+                {error && (
+                  <div className="p-3 text-red-700 text-center">
+                    Error: {error}
+                  </div>
                 )}
-                <button
-                  className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md"
-                  onClick={closeModal}
-                >
-                  Cancel
-                </button>
-              </div>
-            )}
-            {!isEditable && (
-              <div className="text-center text-sm text-gray-500 mt-4">
-                You do not have permission to edit this event.
-                <div>
+
+                <div className="flex justify-between">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+                    onClick={savebooking}
+                  >
+                    Save
+                  </button>
+                  {selectedEvent.id !== 0 && (
+                    <button
+                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+                      onClick={deletebooking}
+                    >
+                      Delete
+                    </button>
+                  )}
                   <button
                     className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md"
                     onClick={closeModal}
@@ -280,9 +263,115 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
                   </button>
                 </div>
               </div>
-              
-            )}
-          </div>
+            </>
+          )}
+{/* isEditable is true if the user is the owner of the booking */}
+          {selectedEvent.id != 0 && isEditable && (
+            <>
+              <div className="bg-white p-6 rounded-lg max-w-md w-full shadow-lg">
+                <h2 className="text-xl font-bold mb-4">
+                  {selectedEvent.id === 0 ? "New Booking" : "Edit Booking"}
+                </h2>
+                <input
+                  type="text"
+                  placeholder="Title"
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
+                  value={selectedEvent.title}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, title: e.target.value })} />
+                <textarea
+                  placeholder="Details"
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
+                  value={selectedEvent.details}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, details: e.target.value })} />
+                <input
+                  type="datetime-local"
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
+                  value={parseISO(selectedEvent.starttime).toISOString().slice(0, -8)}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, starttime: e.target.value + ":00Z" })} />
+                <input
+                  type="datetime-local"
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
+                  value={parseISO(selectedEvent.endtime).toISOString().slice(0, -8)}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, endtime: e.target.value + ":00Z" })} />
+                <p>{selectedEvent.user}</p>
+
+                <div className="flex justify-between">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+                    onClick={savebooking}
+                  >
+                    Save
+                  </button>
+                  {selectedEvent.id !== 0 && (
+                    <button
+                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+                      onClick={deletebooking}
+                    >
+                      Delete
+                    </button>
+                  )}
+                  <button
+                    className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md"
+                    onClick={closeModal}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+{/* !isEditable is true if the user is not the owner of the booking */}
+          {selectedEvent.id != 0 && !isEditable && (
+            <>
+              <div className="bg-white p-6 rounded-lg max-w-md w-full shadow-lg">
+                <h2 className="text-xl font-bold mb-4">
+                  {selectedEvent.id === 0 ? "New Booking" : "Edit Booking"}
+                </h2>
+                <input
+                  type="text"
+                  placeholder="Title"
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
+                  value={selectedEvent.title}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, title: e.target.value })}
+                  disabled={true} />
+                  
+                <textarea
+                  placeholder="Details"
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
+                  value={selectedEvent.details}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, details: e.target.value })}
+                  disabled={true} />
+                <input
+                  type="datetime-local"
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
+                  value={parseISO(selectedEvent.starttime).toISOString().slice(0, -8)}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, starttime: e.target.value + ":00Z" })}
+                  disabled={true} />
+                <input
+                  type="datetime-local"
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
+                  value={parseISO(selectedEvent.endtime).toISOString().slice(0, -8)}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, endtime: e.target.value + ":00Z" })}
+                  disabled={true} />
+                <p>{selectedEvent.user}</p>
+
+                <div className="flex justify-between">
+
+                <div className="text-center text-sm text-gray-500 mt-4">
+                  You do not have permission to edit this event.
+                    <div>
+                      <button
+                        className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md"
+                        onClick={closeModal}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       )}
     </>
