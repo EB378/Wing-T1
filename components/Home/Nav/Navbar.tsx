@@ -29,7 +29,7 @@ const Navbar = ({
   };
 
   return (
-    <nav className="bg-black text-white w-screen max-h-16 md:max-h-24">
+    <nav className="bg-black text-white w-screen">
       <div className="max-w-7xl mx-auto px-6 sm:py-2 md:py-2 flex justify-between items-center">
         {/* Logo */}
         <Link href={`/${currentLocale}/`}>
@@ -90,7 +90,7 @@ const Navbar = ({
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-blue-800 text-white px-6 py-4 space-y-4">
+        <div className="lg:hidden bg-blue-800 text-white px-6 py-4 space-y-4">
           <Link
             href={`/${currentLocale}/#aircraft-options`}
             className="block text-lg font-bold hover:text-transparent hover:bg-gradient-to-r from-blue-400 to-white"
