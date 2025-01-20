@@ -175,18 +175,9 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
 
   return (
     <>
-      <div className="m-10 text-black bg-white rounded p-4">
-      <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-hidden">
-          {JSON.stringify(selectedEvent?.user, null, 2)}
-        </pre>
-        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-hidden">
-          {JSON.stringify(currentUser.id, null, 2)}
-        </pre>
-        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-hidden">
-          {JSON.stringify(isEditable, null, 2)}
-        </pre>
+      <div className="m-10 text-black bg-white rounded p-4 h-full">
         <FullCalendar
-          timeZone="UTC"
+          timeZone="local"
           nowIndicator={true}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
@@ -197,7 +188,7 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
           }}
           editable={true}
           selectable={true}
-          eventClick={handleEventClick}
+          eventClick={handleEventClick}          
           select={handleDateSelect}
           events={events || []}
           height="auto"
@@ -226,14 +217,14 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
                 <input
                   type="datetime-local"
                   className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
-                  value={parseISO(selectedEvent.starttime).toISOString().slice(0, -8)}
-                  onChange={(e) => setSelectedEvent({ ...selectedEvent, starttime: e.target.value + ":00Z" })} />
+                  value={formatISO(new Date(selectedEvent.starttime), { representation: 'date' }) + 'T' + new Date(selectedEvent.starttime).toLocaleTimeString('it-IT')}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, starttime: new Date(e.target.value).toISOString() })} />
                 <input
                   type="datetime-local"
                   className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
-                  value={parseISO(selectedEvent.endtime).toISOString().slice(0, -8)}
-                  onChange={(e) => setSelectedEvent({ ...selectedEvent, endtime: e.target.value + ":00Z" })} />
-                <p>{selectedEvent.user}</p>
+                  value={formatISO(new Date(selectedEvent.endtime), { representation: 'date' }) + 'T' + new Date(selectedEvent.endtime).toLocaleTimeString('it-IT')}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, endtime: new Date(e.target.value).toISOString() })} />
+
                 {error && (
                   <div className="p-3 text-red-700 text-center">
                     Error: {error}
@@ -286,13 +277,13 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
                 <input
                   type="datetime-local"
                   className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
-                  value={parseISO(selectedEvent.starttime).toISOString().slice(0, -8)}
-                  onChange={(e) => setSelectedEvent({ ...selectedEvent, starttime: e.target.value + ":00Z" })} />
+                  value={formatISO(new Date(selectedEvent.starttime), { representation: 'date' }) + 'T' + new Date(selectedEvent.starttime).toLocaleTimeString('it-IT')}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, starttime: new Date(e.target.value).toISOString() })} />
                 <input
                   type="datetime-local"
                   className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
-                  value={parseISO(selectedEvent.endtime).toISOString().slice(0, -8)}
-                  onChange={(e) => setSelectedEvent({ ...selectedEvent, endtime: e.target.value + ":00Z" })} />
+                  value={formatISO(new Date(selectedEvent.endtime), { representation: 'date' }) + 'T' + new Date(selectedEvent.endtime).toLocaleTimeString('it-IT')}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, endtime: new Date(e.target.value).toISOString() })} />
                 <p>{selectedEvent.user}</p>
 
                 <div className="flex justify-between">
