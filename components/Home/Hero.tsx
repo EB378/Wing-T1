@@ -92,7 +92,7 @@ const Hero = ({locale}: {locale: string}) => {
           {/* For Desktop: Diagonal Banner */}
           <div className="hidden md:block w-full h-full bg-gradient-to-r from-blue-700 to-blue-500 -skew-x-45 transform md:translate-x-30">
             {/* Centered Buttons */}
-            <div className="skew-x-45 h-full flex flex-inline justify-center items-center md:gap-2 lg:gap-6">
+            <div className="skew-x-45 h-full flex flex-col xl:flex-row justify-center items-center md:gap-2 lg:gap-6">
               <Link href={`/${locale}/book`}>
                 <motion.button
                   whileHover={{
@@ -102,7 +102,7 @@ const Hero = ({locale}: {locale: string}) => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6 }}
-                  className="relative lg:px-6 lg:py-3 md:px-2 md:py-1 bg-white text-black font-bold md:text-sm lg:text-md rounded-full shadow-lg overflow-hidden border-2 border-transparent group"
+                  className="relative lg:px-6 lg:py-3 xl:px-8 md:px-2 md:py-1 bg-white text-black font-bold md:text-sm lg:text-md xl:text-lg rounded-full shadow-lg overflow-hidden border-2 border-transparent group"
                 >
                   {/* Animated Border */}
                   <div className="absolute inset-0 rounded-full border-2 border-transparent group-hover:border-gradient animate-border group-hover:animate-border"></div>
@@ -115,7 +115,7 @@ const Hero = ({locale}: {locale: string}) => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="lg:px-6 lg:py-3 md:px-2 md:py-1 bg-transparent border border-white text-white font-bold md:text-sm lg:text-md rounded-full shadow-lg transition-transform"
+                  className="lg:px-6 lg:py-3 md:px-2 md:py-1 xl:px-8 bg-transparent border border-white text-white font-bold md:text-sm lg:text-md xl:text-lg rounded-full shadow-lg transition-transform"
                 >
                   {t("Contact Us")}
                 </motion.button>
