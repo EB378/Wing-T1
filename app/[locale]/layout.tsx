@@ -1,11 +1,8 @@
-import HeaderAuth from "@/components/Layout/header-auth";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "../globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import Navbar from "@/components/Layout/Navbar";
-import Footer from "@/components/Layout/Footer";
 import type { Metadata, Viewport } from "next";
 import React from "react";
 import ClientOnlyQueryProvider from "@/utils/Providers";
@@ -92,18 +89,9 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <main>
-              <Navbar locale={""}>
-                <HeaderAuth
-                  params={{
-                    locale: "",
-                  }}
-                />
-              </Navbar>
               <div className="w-screen sm:max-w-4xl mx-0 min-h-screen">
                 <ClientOnlyQueryProvider>{children}</ClientOnlyQueryProvider>
               </div>
-
-              <Footer locale={""} />
             </main>
           </ThemeProvider>
         </NextIntlClientProvider>
