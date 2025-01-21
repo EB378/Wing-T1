@@ -94,6 +94,9 @@ const ProfileMain = () => {
 
   return (
     <div className="m-10 text-black bg-white rounded p-4 h-full">
+         <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
+          {JSON.stringify(data, null, 2)}
+        </pre>
       <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
       <div className="mb-4">
         <label className="block mb-2">Full Name</label>

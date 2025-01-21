@@ -16,13 +16,6 @@ export default async function ProtectedPage({
   } = await supabase.auth.getUser();
 
 
-  const { data, error } = await supabase.auth.updateUser({
-    email: "new@email.com",
-    password: "new-password",
-    data: { hello: 'world' }
-  })
-
-
   if (!user) {
     return redirect(`/${locale}/sign-in`);
   }
