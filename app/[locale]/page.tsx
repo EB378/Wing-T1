@@ -39,7 +39,7 @@ export default function Home() {
           }}
         />
       </Navbar>
-      <Main />
+      <Main locale={""} />
       <Footer locale={""} />
     </>
   );

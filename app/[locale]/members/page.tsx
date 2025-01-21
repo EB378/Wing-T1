@@ -1,6 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
 import { InfoIcon } from "lucide-react";
-import { redirect } from "next/navigation";
 import React from "react";
 
 export default async function ProtectedPage({
@@ -14,10 +13,6 @@ export default async function ProtectedPage({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  if (!user) {
-    return redirect(`/${locale}/sign-in`);
-  }
 
   return (
     <div className="flex-1 w-screen flex flex-col gap-12">

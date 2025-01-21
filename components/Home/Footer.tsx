@@ -40,7 +40,7 @@ const Footer = ({ locale }: { locale: string }) => {
               </li>
               <li>
                 <Link
-                  href={`/${locale}/#aircraft-options`}
+                  href={`/${locale}/#recource-selction`}
                   className="hover:underline"
                 >
                   {t("aircraft options")}
@@ -56,7 +56,7 @@ const Footer = ({ locale }: { locale: string }) => {
               </li>
               <li>
                 <Link
-                  href={`/${locale}/#contactsec`}
+                  href={`/${locale}/#contact`}
                   className="hover:underline"
                 >
                   {t("contact")}

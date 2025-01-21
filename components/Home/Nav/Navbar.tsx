@@ -53,13 +53,13 @@ const Navbar = ({
         {/* Desktop Links */}
         <div className="hidden lg:flex gap-8 items-center">
           <Link
-            href={`/${currentLocale}/#aircraft-options`}
+            href={`/${currentLocale}/#recource-selction`}
             className="text-md font-bold align-middle hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
           >
-            {t("aircraftOptions")}
+            {t("recource-selction")}
           </Link>
           <Link
-            href={`/${currentLocale}/#contactsec`}
+            href={`/${currentLocale}/#contact`}
             className="text-md font-bold align-middle hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
           >
             {t("contact")}
@@ -68,7 +68,7 @@ const Navbar = ({
             href={`/${currentLocale}/members/book`}
             className="text-md font-bold align-middle hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
           >
-            {t("bookFlight")}
+            {t("bookDiscoveryFlight")}
           </Link>
           <Link
             href={`/${currentLocale}/members`}
@@ -92,7 +92,7 @@ const Navbar = ({
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-blue-800 text-white px-6 py-4 space-y-4">
           <Link
-            href={`/${currentLocale}/#aircraft-options`}
+            href={`/${currentLocale}/#recource-selction`}
             className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
             onClick={() => setIsMobileMenuOpen(false)}
           >
@@ -106,7 +106,7 @@ const Navbar = ({
             {t("testimonials")}
           </Link>
           <Link
-            href={`/${currentLocale}/#contactsec`}
+            href={`/${currentLocale}/#contact`}
             className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
             onClick={() => setIsMobileMenuOpen(false)}
           >
@@ -117,7 +117,7 @@ const Navbar = ({
             className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            {t("bookFlight")}
+            {t("bookDiscoveryFlight")}
           </Link>
           <Link
             href={`/${currentLocale}/members`}

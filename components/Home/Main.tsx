@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import Contact from "@/components//Home/Contact";
 import AircraftOptions from "@/components/Home/AircraftOptions";
 
-const Main = () => {
+const Main = ({locale}: {locale: string}) => {
   const t = useTranslations("HomePage");
 
   // Animation Variants
@@ -104,7 +104,7 @@ const Main = () => {
             <p className="my-4 text-lg sm:text-xl">
               {t("Discover the freedom of flight")}
             </p>
-            <Link href="/book-flight">
+            <Link href={`/${locale}/book`}>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 className="px-8 py-4 bg-gradient-to-r from-blue-700 to-blue-500 text-white font-bold text-xl rounded-full shadow-lg transition-transform"

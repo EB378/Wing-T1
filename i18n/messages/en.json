@@ -2,7 +2,7 @@
   "HomePage": {
     "Affordable Aircraft Rentals": "Affordable Aircraft Rentals",
     "Explore the beauty of Southern Finland from the skies": "Explore the beauty of Southern Finland from the skies.",
-    "Book Your Flight": "Book Your Flight",
+    "CTA": "Book Discovery Flight",
     "Contact Us": "Contact Us",
     "In Southern Finland": "In Southern Finland",
     "Flexible Booking": "Flexible Booking",
@@ -50,8 +50,8 @@
   },
   "NavbarLinks": {
     "contact": "Contact",
-    "aircraftOptions": "Aircraft Options",
-    "bookFlight": "Book a Flight",
+    "recource-selction": "Aircrafts",
+    "bookDiscoveryFlight": "Discovery Flight",
     "testimonials": "Testimonials",
     "members": "Members"
   }

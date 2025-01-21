@@ -74,11 +74,11 @@ const Hero = ({locale}: {locale: string}) => {
                 transition={{ duration: 0.6 }}
                 className="relative px-4 py-2 bg-white text-black font-bold text-sm rounded-full shadow-lg overflow-hidden"
               >
-                {t("Book Your Flight")}
+                {t("CTA")}
               </motion.button>
             </Link>
 
-            <Link href="#contactsec">
+            <Link href="#contact">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -107,11 +107,11 @@ const Hero = ({locale}: {locale: string}) => {
                   {/* Animated Border */}
                   <div className="absolute inset-0 rounded-full border-2 border-transparent group-hover:border-gradient animate-border group-hover:animate-border"></div>
 
-                  <span className="relative z-10">{t("Book Your Flight")}</span>
+                  <span className="relative z-10">{t("CTA")}</span>
                 </motion.button>
               </Link>
 
-              <Link href="#contactsec">
+              <Link href="#contact">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
