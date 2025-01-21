@@ -1,5 +1,5 @@
 import React from "react";
-import ResourceBookingCal from "@/components/calendarviews/ResourceBookingCal";
+import ResourceBookingCal from "@/components/members/calendarviews/ResourceBookingCal";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
