@@ -51,6 +51,7 @@
   "NavbarLinks": {
     "contact": "Yhteystiedot",
     "aircraftOptions": "Lentokonemallit",
-    "bookFlight": "Varaa lento"
+    "bookFlight": "Varaa lento",
+    "members": "Jäsenet"
   }
 }

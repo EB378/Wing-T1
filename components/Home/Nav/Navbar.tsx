@@ -54,27 +54,27 @@ const Navbar = ({
         <div className="hidden lg:flex gap-8 items-center">
           <Link
             href={`/${currentLocale}/#aircraft-options`}
-            className="text-md font-bold align-middle hover:text-transparent hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
+            className="text-md font-bold align-middle hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
           >
             {t("aircraftOptions")}
           </Link>
           <Link
             href={`/${currentLocale}/#contactsec`}
-            className="text-md font-bold align-middle hover:text-transparent hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
+            className="text-md font-bold align-middle hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
           >
             {t("contact")}
           </Link>
           <Link
             href={`/${currentLocale}/members/book`}
-            className="text-md font-bold align-middle hover:text-transparent hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
+            className="text-md font-bold align-middle hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
           >
             {t("bookFlight")}
           </Link>
           <Link
             href={`/${currentLocale}/members`}
-            className="text-md font-bold align-middle hover:text-transparent hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
+            className="text-md font-bold align-middle hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
           >
-            Protected
+            {t("members")}
           </Link>
           {children}
           <select
@@ -93,38 +93,38 @@ const Navbar = ({
         <div className="lg:hidden bg-blue-800 text-white px-6 py-4 space-y-4">
           <Link
             href={`/${currentLocale}/#aircraft-options`}
-            className="block text-lg font-bold hover:text-transparent hover:bg-gradient-to-r from-blue-400 to-white"
+            className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             {t("aircraftOptions")}
           </Link>
           <Link
             href={`/${currentLocale}/#testimonials`}
-            className="block text-lg font-bold hover:text-transparent hover:bg-gradient-to-r from-blue-400 to-white"
+            className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             {t("testimonials")}
           </Link>
           <Link
             href={`/${currentLocale}/#contactsec`}
-            className="block text-lg font-bold hover:text-transparent hover:bg-gradient-to-r from-blue-400 to-white"
+            className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             {t("contact")}
           </Link>
           <Link
             href={`/${currentLocale}/members/book`}
-            className="block text-lg font-bold hover:text-transparent hover:bg-gradient-to-r from-blue-400 to-white"
+            className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             {t("bookFlight")}
           </Link>
           <Link
             href={`/${currentLocale}/members`}
-            className="block text-lg font-bold hover:text-transparent hover:bg-gradient-to-r from-blue-400 to-white"
+            className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            Protected
+            {t("members")}
           </Link>
           {children}
           <select
