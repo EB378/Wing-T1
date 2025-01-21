@@ -66,7 +66,7 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", `/${locale}/sign-in`, error.message);
   }
 
-  return redirect(`/${locale}/protected`);
+  return redirect(`/${locale}/members`);
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {
@@ -85,7 +85,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${origin}/${locale}/auth/callback?redirect_to=/${locale}/protected/reset-password`,
+    redirectTo: `${origin}/${locale}/auth/callback?redirect_to=/${locale}/members/reset-password`,
   });
 
   if (error) {
@@ -118,7 +118,7 @@ export const resetPasswordAction = async (formData: FormData) => {
   if (!password || !confirmPassword) {
     encodedRedirect(
       "error",
-      `/${locale}/protected/reset-password`,
+      `/${locale}/members/reset-password`,
       "Password and confirm password are required",
     );
   }
@@ -126,7 +126,7 @@ export const resetPasswordAction = async (formData: FormData) => {
   if (password !== confirmPassword) {
     encodedRedirect(
       "error",
-      `/${locale}/protected/reset-password`,
+      `/${locale}/members/reset-password`,
       "Passwords do not match",
     );
   }
@@ -138,14 +138,14 @@ export const resetPasswordAction = async (formData: FormData) => {
   if (error) {
     encodedRedirect(
       "error",
-      `/${locale}/protected/reset-password`,
+      `/${locale}/members/reset-password`,
       "Password update failed",
     );
   }
 
   encodedRedirect(
     "success",
-    `/${locale}/protected/reset-password`,
+    `/${locale}/members/reset-password`,
     "Password updated",
   );
 };
@@ -181,7 +181,7 @@ export const googleAuthAction = async () => {
 
   return encodedRedirect(
     "error",
-    `/${locale}/protected`,
+    `/${locale}/members`,
     "Failed to initialize Google authentication.",
   );
 };

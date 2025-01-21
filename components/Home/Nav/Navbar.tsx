@@ -65,13 +65,13 @@ const Navbar = ({
             {t("contact")}
           </Link>
           <Link
-            href={`/${currentLocale}/protected/book`}
+            href={`/${currentLocale}/members/book`}
             className="text-md font-bold align-middle hover:text-transparent hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
           >
             {t("bookFlight")}
           </Link>
           <Link
-            href={`/${currentLocale}/protected`}
+            href={`/${currentLocale}/members`}
             className="text-md font-bold align-middle hover:text-transparent hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
           >
             Protected
@@ -113,14 +113,14 @@ const Navbar = ({
             {t("contact")}
           </Link>
           <Link
-            href={`/${currentLocale}/protected/book`}
+            href={`/${currentLocale}/members/book`}
             className="block text-lg font-bold hover:text-transparent hover:bg-gradient-to-r from-blue-400 to-white"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             {t("bookFlight")}
           </Link>
           <Link
-            href={`/${currentLocale}/protected`}
+            href={`/${currentLocale}/members`}
             className="block text-lg font-bold hover:text-transparent hover:bg-gradient-to-r from-blue-400 to-white"
             onClick={() => setIsMobileMenuOpen(false)}
           >
