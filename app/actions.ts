@@ -352,3 +352,92 @@ export const deleteBooking = async ({ id }: { id: number }) => {
 
   return deletedBooking; // This will return the details of the deleted booking.
 };
+
+export const getProfile = async ({
+  id,
+}: {
+  id: string;
+}) => {
+  const supabase = await createClient();
+
+  // Fetch email and phone from the user table in the auth schema
+  
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+
+  if (userError) {
+    console.error("Error fetching user data:", userError);
+    throw new Error("Failed to fetch user data");
+  }
+
+  const email = user?.email;
+  const phone = user?.phone;
+
+  // Fetch the rest of the profile data from the profiles table in the public schema
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("fullName, username, streetAddress, city, country, postCode, role, qualifications")
+
+  if (profileError) {
+    console.error("Error fetching profile data:", profileError);
+    throw new Error("Failed to fetch profile data");
+  }
+
+  return {
+    ...profile,
+    email: email,
+    phone: phone,
+  };
+};
+
+export const saveProfileUpdate = async (formData: FormData) => {
+  const supabase = await createClient();
+  const locale = await getLocaleFromHeaders();
+
+  const email = formData.get("email") as string;
+  const phone = formData.get("phone") as string;
+  const username = formData.get("username") as string;
+  const fullName = formData.get("fullName") as string;
+  const streetAddress = formData.get("streetAddress") as string;
+  const city = formData.get("city") as string;
+  const country = formData.get("country") as string;
+  const postCode = formData.get("postCode") as string;
+  const role = formData.get("role") as string;
+  const qualifications = formData.get("qualifications") ? JSON.parse(formData.get("qualifications") as string) : [];
+
+  // Update email and phone in the user table in the auth schema
+  const { error: userError } = await supabase.auth.updateUser({
+    email: email,
+    phone: phone,
+  });
+
+  if (userError) {
+    console.error("Error updating user data:", userError);
+    throw new Error("Failed to update user data");
+  }
+
+  // Update the rest of the profile data in the profiles table in the public schema
+  const { data: updatedProfile, error: profileError } = await supabase
+    .from("profiles")
+    .update({
+      username: username,
+      fullName: fullName,
+      streetAddress: streetAddress,
+      city: city,
+      country: country,
+      postCode: postCode,
+      role: role,
+      qualifications: qualifications,
+    })
+    .eq("id", formData.get("id"));
+
+  if (profileError) {
+    console.error("Error updating profile data:", profileError);
+    throw new Error("Failed to update profile data");
+  }
+
+  encodedRedirect(
+    "success",
+    `/${locale}/members`,
+    "Profile updated successfully",
+  );
+};
