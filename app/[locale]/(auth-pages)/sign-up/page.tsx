@@ -6,6 +6,8 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { SmtpMessage } from "../smtp-message";
 import React from "react";
+import Navbar from "@/components/Home/Nav/Navbar";
+import HeaderAuth from "@/components/Home/Nav/header-auth";
 
 export default async function Signup(props: {
   searchParams: Promise<Message>;
@@ -24,6 +26,13 @@ export default async function Signup(props: {
 
   return (
     <>
+      <Navbar locale={""}>
+        <HeaderAuth
+          params={{
+            locale: "",
+          }}
+        />
+      </Navbar>
       <form className="flex flex-col min-w-64 max-w-64 mt-10 mx-auto allign-center">
         <h1 className="text-2xl font-medium">Sign up</h1>
         <p className="text-sm text text-foreground">

@@ -52,6 +52,11 @@
     "contact": "Yhteystiedot",
     "recource-selction": "Lentokonemallit",
     "bookFlight": "Varaa lento",
-    "members": "Jäsenet"
+    "members": "Jäsenet",
+    "bookings": "Varauskirja",
+    "logbook": "Lentopäiväkirja",
+    "noticeboard": "Ilmoitustaulu",
+    "profile": "Profiili",
+    "settings": "Asetukset"
   }
 }

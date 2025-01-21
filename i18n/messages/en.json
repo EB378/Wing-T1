@@ -53,6 +53,11 @@
     "recource-selction": "Aircrafts",
     "bookDiscoveryFlight": "Discovery Flight",
     "testimonials": "Testimonials",
-    "members": "Members"
+    "members": "Members",
+    "bookings": "Bookings",
+    "logbook": "Logbook",
+    "noticeboard": "Noticeboard",
+    "profile": "Profile",
+    "settings": "Settings"
   }
 }

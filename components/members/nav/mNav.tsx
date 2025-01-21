@@ -53,28 +53,34 @@ const mNavbar = ({
         {/* Desktop Links */}
         <div className="hidden lg:flex gap-8 items-center">
           <Link
-            href={`/${currentLocale}/#recource-selction`}
-            className="text-md font-bold align-middle hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
-          >
-            {t("aircraftOptions")}
-          </Link>
-          <Link
-            href={`/${currentLocale}/#contact`}
-            className="text-md font-bold align-middle hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
-          >
-            {t("contact")}
-          </Link>
-          <Link
             href={`/${currentLocale}/members/book`}
             className="text-md font-bold align-middle hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
           >
-            {t("bookFlight")}
+            {t("bookings")}
           </Link>
           <Link
-            href={`/${currentLocale}/members`}
+            href={`/${currentLocale}/members/logbook`}
             className="text-md font-bold align-middle hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
           >
-            {t("members")}
+            {t("logbook")}
+          </Link>
+          <Link
+            href={`/${currentLocale}/members/noticeboard`}
+            className="text-md font-bold align-middle hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
+          >
+            {t("noticeboard")}
+          </Link>
+          <Link
+            href={`/${currentLocale}/members/profile`}
+            className="text-md font-bold align-middle hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
+          >
+            {t("profile")}
+          </Link>
+          <Link
+            href={`/${currentLocale}/members/settings`}
+            className="text-md font-bold align-middle hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white transition-transform transform hover:scale-110"
+          >
+            {t("settings")}
           </Link>
           {children}
           <select
@@ -92,39 +98,39 @@ const mNavbar = ({
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-blue-800 text-white px-6 py-4 space-y-4">
           <Link
-            href={`/${currentLocale}/#recource-selction`}
-            className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            {t("aircraftOptions")}
-          </Link>
-          <Link
-            href={`/${currentLocale}/#testimonials`}
-            className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            {t("testimonials")}
-          </Link>
-          <Link
-            href={`/${currentLocale}/#contact`}
-            className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            {t("contact")}
-          </Link>
-          <Link
             href={`/${currentLocale}/members/book`}
             className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            {t("bookFlight")}
+            {t("bookings")}
           </Link>
           <Link
-            href={`/${currentLocale}/members`}
+            href={`/${currentLocale}/members/logbook`}
             className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            {t("members")}
+            {t("logbook")}
+          </Link>
+          <Link
+            href={`/${currentLocale}/members/noticeboard`}
+            className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            {t("noticeboard")}
+          </Link>
+          <Link
+            href={`/${currentLocale}/members/profile`}
+            className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            {t("profile")}
+          </Link>
+          <Link
+            href={`/${currentLocale}/members/settings`}
+            className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            {t("settings")}
           </Link>
           {children}
           <select

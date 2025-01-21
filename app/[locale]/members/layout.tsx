@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "@/components/Home/Nav/Navbar";
+import Navbar from "@/components/members/nav/mNav";
 import HeaderAuth from "@/components/Home/Nav/header-auth";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
