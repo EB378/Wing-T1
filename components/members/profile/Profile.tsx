@@ -25,11 +25,18 @@ const ProfileMain = () => {
 
   useEffect(() => {
     server_getProfile({
-        id: "",
+      fullName: "",
+      username: "",
+      streetAddress: "",
+      city: "",
+      country: "",
+      postCode: "",
+      role: "",
+      qualifications: [],
     });
   }, [server_getProfile]);
 
-  interface FormData {
+  interface ProfileFormData {
     fullName: string;
     username: string;
     streetAddress: string;
@@ -42,7 +49,7 @@ const ProfileMain = () => {
     phone: string;
   }
 
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<ProfileFormData>({
     fullName: "",
     username: "",
     email: "",
@@ -70,7 +77,15 @@ const ProfileMain = () => {
   };
 
   const handleSave = () => {
-    // Save logic here
+    const formDataToSubmit = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => formDataToSubmit.append(key, item));
+      } else {
+        formDataToSubmit.append(key, value);
+      }
+    });
+    saveProfileUpdate(formDataToSubmit);
     console.log("Saved data:", formData);
     setIsEditing(false);
   };
@@ -92,6 +107,19 @@ const ProfileMain = () => {
     setIsEditing(false);
   };
 
+  const profiledisplay = data ? {
+      fullName: data.fullName,
+      username: data.username,
+      email: data.email,
+      phone: data.phone,
+      streetAddress: data.streetAddress,
+      city: data.city,
+      country: data.country,
+      postCode: data.postCode,
+      role: data.role,
+      qualifications: data.qualifications,
+    } : null;
+
   return (
     <div className="m-10 text-black bg-white rounded p-4 h-full">
          <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
@@ -104,7 +132,7 @@ const ProfileMain = () => {
           type="text"
           name="fullName"
           className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={formData.fullName}
+          value={profiledisplay?.fullName}
           onChange={handleChange}
         />
       </div>
@@ -114,7 +142,7 @@ const ProfileMain = () => {
           type="text"
           name="username"
           className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={formData.username}
+          value={profiledisplay?.username}
           onChange={handleChange}
         />
       </div>
@@ -124,7 +152,7 @@ const ProfileMain = () => {
           type="email"
           name="email"
           className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={formData.email}
+          value={profiledisplay?.email}
           onChange={handleChange}
         />
       </div>
@@ -134,7 +162,7 @@ const ProfileMain = () => {
           type="text"
           name="phone"
           className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={formData.phone}
+          value={profiledisplay?.phone}
           onChange={handleChange}
         />
       </div>
@@ -144,7 +172,7 @@ const ProfileMain = () => {
           type="text"
           name="streetAddress"
           className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={formData.streetAddress}
+          value={profiledisplay?.streetAddress}
           onChange={handleChange}
         />
       </div>
@@ -154,7 +182,7 @@ const ProfileMain = () => {
           type="text"
           name="city"
           className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={formData.city}
+          value={profiledisplay?.city}
           onChange={handleChange}
         />
       </div>
@@ -164,7 +192,7 @@ const ProfileMain = () => {
           type="text"
           name="country"
           className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={formData.country}
+          value={profiledisplay?.country}
           onChange={handleChange}
         />
       </div>
@@ -174,7 +202,7 @@ const ProfileMain = () => {
           type="text"
           name="postCode"
           className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={formData.postCode}
+          value={profiledisplay?.postCode}
           onChange={handleChange}
         />
       </div>
@@ -184,7 +212,7 @@ const ProfileMain = () => {
           type="text"
           name="role"
           className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={formData.role}
+          value={profiledisplay?.role}
           readOnly
         />
       </div>
@@ -194,7 +222,7 @@ const ProfileMain = () => {
           name="qualifications"
           className="w-full p-2 border border-gray-300 rounded-md bg-white"
           multiple
-          value={formData.qualifications}
+          value={profiledisplay?.qualifications}
           onChange={handleMultiSelectChange}
         >
           <option value="IR">IR</option>

@@ -354,11 +354,43 @@ export const deleteBooking = async ({ id }: { id: number }) => {
 };
 
 export const getProfile = async ({
-  id,
+  fullName,
+  username,
+  streetAddress,
+  city,
+  country,
+  postCode,
+  role,
+  qualifications,
 }: {
-  id: string;
+  fullName: string;
+  username: string;
+  streetAddress: string;
+  city: string;
+  country: string;
+  postCode: string;
+  role: string;
+  qualifications: string[];
 }) => {
   const supabase = await createClient();
+  let query = supabase.from("profiles").select("*");
+
+  // Add filters based on provided parameters
+  if (fullName) query = query.ilike("title", `%${fullName}%`);
+  if (username) query = query.ilike("details", `%${username}%`);
+  if (streetAddress) query = query.gte("starttime", streetAddress);
+  if (city) query = query.lte("endtime", city);
+  if (country) query = query.eq("created_at", country);
+  if (postCode) query = query.eq("user", postCode);
+  if (role) query = query.eq("user", role);
+  if (qualifications) query = query.eq("user", qualifications);
+
+  const { data: profiles, error } = await query;
+
+  if (error) {
+    console.error("Error fetching bookings:", error);
+    throw new Error("Failed to fetch bookings");
+    }
 
   // Fetch email and phone from the user table in the auth schema
   
@@ -371,6 +403,14 @@ export const getProfile = async ({
 
   const email = user?.email;
   const phone = user?.phone;
+  const fullName1 = fullName;
+  const username1 = username;
+  const streetAddress1 = streetAddress;
+  const city1 = city;
+  const country1 = country;
+  const postCode1 = postCode;
+  const role1 = role;
+  const qualifications1 = qualifications;
 
   // Fetch the rest of the profile data from the profiles table in the public schema
   const { data: profile, error: profileError } = await supabase
@@ -383,7 +423,14 @@ export const getProfile = async ({
   }
 
   return {
-    ...profile,
+    fullName: fullName1,
+    username: username1,
+    streetAddress: streetAddress1,
+    city: city1,
+    country: country1,
+    postCode: postCode1,
+    role: role1,
+    qualifications: qualifications1,
     email: email,
     phone: phone,
   };
