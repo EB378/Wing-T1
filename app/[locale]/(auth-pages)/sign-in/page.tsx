@@ -1,4 +1,4 @@
-import { signInAction, googleAuthAction } from "@/app/actions";
+import { signInAction } from "@/app/actions";
 import { FormMessage, Message } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
@@ -43,9 +43,6 @@ export default async function Login(props: {
         <SubmitButton pendingText="Signing In..." formAction={signInAction}>
           Sign in
         </SubmitButton>
-        <button onClick={googleAuthAction} className="btn btn-primary">
-          Sign in with Google
-        </button>
 
         <FormMessage message={searchParams} />
       </div>

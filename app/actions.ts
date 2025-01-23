@@ -4,7 +4,6 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { parsePhoneNumberFromString } from 'libphonenumber-js';
 
 const getLocaleFromHeaders = async () => {
   const referer = (await headers()).get("referer");
@@ -158,35 +157,6 @@ export const signOutAction = async () => {
   return redirect(`/${locale}/sign-in`);
 };
 
-export const googleAuthAction = async () => {
-  const supabase = await createClient();
-  const origin = (await headers()).get("origin");
-  const locale = await getLocaleFromHeaders();
-
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: `${origin}/auth/callback`,
-    },
-  });
-
-  if (error) {
-    console.error("Google Auth Error:", error);
-    return encodedRedirect("error", `${locale}/sign-in`, error.message);
-  }
-
-  // Redirect user to Google OAuth URL
-  if (data?.url) {
-    return redirect(data.url);
-  }
-
-  return encodedRedirect(
-    "error",
-    `/${locale}/members`,
-    "Failed to initialize Google authentication.",
-  );
-};
-
 export const getBookings = async ({
   id,
   title,
@@ -226,7 +196,6 @@ export const getBookings = async ({
   return bookings; // Assuming bookings is an array of booking records
 };
 
-
 export const hasOverlappingBookings = async ({
   starttime = new Date().toISOString(), // provide default values if undefined
   endtime = new Date().toISOString(),
@@ -259,7 +228,6 @@ export const hasOverlappingBookings = async ({
 
   return data.length > 0;
 };
-
 
 export const createBooking = async ({
   title,
@@ -297,7 +265,6 @@ export const createBooking = async ({
 
   return booking;
 };
-
 
 export const updateBooking = async ({
   id,
@@ -360,14 +327,14 @@ export const getProfile = async () => {
 
   const { data: profiles, error } = await supabase
   .from("profiles")
-  .select("id, fullName, username, streetAddress, city, country, postCode, role, qualifications, phone")
+  .select("id, fullname, username, streetaddress, city, country, postcode, role, NF, phone, email")
 
 
 
 
   if (error) {
-    console.error("Error fetching bookings:", error);
-    throw new Error("Failed to fetch bookings");
+    console.error("Error fetching profile:", error);
+    throw new Error("Failed to fetch profile");
     }
 
   // Fetch email and phone from the user table in the auth schema
@@ -379,40 +346,41 @@ export const getProfile = async () => {
     throw new Error("Failed to fetch user data");
   }
 
-  const email = user?.email; 
+  const email = user?.email;
+  const phone = profiles?.[0]?.phone; 
   const id = profiles?.[0]?.id;
-  const phone = profiles?.[0]?.phone;
-  const fullName = profiles?.[0]?.fullName;
+  const fullname = profiles?.[0]?.fullname;
   const username = profiles?.[0]?.username;
-  const streetAddress = profiles?.[0]?.streetAddress;
+  const streetaddress = profiles?.[0]?.streetaddress;
   const city = profiles?.[0]?.city;
   const country = profiles?.[0]?.country;
-  const postCode = profiles?.[0]?.postCode;
+  const postcode = profiles?.[0]?.postcode;
   const role = profiles?.[0]?.role;
-  const qualifications = profiles?.[0]?.qualifications;
+  const NF = profiles?.[0]?.NF ?? false;
 
   // Fetch the rest of the profile data from the profiles table in the public schema
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("fullName, username, streetAddress, city, country, postCode, role, qualifications")
+    .select("fullname, username, streetaddress, city, country, postcode, role, NF")
 
   if (profileError) {
     console.error("Error fetching profile data:", profileError);
     throw new Error("Failed to fetch profile data");
   }
+  console.log("NF", NF);
 
   return {
     id: id,
     email: email,
     phone: phone,
-    fullName: fullName,
+    fullname: fullname,
     username: username,
-    streetAddress: streetAddress,
+    streetaddress: streetaddress,
     city: city,
     country: country,
-    postCode: postCode,
+    postcode: postcode,
     role: role,
-    qualifications: qualifications,
+    NF: NF,
   };
 };
 
@@ -423,13 +391,13 @@ export const saveProfileUpdate = async (formData: FormData) => {
   const email = formData.get("email") as string;
   const phone = formData.get("phone") as string;
   const username = formData.get("username") as string;
-  const fullName = formData.get("fullName") as string;
-  const streetAddress = formData.get("streetAddress") as string;
+  const fullname = formData.get("fullname") as string;
+  const streetaddress = formData.get("streetaddress") as string;
   const city = formData.get("city") as string;
   const country = formData.get("country") as string;
-  const postCode = formData.get("postCode") as string;
+  const postcode = formData.get("postcode") as string;
   const role = formData.get("role") as string;
-  const qualifications = formData.get("qualifications") as string;
+  const NF = formData.get("NF") as string;
 
   console.log("formData", formData);
 
@@ -461,14 +429,14 @@ export const saveProfileUpdate = async (formData: FormData) => {
     .from("profiles")
     .update({
       username: username,
-      fullName: fullName,
-      streetAddress: streetAddress,
+      fullname: fullname,
+      streetaddress: streetaddress,
       city: city,
       country: country,
-      postCode: postCode,
+      postcode: postcode,
       role: role,
       phone: phone,
-      qualifications: qualifications,
+      NF: NF,
     }).match({ id });
 
   if (profileError) {
