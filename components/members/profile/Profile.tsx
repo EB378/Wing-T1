@@ -20,7 +20,7 @@ interface ProfileFormData {
 }
 
 const ProfileMain = () => {
-  const t = useTranslations("HomePage");
+  const t = useTranslations("Profile");
   const [error, setError] = useState("");
   const [formData, setFormData] = useState<ProfileFormData>({
     id: 0,
@@ -85,25 +85,32 @@ const ProfileMain = () => {
   };
 
   return (
-    
-    <>
-    <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
-      {JSON.stringify(formData, null, 2)}
-    </pre>
-    <form onSubmit={handleSubmit}>
-      <input type="text" name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
-      <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone" />
-      <input type="text" name="username" value={formData.username} onChange={handleChange} placeholder="Username" />
-      <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} placeholder="Full Name" />
-      <input type="text" name="streetAddress" value={formData.streetAddress} onChange={handleChange} placeholder="Street Address" />
-      <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder="City" />
-      <input type="text" name="country" value={formData.country} onChange={handleChange} placeholder="Country" />
-      <input type="text" name="postCode" value={formData.postCode} onChange={handleChange} placeholder="Post Code" />
-      <input type="text" name="role" value={formData.role} onChange={handleChange} placeholder="Role" />
-      <input type="text" name="qualifications" value={formData.qualifications.join(', ')} onChange={handleChange} placeholder="Qualifications" />
-      <button type="submit">Save</button>
-    </form>
-    </>
+    <div className="bg-background p-4 rounded-lg shadow-md border-solid border-foreground border-2">
+      <h2 className="font-bold text-2xl mb-4">{t("profileUpdate")}</h2>
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-2">
+        <label>{t("email")}</label>
+        <input type="text" name="email" className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.email} onChange={handleChange} placeholder="Email" />
+        <label>{t("phone")}</label>
+        <input type="text" name="phone"className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.phone} onChange={handleChange} placeholder="Phone" />
+        <label>{t("username")}</label>
+        <input type="text" name="username"className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.username} onChange={handleChange} placeholder="Username" />
+        <label>{t("fullname")}</label>
+        <input type="text" name="fullName"className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.fullName} onChange={handleChange} placeholder="Full Name" />
+        <label>{t("address")}</label>
+        <input type="text" name="streetAddress" className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.streetAddress} onChange={handleChange} placeholder="Street Address" />
+        <label>{t("city")}</label>
+        <input type="text" name="city" className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.city} onChange={handleChange} placeholder="City" />
+        <label>{t("country")}</label>
+        <input type="text" name="country" className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.country} onChange={handleChange} placeholder="Country" />
+        <label>{t("zip")}</label>
+        <input type="text" name="postCode" className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.postCode} onChange={handleChange} placeholder="Post Code" />
+        <label>{t("role")}</label>
+        <input type="text" name="role" className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.role} onChange={handleChange} placeholder="Role" />
+        <label>{t("qualifications")}</label>
+        <input type="text" name="qualifications" className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.qualifications.join(', ')} onChange={handleChange} placeholder="Qualifications" />
+        <button type="submit" className="text-foreground p-2 rounded border-solid border-foreground border-2 w-auto">Save</button>
+      </form>
+    </div>
   );
 };
 

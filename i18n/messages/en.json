@@ -59,5 +59,19 @@
     "noticeboard": "Noticeboard",
     "profile": "Profile",
     "settings": "Settings"
+  },
+  "Profile": {
+    "profileUpdate": "Update Profile",
+    "username": "Username",
+    "fullname": "Full Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "city": "City",
+    "zip": "Zip",
+    "country": "Country",
+    "role": "Role",
+    "qualifications": "Qualifications",
+    "save": "Save"
   }
 }
