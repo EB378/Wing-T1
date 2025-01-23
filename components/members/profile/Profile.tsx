@@ -1,4 +1,3 @@
-// components/members/profile/Profile.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -6,50 +5,25 @@ import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
 import { getProfile, saveProfileUpdate } from "@/app/actions";
 
+interface ProfileFormData {
+  id: number;
+  fullName: string;
+  username: string;
+  email: string;
+  phone: string;
+  streetAddress: string;
+  city: string;
+  country: string;
+  postCode: string;
+  role: string;
+  qualifications: string[];
+}
+
 const ProfileMain = () => {
   const t = useTranslations("HomePage");
   const [error, setError] = useState("");
-
-  const {
-    data,
-    mutate: server_getProfile,
-  } = useMutation({
-    mutationFn: getProfile,
-    onSuccess: () => {
-      // Success callback
-    },
-    onError: () => {
-      // Error handling
-    },
-  });
-
-  useEffect(() => {
-    server_getProfile({
-      fullName: "",
-      username: "",
-      streetAddress: "",
-      city: "",
-      country: "",
-      postCode: "",
-      role: "",
-      qualifications: [],
-    });
-  }, [server_getProfile]);
-
-  interface ProfileFormData {
-    fullName: string;
-    username: string;
-    streetAddress: string;
-    city: string;
-    country: string;
-    postCode: string;
-    role: string;
-    qualifications: string[];
-    email: string;
-    phone: string;
-  }
-
   const [formData, setFormData] = useState<ProfileFormData>({
+    id: 0,
     fullName: "",
     username: "",
     email: "",
@@ -62,191 +36,74 @@ const ProfileMain = () => {
     qualifications: [],
   });
 
-  const [isEditing, setIsEditing] = useState(false);
+  const {
+    data,
+    mutate: server_getProfile,
+  } = useMutation({
+    mutationFn: getProfile,
+    onSuccess: (data) => {
+      setFormData({
+        id: data.id || 0,
+        fullName: data.fullName || "",
+        username: data.username || "",
+        email: data.email || "",
+        phone: data.phone || "",
+        streetAddress: data.streetAddress || "",
+        city: data.city || "",
+        country: data.country || "",
+        postCode: data.postCode || "",
+        role: data.role || "",
+        qualifications: data.qualifications || [],
+      }); // Update form data with fetched profile data
+    },
+    onError: () => {
+      // Error handling
+    },
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  useEffect(() => {
+    server_getProfile();
+  }, [server_getProfile]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    setIsEditing(true);
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleMultiSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const options = Array.from(e.target.selectedOptions, option => option.value);
-    setFormData({ ...formData, qualifications: options });
-    setIsEditing(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await saveProfileUpdate(new FormData(e.target as HTMLFormElement));
+      // Handle success (e.g., show a success message or redirect)
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      // Handle error (e.g., show an error message)
+    }
   };
-
-  const handleSave = () => {
-    const formDataToSubmit = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        value.forEach((item) => formDataToSubmit.append(key, item));
-      } else {
-        formDataToSubmit.append(key, value);
-      }
-    });
-    saveProfileUpdate(formDataToSubmit);
-    console.log("Saved data:", formData);
-    setIsEditing(false);
-  };
-
-  const handleCancel = () => {
-    // Reset form logic here
-    setFormData({
-      fullName: "",
-      username: "",
-      email: "",
-      phone: "",
-      streetAddress: "",
-      city: "",
-      country: "",
-      postCode: "",
-      role: "",
-      qualifications: [],
-    });
-    setIsEditing(false);
-  };
-
-  const profiledisplay = data ? {
-      fullName: data.fullName,
-      username: data.username,
-      email: data.email,
-      phone: data.phone,
-      streetAddress: data.streetAddress,
-      city: data.city,
-      country: data.country,
-      postCode: data.postCode,
-      role: data.role,
-      qualifications: data.qualifications,
-    } : null;
 
   return (
-    <div className="m-10 text-black bg-white rounded p-4 h-full">
-         <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
-          {JSON.stringify(data, null, 2)}
-        </pre>
-      <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
-      <div className="mb-4">
-        <label className="block mb-2">Full Name</label>
-        <input
-          type="text"
-          name="fullName"
-          className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={profiledisplay?.fullName}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2">Username</label>
-        <input
-          type="text"
-          name="username"
-          className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={profiledisplay?.username}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2">Email</label>
-        <input
-          type="email"
-          name="email"
-          className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={profiledisplay?.email}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2">Phone</label>
-        <input
-          type="text"
-          name="phone"
-          className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={profiledisplay?.phone}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2">Street Address</label>
-        <input
-          type="text"
-          name="streetAddress"
-          className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={profiledisplay?.streetAddress}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2">City</label>
-        <input
-          type="text"
-          name="city"
-          className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={profiledisplay?.city}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2">Country</label>
-        <input
-          type="text"
-          name="country"
-          className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={profiledisplay?.country}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2">Post Code</label>
-        <input
-          type="text"
-          name="postCode"
-          className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={profiledisplay?.postCode}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2">Role</label>
-        <input
-          type="text"
-          name="role"
-          className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          value={profiledisplay?.role}
-          readOnly
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2">Qualifications</label>
-        <select
-          name="qualifications"
-          className="w-full p-2 border border-gray-300 rounded-md bg-white"
-          multiple
-          value={profiledisplay?.qualifications}
-          onChange={handleMultiSelectChange}
-        >
-          <option value="IR">IR</option>
-          <option value="NF">NF</option>
-          <option value="CFI">CFI</option>
-          <option value="CFIIR">CFIIR</option>
-          <option value="SAR">SAR</option>
-        </select>
-      </div>
-      {isEditing && (
-        <button
-          className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md mr-2"
-          onClick={handleCancel}
-        >
-          Cancel
-        </button>
-      )}
-      <button
-        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
-        onClick={handleSave}
-      >
-        Save
-      </button>
-    </div>
+    
+    <>
+    <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
+      {JSON.stringify(formData, null, 2)}
+    </pre>
+    <form onSubmit={handleSubmit}>
+      <input type="text" name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
+      <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone" />
+      <input type="text" name="username" value={formData.username} onChange={handleChange} placeholder="Username" />
+      <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} placeholder="Full Name" />
+      <input type="text" name="streetAddress" value={formData.streetAddress} onChange={handleChange} placeholder="Street Address" />
+      <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder="City" />
+      <input type="text" name="country" value={formData.country} onChange={handleChange} placeholder="Country" />
+      <input type="text" name="postCode" value={formData.postCode} onChange={handleChange} placeholder="Post Code" />
+      <input type="text" name="role" value={formData.role} onChange={handleChange} placeholder="Role" />
+      <input type="text" name="qualifications" value={formData.qualifications.join(', ')} onChange={handleChange} placeholder="Qualifications" />
+      <button type="submit">Save</button>
+    </form>
+    </>
   );
 };
 
