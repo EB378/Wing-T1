@@ -440,83 +440,89 @@ export const saveProfileUpdate = async (formData: FormData) => {
   );
 };
 
-export const getLogs = async () => {
+export const getLogs = async ({
+  id: id,
+  userId,
+  aircraft,
+  date,
+  PIC,
+  peopleonboard,
+  departure,
+  arrival,
+  offblock,
+  takeoff,
+  landing,
+  onblock,
+  landings,
+  flightrules,
+  night,
+  ir,
+  fuel,
+  flight_type,
+  details,
+  billing_details,
+}: {
+    id: number;
+    userId: string;
+    aircraft: string;
+    date: string;
+    PIC: string;
+    peopleonboard: number;
+    departure: string;
+    arrival: string;
+    offblock: number;
+    takeoff: number;
+    landing: number;
+    onblock: number;
+    landings: number;
+    flightrules: string;
+    night: string;
+    ir: string;
+    fuel: number;
+    flight_type: string;
+    details: string;
+    billing_details: string;
+}) => {
   const supabase = await createClient();
-
-
-  const { data: logs, error } = await supabase
-  .from("logs")
-  .select("userId, aircraft, date, PIC, peopleonboard, departure, arrival, offblock, takeoff, landing, onblock, landings, flightrules, night, ir, fuel, flight_type, details, billing_details")
+  const { data: logs, error } = await supabase.from("logs").select("*").eq("userId", userId);
 
   if (error) {
     console.error("Error fetching logs:", error);
     throw new Error("Failed to fetch logs");
-    }
+  }
 
-
-  const userId = logs?.[0]?.userId; 
-  const aircraft = logs?.[0]?.aircraft;
-  const date = logs?.[0]?.date;
-  const PIC = logs?.[0]?.PIC;
-  const peopleonboard = logs?.[0]?.peopleonboard;
-  const departure = logs?.[0]?.departure;
-  const arrival = logs?.[0]?.arrival;
-  const offblock = logs?.[0]?.offblock;
-  const takeoff = logs?.[0]?.takeoff;
-  const landing = logs?.[0]?.landing;
-  const onblock = logs?.[0]?.onblock;
-  const landings = logs?.[0]?.landings;
-  const flightrules = logs?.[0]?.flightrules;
-  const night = logs?.[0]?.night;
-  const ir = logs?.[0]?.ir;
-  const fuel = logs?.[0]?.fuel;
-  const flight_type = logs?.[0]?.flight_type;
-  const details = logs?.[0]?.details;
-  const billing_details = logs?.[0]?.billing_details;
-
-  return {
-    userId: userId,
-    aircraft: aircraft,
-    date: date,
-    PIC: PIC,
-    peopleonboard: peopleonboard,
-    departure: departure,
-    arrival: arrival,
-    offblock: offblock,
-    takeoff: takeoff,
-    landing: landing,
-    onblock: onblock,
-    landings: landings,
-    flightrules: flightrules,
-    night: night,
-    ir: ir,
-    fuel: fuel,
-    flight_type: flight_type,
-    details: details,
-    billing_details: billing_details,
-  };
+  return logs; // Assuming bookings is an array of booking records
 };
 
 export const saveLogNew = async (formData: FormData) => {
   const supabase = await createClient();
   const locale = await getLocaleFromHeaders();
 
-  const email = formData.get("email") as string;
-  const phone = formData.get("phone") as string;
-  const username = formData.get("username") as string;
-  const fullname = formData.get("fullname") as string;
-  const streetaddress = formData.get("streetaddress") as string;
-  const city = formData.get("city") as string;
-  const country = formData.get("country") as string;
-  const postcode = formData.get("postcode") as string;
-  const role = formData.get("role") as string;
-  const NF = formData.get("NF") as string;
+  const userId: formData.get("userId") as string;
+  const aircraft: formData.get("aircraft") as string;
+  const date: formData.get("date") as string;
+  const PIC: formData.get("PIC") as string;
+  const peopleonboard: formData.get("peopleonboard") as string;
+  const departure: formData.get("departure") as string;
+  const arrival: formData.get("arrival") as string;
+  const offblock: formData.get("offblock") as string;
+  const takeoff: formData.get("takeoff") as string;
+  const landing: formData.get("landing") as string;
+  const onblock: formData.get("onblock") as string;
+  const landings: formData.get("landings") as string;
+  const flightrules: formData.get("flightrules") as string;
+  const night: formData.get("night") as string;
+  const ir: formData.get("ir") as string;
+  const fuel: formData.get("fuel") as string;
+  const flight_type: formData.get("flight_type") as string;
+  const details: formData.get("details") as string;
+  const billing_details: formData.get("billing_details") as string;
 
   console.log("formData", formData);
 
   // Fetch the user's profile id
   const { data: profileData, error: profileFetchError } = await supabase
-    .from("profiles")
+    .from("logs")
     .select("id")
 
   if (!profileData || profileData.length === 0) {
@@ -526,17 +532,27 @@ export const saveLogNew = async (formData: FormData) => {
 
   // Update the rest of the profile data in the profiles table in the public schema
   const { data: FormData, error: profileError } = await supabase
-    .from("profiles")
+    .from("logs")
     .update({
-      username: username,
-      fullname: fullname,
-      streetaddress: streetaddress,
-      city: city,
-      country: country,
-      postcode: postcode,
-      role: role,
-      phone: phone,
-      NF: NF,
+      userId: userId,
+      aircraft: aircraft,
+      date: date,
+      PIC: PIC,
+      peopleonboard: peopleonboard,
+      departure: departure,
+      arrival: arrival,
+      offblock: offblock,
+      takeoff: takeoff,
+      landing: landing,
+      onblock: onblock,
+      landings: landings,
+      flightrules: flightrules,
+      night: night,
+      ir: ir,
+      fuel: fuel,
+      flight_type: flight_type,
+      details: details,
+      billing_details: billing_details,
     }).match({ id });
 
   if (profileError) {
