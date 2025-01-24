@@ -5,6 +5,8 @@ import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { use } from "react";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const getLocaleFromHeaders = async () => {
   const referer = (await headers()).get("referer");
@@ -410,16 +412,6 @@ export const saveProfileUpdate = async (formData: FormData) => {
     throw new Error("Failed to update user data");
   }
 
-  // Fetch the user's profile id
-  const { data: profileData, error: profileFetchError } = await supabase
-    .from("profiles")
-    .select("id")
-    .eq("id", user?.id);
-
-  if (!profileData || profileData.length === 0) {
-    throw new Error("Profile data not found");
-  }
-  const id = profileData[0].id;
 
   // Update the rest of the profile data in the profiles table in the public schema
   const { data: FormData, error: profileError } = await supabase
@@ -434,11 +426,15 @@ export const saveProfileUpdate = async (formData: FormData) => {
       role: role,
       phone: phone,
       NF: NF,
-    }).match({ id });
+    });
 
   if (profileError) {
     console.error("Error updating profile data:", profileError);
     throw new Error("Failed to update profile data");
+    toast.error("Failed to update profile");
+
+  }else {
+    toast.success("Profile updated successfully");
   }
 
   encodedRedirect(

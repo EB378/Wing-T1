@@ -19,3 +19,7 @@ npm i date-fns
 npm i @ducanh2912/next-pwa && npm i -D webpack
 npm i @tanstack/react-query
 npm i @tanstack/react-query-devtools
+
+npm install react-toastify
+
+npm install --save-dev @types/react-toastify

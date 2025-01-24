@@ -96,7 +96,7 @@ const Navbar = ({
             className="block text-lg font-bold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r from-blue-400 to-white"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            {t("aircraftOptions")}
+            {t("recource-selction")}
           </Link>
           <Link
             href={`/${currentLocale}/#testimonials`}

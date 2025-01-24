@@ -37,12 +37,14 @@
     "prettier-plugin-tailwindcss": "^0.0.0-insiders.d539a72",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-icons": "^5.4.0"
+    "react-icons": "^5.4.0",
+    "react-toastify": "^11.0.3"
   },
   "devDependencies": {
     "@types/node": "22.10.2",
     "@types/react": "^19.0.2",
     "@types/react-dom": "19.0.2",
+    "@types/react-toastify": "^4.0.2",
     "postcss": "8.4.49",
     "prettier": "3.4.2",
     "tailwind-merge": "^2.5.2",
