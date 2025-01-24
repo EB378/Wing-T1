@@ -358,17 +358,6 @@ export const getProfile = async () => {
   const role = profiles?.[0]?.role;
   const NF = profiles?.[0]?.NF ?? false;
 
-  // Fetch the rest of the profile data from the profiles table in the public schema
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("fullname, username, streetaddress, city, country, postcode, role, NF")
-
-  if (profileError) {
-    console.error("Error fetching profile data:", profileError);
-    throw new Error("Failed to fetch profile data");
-  }
-  console.log("NF", NF);
-
   return {
     id: id,
     email: email,
@@ -449,4 +438,86 @@ export const saveProfileUpdate = async (formData: FormData) => {
     `/${locale}/members`,
     "Profile updated successfully",
   );
+};
+
+export const getLogs = async () => {
+  const supabase = await createClient();
+
+
+  const { data: logs, error } = await supabase
+  .from("logs")
+  .select("userId, aircraft, date, PIC, peopleonboard, departure, arrival, offblock, takeoff, landing, onblock, landings, flightrules, night, ir, fuel, flight_type, details, billing_details")
+
+  if (error) {
+    console.error("Error fetching logs:", error);
+    throw new Error("Failed to fetch logs");
+    }
+
+
+  const userId = logs?.[0]?.userId; 
+  const aircraft = logs?.[0]?.aircraft;
+  const date = logs?.[0]?.date;
+  const PIC = logs?.[0]?.PIC;
+  const peopleonboard = logs?.[0]?.peopleonboard;
+  const departure = logs?.[0]?.departure;
+  const arrival = logs?.[0]?.arrival;
+  const offblock = logs?.[0]?.offblock;
+  const takeoff = logs?.[0]?.takeoff;
+  const landing = logs?.[0]?.landing;
+  const onblock = logs?.[0]?.onblock;
+  const landings = logs?.[0]?.landings;
+  const flightrules = logs?.[0]?.flightrules;
+  const night = logs?.[0]?.night;
+  const ir = logs?.[0]?.ir;
+  const fuel = logs?.[0]?.fuel;
+  const flight_type = logs?.[0]?.flight_type;
+  const details = logs?.[0]?.details;
+  const billing_details = logs?.[0]?.billing_details;
+
+  return {
+    userId: userId,
+    aircraft: aircraft,
+    date: date,
+    PIC: PIC,
+    peopleonboard: peopleonboard,
+    departure: departure,
+    arrival: arrival,
+    offblock: offblock,
+    takeoff: takeoff,
+    landing: landing,
+    onblock: onblock,
+    landings: landings,
+    flightrules: flightrules,
+    night: night,
+    ir: ir,
+    fuel: fuel,
+    flight_type: flight_type,
+    details: details,
+    billing_details: billing_details,
+  };
+};
+
+export const getAircaft = async () => {
+  const supabase = await createClient();
+
+
+  const { data: aircrafts, error } = await supabase
+  .from("aircraft")
+  .select("id, aircraft, model")
+
+  if (error) {
+    console.error("Error fetching Aircraft:", error);
+    throw new Error("Failed to fetch Aircraft");
+    }
+
+
+  const id = aircrafts?.[0]?.id; 
+  const aircraft = aircrafts?.[0]?.aircraft;
+  const model = aircrafts?.[0]?.model;
+
+  return {
+    id: id,
+    aircraft: aircraft,
+    model: model,
+  };
 };
