@@ -325,19 +325,7 @@ export const getProfile = async () => {
   const supabase = await createClient();
 
 
-  const { data: profiles, error } = await supabase
-  .from("profiles")
-  .select("id, fullname, username, streetaddress, city, country, postcode, role, NF, phone, email")
-
-
-
-
-  if (error) {
-    console.error("Error fetching profile:", error);
-    throw new Error("Failed to fetch profile");
-    }
-
-  // Fetch email and phone from the user table in the auth schema
+  // Fetch email and userid from the user table in the auth schema
   
   const { data: { user }, error: userError } = await supabase.auth.getUser()
 
@@ -346,17 +334,31 @@ export const getProfile = async () => {
     throw new Error("Failed to fetch user data");
   }
 
+  const { data: profiles, error } = await supabase
+  .from("profiles")
+  .select("*")
+  .eq("id", user?.id);
+
+  if (error) {
+    console.error("Error fetching profile:", error);
+    throw new Error("Failed to fetch profile");
+    }
+
+  const profile = profiles[0];
   const email = user?.email;
-  const phone = profiles?.[0]?.phone; 
-  const id = profiles?.[0]?.id;
-  const fullname = profiles?.[0]?.fullname;
-  const username = profiles?.[0]?.username;
-  const streetaddress = profiles?.[0]?.streetaddress;
-  const city = profiles?.[0]?.city;
-  const country = profiles?.[0]?.country;
-  const postcode = profiles?.[0]?.postcode;
-  const role = profiles?.[0]?.role;
-  const NF = profiles?.[0]?.NF ?? false;
+  const phone = profile.phone;
+  const id = profile.id;
+  const fullname = profile.fullname;
+  const username = profile.username;
+  const streetaddress = profile.streetaddress;
+  const city = profile.city;
+  const country = profile.country;
+  const postcode = profile.postcode;
+  const role = profile.role;
+  const NF = profile.NF ?? false;
+  console.log("id", id);
+  console.log("1d", user?.id);
+  console.log("profile", profiles);
 
   return {
     id: id,
@@ -386,11 +388,15 @@ export const saveProfileUpdate = async (formData: FormData) => {
   const country = formData.get("country") as string;
   const postcode = formData.get("postcode") as string;
   const role = formData.get("role") as string;
-  const NF = formData.get("NF") as string;
+  let NF = formData.get("NF") as string;
+
+  if (!NF) {
+    NF = "false";
+  }
 
   console.log("formData", formData);
 
-
+  const { data: { user }, error: UserIdError } = await supabase.auth.getUser()
 
   // Update email and phone in the user table in the auth schema
   const { data, error: userError } = await supabase.auth.updateUser({
@@ -407,6 +413,7 @@ export const saveProfileUpdate = async (formData: FormData) => {
   const { data: profileData, error: profileFetchError } = await supabase
     .from("profiles")
     .select("id")
+    .eq("id", user?.id);
 
   if (!profileData || profileData.length === 0) {
     throw new Error("Profile data not found");
@@ -440,57 +447,46 @@ export const saveProfileUpdate = async (formData: FormData) => {
   );
 };
 
-export const getLogs = async ({
-  id: id,
-  userId,
-  aircraft,
-  date,
-  PIC,
-  peopleonboard,
-  departure,
-  arrival,
-  offblock,
-  takeoff,
-  landing,
-  onblock,
-  landings,
-  flightrules,
-  night,
-  ir,
-  fuel,
-  flight_type,
-  details,
-  billing_details,
-}: {
-    id: number;
-    userId: string;
-    aircraft: string;
-    date: string;
-    PIC: string;
-    peopleonboard: number;
-    departure: string;
-    arrival: string;
-    offblock: number;
-    takeoff: number;
-    landing: number;
-    onblock: number;
-    landings: number;
-    flightrules: string;
-    night: string;
-    ir: string;
-    fuel: number;
-    flight_type: string;
-    details: string;
-    billing_details: string;
-}) => {
+export const getLogs = async () => {
   const supabase = await createClient();
-  const { data: logs, error } = await supabase.from("logs").select("*").eq("userId", userId);
+
+
+
+
+  let query = supabase.from("logs").select("*");
+
+  // Add filters based on provided parameters
+
+  const { data: logs, error } = await query;
+  console.log("logs", logs);
 
   if (error) {
     console.error("Error fetching logs:", error);
     throw new Error("Failed to fetch logs");
   }
 
+
+  const id = logs?.[0]?.id;
+  const userId = logs?.[0]?.userId;
+  const aircraft = logs?.[0]?.aircraft;
+  const date = logs?.[0]?.date;
+  const PIC = logs?.[0]?.PIC;
+  const peopleonboard = logs?.[0]?.peopleonboard;
+  const departure = logs?.[0]?.departure;
+  const arrival = logs?.[0]?.arrival;
+  const offblock = logs?.[0]?.offblock;
+  const takeoff = logs?.[0]?.takeoff;
+  const landing = logs?.[0]?.landing;
+  const onblock = logs?.[0]?.onblock;
+  const landings = logs?.[0]?.landings;
+  const flightrules = logs?.[0]?.flightrules;
+  const night = logs?.[0]?.night;
+  const ir = logs?.[0]?.ir;
+  const fuel = logs?.[0]?.fuel;
+  const flight_type = logs?.[0]?.flight_type;
+  const details = logs?.[0]?.details;
+  const billing_details = logs?.[0]?.billing_details;
+  
   return logs; // Assuming bookings is an array of booking records
 };
 
@@ -498,25 +494,26 @@ export const saveLogNew = async (formData: FormData) => {
   const supabase = await createClient();
   const locale = await getLocaleFromHeaders();
 
-  const userId: formData.get("userId") as string;
-  const aircraft: formData.get("aircraft") as string;
-  const date: formData.get("date") as string;
-  const PIC: formData.get("PIC") as string;
-  const peopleonboard: formData.get("peopleonboard") as string;
-  const departure: formData.get("departure") as string;
-  const arrival: formData.get("arrival") as string;
-  const offblock: formData.get("offblock") as string;
-  const takeoff: formData.get("takeoff") as string;
-  const landing: formData.get("landing") as string;
-  const onblock: formData.get("onblock") as string;
-  const landings: formData.get("landings") as string;
-  const flightrules: formData.get("flightrules") as string;
-  const night: formData.get("night") as string;
-  const ir: formData.get("ir") as string;
-  const fuel: formData.get("fuel") as string;
-  const flight_type: formData.get("flight_type") as string;
-  const details: formData.get("details") as string;
-  const billing_details: formData.get("billing_details") as string;
+  const userId = formData.get("userId") as string;
+  const aircraft = formData.get("aircraft") as string;
+  const date = formData.get("date") as string;
+  const PIC = formData.get("PIC") as string;
+  const peopleonboard = parseInt(formData.get("peopleonboard") as string);
+  const departure = formData.get("departure") as string;
+  const arrival = formData.get("arrival") as string;
+  const offblock = parseInt(formData.get("offblock") as string);
+  const takeoff = parseInt(formData.get("takeoff") as string);
+  const landing = parseInt(formData.get("landing") as string);
+  const onblock = parseInt(formData.get("onblock") as string);
+  const landings = parseInt(formData.get("landings") as string);
+  const flightrules = formData.get("flightrules") as string;
+  const night = formData.get("night") as string;
+  const ir = formData.get("ir") as string;
+  const fuel = parseInt(formData.get("fuel") as string);
+  const flight_type = formData.get("flight_type") as string;
+  const details = formData.get("details") as string;
+  const billing_details = formData.get("billing_details") as string;
+
 
   console.log("formData", formData);
 

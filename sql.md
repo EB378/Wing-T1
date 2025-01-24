@@ -21,8 +21,10 @@ create table profiles (
 alter table profiles
   enable row level security;
 
-create policy "Public profiles are viewable by everyone." on profiles
-  for select using (true);
+CREATE POLICY "Public profiles are viewable by the User." 
+ON profiles
+  FOR SELECT
+  USING (auth.uid() = Id);
 
 create policy "Users can insert their own profile." on profiles
   for insert with check ((select auth.uid()) = id);

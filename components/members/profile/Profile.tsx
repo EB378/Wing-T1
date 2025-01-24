@@ -16,7 +16,7 @@ interface ProfileFormData {
   country: string;
   postcode: string;
   role: string;
-  NF: string;
+  NF: boolean;
 }
 
 const ProfileMain = () => {
@@ -33,7 +33,7 @@ const ProfileMain = () => {
     country: "",
     postcode: "",
     role: "",
-    NF: "",
+    NF:  true || false,
   });
 
   const {
@@ -53,7 +53,7 @@ const ProfileMain = () => {
         country: data.country || "",
         postcode: data.postcode || "",
         role: data.role || "",
-        NF: data.NF || [],
+        NF: data.NF || true || false,
       }); // Update form data with fetched profile data
     },
     onError: () => {
@@ -66,10 +66,10 @@ const ProfileMain = () => {
   }, [server_getProfile]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -84,10 +84,13 @@ const ProfileMain = () => {
     }
   };
 
+  const checked = formData.NF === true? true : false;
+  console.log(formData);
+  console.log("abcd224njdjkdkssnk");
+  console.log(formData.NF);
   return (
     <div className="bg-background p-4 rounded-lg shadow-md border-solid border-foreground border-2">
       <h2 className="font-bold text-2xl mb-4">{t("profileUpdate")}</h2>
-      <pre>{JSON.stringify(formData.NF, null, 2)}</pre>
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-2">
         <label>{t("email")}</label>
         <input type="text" name="email" className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.email} onChange={handleChange} placeholder="Email" />
@@ -108,7 +111,19 @@ const ProfileMain = () => {
         <label>{t("role")}</label>
         <input type="text" name="role" className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.role} onChange={handleChange} placeholder="Role" />
         <label>{t("qualifications")}</label>
-        <input type="checkbox" name="NF" className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.NF} onChange={handleChange} />
+        <div>
+          <table>
+            <tr>
+              <th>NF</th>
+              <th><input type="checkbox" name="NF" className="bg-foreground text-background p-2 rounded border-solid border-grey" checked={checked} onChange={handleChange} /></th>
+            </tr>
+            <tr>
+              <th>IR</th>
+              <th><input type="checkbox" name="NF" className="bg-foreground text-background p-2 rounded border-solid border-grey" checked={checked} onChange={handleChange} /></th>
+            </tr>
+          </table>
+        </div>
+       
         <button type="submit" className="text-foreground p-2 rounded border-solid border-foreground border-2 w-auto">Save</button>
       </form>
     </div>
