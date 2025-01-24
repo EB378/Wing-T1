@@ -4,6 +4,7 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { use } from "react";
 
 const getLocaleFromHeaders = async () => {
   const referer = (await headers()).get("referer");
@@ -199,7 +200,7 @@ export const getBookings = async ({
 export const hasOverlappingBookings = async ({
   starttime = new Date().toISOString(), // provide default values if undefined
   endtime = new Date().toISOString(),
-  user = 'defaultUser',
+  user = 'defultUser',
   excludeBookingId = null,
 }: {
   starttime?: string;
@@ -442,7 +443,7 @@ export const saveProfileUpdate = async (formData: FormData) => {
 
   encodedRedirect(
     "success",
-    `/${locale}/members`,
+    `/${locale}/members/profile`,
     "Profile updated successfully",
   );
 };
@@ -465,29 +466,51 @@ export const getLogs = async () => {
     throw new Error("Failed to fetch logs");
   }
 
+  const log = logs[0];
+  const id = log.id;
+  const userId = log.userId;
+  const aircraft = log.aircraft;
+  const date = log.date;
+  const PIC = log.PIC;
+  const peopleonboard = log.peopleonboard;
+  const departure = log.departure;
+  const arrival = log.arrival;
+  const offblock = log.offblock;
+  const takeoff = log.takeoff;
+  const landing = log.landing;
+  const onblock = log.onblock;
+  const landings = log.landings;
+  const flightrules = log.flightrules;
+  const night = log.night;
+  const ir = log.ir;
+  const fuel = log.fuel;
+  const flight_type = log.flight_type;
+  const details = log.details;
+  const billing_details = log.billing_details;
 
-  const id = logs?.[0]?.id;
-  const userId = logs?.[0]?.userId;
-  const aircraft = logs?.[0]?.aircraft;
-  const date = logs?.[0]?.date;
-  const PIC = logs?.[0]?.PIC;
-  const peopleonboard = logs?.[0]?.peopleonboard;
-  const departure = logs?.[0]?.departure;
-  const arrival = logs?.[0]?.arrival;
-  const offblock = logs?.[0]?.offblock;
-  const takeoff = logs?.[0]?.takeoff;
-  const landing = logs?.[0]?.landing;
-  const onblock = logs?.[0]?.onblock;
-  const landings = logs?.[0]?.landings;
-  const flightrules = logs?.[0]?.flightrules;
-  const night = logs?.[0]?.night;
-  const ir = logs?.[0]?.ir;
-  const fuel = logs?.[0]?.fuel;
-  const flight_type = logs?.[0]?.flight_type;
-  const details = logs?.[0]?.details;
-  const billing_details = logs?.[0]?.billing_details;
   
-  return logs; // Assuming bookings is an array of booking records
+  return {
+    id: id,
+    userId: userId,
+    aircraft: aircraft,
+    date: date,
+    PIC: PIC,
+    peopleonboard: peopleonboard,
+    departure: departure,
+    arrival: arrival,
+    offblock: offblock,
+    takeoff: takeoff,
+    landing: landing,
+    onblock: onblock,
+    landings: landings,
+    flightrules: flightrules,
+    night: night,
+    ir: ir,
+    fuel: fuel,
+    flight_type: flight_type,
+    details: details,
+    billing_details: billing_details,
+  }; // Assuming bookings is an array of booking records
 };
 
 export const saveLogNew = async (formData: FormData) => {
@@ -517,20 +540,8 @@ export const saveLogNew = async (formData: FormData) => {
 
   console.log("formData", formData);
 
-  // Fetch the user's profile id
-  const { data: profileData, error: profileFetchError } = await supabase
-    .from("logs")
-    .select("id")
-
-  if (!profileData || profileData.length === 0) {
-    throw new Error("Profile data not found");
-  }
-  const id = profileData[0].id;
-
-  // Update the rest of the profile data in the profiles table in the public schema
-  const { data: FormData, error: profileError } = await supabase
-    .from("logs")
-    .update({
+  const { data: logs, error } = await supabase.from("logs").insert([
+    {
       userId: userId,
       aircraft: aircraft,
       date: date,
@@ -550,16 +561,17 @@ export const saveLogNew = async (formData: FormData) => {
       flight_type: flight_type,
       details: details,
       billing_details: billing_details,
-    }).match({ id });
+    },
+  ]);
 
-  if (profileError) {
-    console.error("Error updating profile data:", profileError);
-    throw new Error("Failed to update profile data");
+  if (error) {
+    console.error("Error creating booking:", error);
+    throw new Error("Failed to create booking");
   }
 
   encodedRedirect(
     "success",
-    `/${locale}/members`,
+    `/${locale}/members/logbook`,
     "Profile updated successfully",
   );
 };

@@ -1,54 +1,85 @@
-// components/calendarviews/ResourceBookingCal.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
 import { getLogs } from "@/app/actions";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import { formatISO, parseISO } from "date-fns";
-import { EventClickArg } from "@fullcalendar/core";
 
-interface Event {
-  id: number;
-  userid: string;
-  aircraft: string;
-  date: string;
-  PIC: string;
-  peopleonboard: number;
-  departure: string;
-  arrival: string;
-  offblock: number;
-  takeoff: number;
-  landing: number;
-  onblock: number;
-  landings: number;
-  flightrules: string;
-  night: string;
-  ir: string;
-  fuel: number;
-  flight_type: string;
-  details: string;
-  billing_details: string;
+interface ProfileFormData {
+  userId: String,
+  aircraft: String,
+  date: Date,
+  PIC: String,
+  peopleonboard: Number,
+  departure: String,
+  arrival: String,
+  offblock: Date,
+  takeoff: Date,
+  landing: Date,
+  onblock: Date,
+  landings: Number,
+  flightrules: String,
+  night: String,
+  ir: String,
+  fuel: Number,
+  flight_type: String,
+  details: String,
+  billing_details: String,
 }
 
 const Logbook = () => {
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const t = useTranslations("HomePage");
+  const t = useTranslations("Logbook");
   const [error, setError] = useState("");
-  const [isEditable, setIsEditable] = useState(false);
+  const [formData, setFormData] = useState<ProfileFormData>({
+    userId: "",
+    aircraft: "",
+    date: new Date(),
+    PIC: "",
+    peopleonboard: 0,
+    departure: "",
+    arrival: "",
+    offblock: new Date(),
+    takeoff: new Date(),
+    landing: new Date(),
+    onblock: new Date(),
+    landings: 0,
+    flightrules: "",
+    night: "",
+    ir: "",
+    fuel: 0,
+    flight_type: "",
+    details: "",
+    billing_details: "",
+  });
 
   const {
     data,
-    mutate: server_getLogs,
+    mutate: server_getProfile,
   } = useMutation({
     mutationFn: getLogs,
-    onSuccess: () => {
-      // Success callback
+    onSuccess: (data) => {
+      setFormData({
+
+        userId: data.userId || "",
+        aircraft: data.aircraft || "",
+        date: data.date || new Date(),
+        PIC: data.PIC || "",
+        peopleonboard: data.peopleonboard || 0,
+        departure: data.departure || "",
+        arrival: data.arrival || "",
+        offblock: data.offblock || new Date(),
+        takeoff: data.takeoff || new Date(),
+        landing: data.landing || new Date(),
+        onblock: data.onblock || new Date(),
+        landings: data.landings || 0,
+        flightrules: data.flightrules || "",
+        night: data.night || "",
+        ir: data.ir || "",
+        fuel: data.fuel || 0,
+        flight_type: data.flight_type || "",
+        details: data.details || "",
+        billing_details: data.billing_details || "",
+      }); // Update form data with fetched profile data
     },
     onError: () => {
       // Error handling
@@ -56,52 +87,72 @@ const Logbook = () => {
   });
 
   useEffect(() => {
-    server_getLogs({
-      id: 0,
-      userid: "",
-      aircraft: "",
-      date: "",
-      PIC: "",
-      peopleonboard: 0,
-      departure: "",
-      arrival: "",
-      offblock: 0,
-      takeoff: 0,
-      landing: 0,
-      onblock: 0,
-      landings: 0,
-      flightrules: "",
-      night: "",
-      ir: "",
-      fuel: 0,
-      flight_type: "",
-      details: "",
-      billing_details: "",
-    });
-  }, [server_getLogs]);
+    server_getProfile();
+  }, [server_getProfile]);
 
-  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
+  console.log(formData);
 
-
+  const logs = data ? [data] : [];
   return (
-    <>
-      <div className="m-10 text-black bg-white rounded p-4 h-full">
-        <FullCalendar
-          timeZone="local"
-          nowIndicator={true}
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          initialView="dayGridMonth"
-          headerToolbar={{
-            left: "title",
-            center: "dayGridMonth,timeGridWeek,timeGridDay",
-            right: "prev,next today",
-          }}
-          editable={true}
-          height="auto"
-        />
-      </div>
-    </>
+    <div className="bg-background p-4 rounded-lg shadow-md border-solid border-foreground border-2">
+    <h2 className="font-bold text-2xl mb-4">{t("logbook")}</h2>
+    <table className="max-w-full bg-foreground text-background">
+      <thead>
+        <tr>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("date")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("aircraft")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("PIC")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("peopleonboard")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("departure")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("arrival")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("offblock")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("takeoff")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("landing")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("onblock")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("landings")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("flightrules")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("night")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("ir")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("fuel")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("flight_type")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("details")}</th>
+          <th className="py-2 px-4 border-b-2 border-grey">{t("billing_details")}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {logs.map((log, index) => (
+          <tr key={index}>
+            <td className="py-2 px-4 border-b border-grey">{log.date}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.aircraft}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.PIC}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.peopleonboard}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.departure}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.arrival}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.offblock}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.takeoff}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.landing}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.onblock}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.landings}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.flightrules}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.night}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.ir}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.fuel}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.flight_type}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.details}</td>
+            <td className="py-2 px-4 border-b border-grey">{log.billing_details}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
   );
 };
 

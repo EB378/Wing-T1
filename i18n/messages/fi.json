@@ -58,5 +58,26 @@
     "noticeboard": "Ilmoitustaulu",
     "profile": "Profiili",
     "settings": "Asetukset"
+  },
+  "Logbook": {
+    "logbook": "Lentopäiväkirja",
+    "aircraft": "Lentokone",
+    "date": "Päivämäärä",
+    "PIC": "PIC",
+    "peopleonboard": "PAX",
+    "departure": "Lähtö",
+    "arrival": "Saapuminen",
+    "offblock": "offblock",
+    "takeoff": "Lähtöaika",
+    "landing": "Laskeutumisaika",
+    "onblock": "onblock",
+    "landings": "Laskeutumiset",
+    "flightrules": "Lentosäännöt",
+    "night": "Yö",
+    "ir": "IR",
+    "fuel": "Jäljellä oleva polttoaine",
+    "flight_type": "Lennon tyyppi",
+    "details": "Yksityiskohdat",
+    "billing_details": "Laskutustiedot"
   }
 }

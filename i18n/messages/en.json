@@ -73,5 +73,26 @@
     "role": "Role",
     "qualifications": "Qualifications",
     "save": "Save"
+  },
+  "Logbook": {
+    "logbook": "Logbook",
+    "aircraft": "Aircraft",
+    "date": "Date",
+    "PIC": "PIC",
+    "peopleonboard": "PAX",
+    "departure": "Departure",
+    "arrival": "Arrival",
+    "offblock": "offblock",
+    "takeoff": "Takeoff",
+    "landing": "Landing",
+    "onblock": "onblock",
+    "landings": "Landings",
+    "flightrules": "Flight Rules",
+    "night": "Night",
+    "ir": "IR",
+    "fuel": "Fuel Remaining",
+    "flight_type": "Flight Type",
+    "details": "Details",
+    "billing_details": "Billing details"
   }
 }

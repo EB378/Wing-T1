@@ -284,7 +284,6 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
                   className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-white"
                   value={formatISO(new Date(selectedEvent.endtime), { representation: 'date' }) + 'T' + new Date(selectedEvent.endtime).toLocaleTimeString('it-IT')}
                   onChange={(e) => setSelectedEvent({ ...selectedEvent, endtime: new Date(e.target.value).toISOString() })} />
-                <p>{selectedEvent.user}</p>
 
                 <div className="flex justify-between">
                   <button
@@ -344,7 +343,6 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
                   value={parseISO(selectedEvent.endtime).toISOString().slice(0, -8)}
                   onChange={(e) => setSelectedEvent({ ...selectedEvent, endtime: e.target.value + ":00Z" })}
                   disabled={true} />
-                <p>{selectedEvent.user}</p>
 
                 <div className="flex justify-between">
 
