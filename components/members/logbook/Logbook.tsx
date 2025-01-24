@@ -29,7 +29,7 @@ interface ProfileFormData {
 
 const Logbook = () => {
   const t = useTranslations("Logbook");
-  const [error, setError] = useState("");
+  
   const [formData, setFormData] = useState<ProfileFormData>({
     userId: "",
     aircraft: "",
@@ -51,10 +51,11 @@ const Logbook = () => {
     details: "",
     billing_details: "",
   });
+  
 
   const {
     data,
-    mutate: server_getProfile,
+    mutate: server_getLogs,
   } = useMutation({
     mutationFn: getLogs,
     onSuccess: (data) => {
@@ -87,72 +88,65 @@ const Logbook = () => {
   });
 
   useEffect(() => {
-    server_getProfile();
-  }, [server_getProfile]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+    server_getLogs();
+  }, [server_getLogs]);
 
   console.log(formData);
 
   const logs = data ? [data] : [];
   return (
-    <div className="bg-background p-4 rounded-lg shadow-md border-solid border-foreground border-2">
-    <h2 className="font-bold text-2xl mb-4">{t("logbook")}</h2>
-    <table className="max-w-full bg-foreground text-background">
-      <thead>
-        <tr>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("date")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("aircraft")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("PIC")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("peopleonboard")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("departure")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("arrival")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("offblock")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("takeoff")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("landing")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("onblock")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("landings")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("flightrules")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("night")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("ir")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("fuel")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("flight_type")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("details")}</th>
-          <th className="py-2 px-4 border-b-2 border-grey">{t("billing_details")}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {logs.map((log, index) => (
-          <tr key={index}>
-            <td className="py-2 px-4 border-b border-grey">{log.date}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.aircraft}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.PIC}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.peopleonboard}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.departure}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.arrival}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.offblock}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.takeoff}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.landing}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.onblock}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.landings}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.flightrules}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.night}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.ir}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.fuel}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.flight_type}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.details}</td>
-            <td className="py-2 px-4 border-b border-grey">{log.billing_details}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+    <div className="bg-background p-4 rounded-lg shadow-md">
+      <div className="overflow-x-auto">
+        <table className="max-w-full bg-foreground rounded text-background">
+          <thead>
+            <tr>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("date")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("aircraft")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("PIC")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("peopleonboard")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("departure")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("arrival")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("offblock")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("takeoff")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("landing")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("onblock")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("landings")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("flightrules")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("night")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("ir")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("fuel")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("flight_type")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("details")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("billing_details")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {logs.map((log, index) => (
+              <tr key={index}>
+                <td className="py-2 px-4 border-b border-grey">{log.date}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.aircraft}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.PIC}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.peopleonboard}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.departure}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.arrival}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.offblock}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.takeoff}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.landing}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.onblock}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.landings}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.flightrules}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.night}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.ir}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.fuel}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.flight_type}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.details}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.billing_details}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        </div>
+    </div>
   );
 };
 
