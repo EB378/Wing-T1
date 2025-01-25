@@ -243,14 +243,12 @@ const UpdateLog = () => {
             type="checkbox"
             name="NF"
             className="bg-foreground text-background p-2 rounded border-solid border-grey"
-            checked={formData.ir = true || false}
             onChange={handleChange}
           />
           <input
             type="text"
             name="city"
             className="bg-foreground text-background p-2 rounded border-solid border-grey"
-            value={formData.ir}
             onChange={handleChange}
             placeholder="City"
           />
