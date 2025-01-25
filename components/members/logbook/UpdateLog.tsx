@@ -220,7 +220,7 @@ const UpdateLog = () => {
           placeholder="eg. VFR"
         />
         <label>Night flight time</label>
-        <div classname="inline">
+        <div className="inline">
           <input
             type="checkbox"
             name="NF"
@@ -238,7 +238,7 @@ const UpdateLog = () => {
           />
         </div>
         <label>IR flight time</label>
-        <div classname="inline">
+        <div className="inline">
           <input
             type="checkbox"
             name="NF"
