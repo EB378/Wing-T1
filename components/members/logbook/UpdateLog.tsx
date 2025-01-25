@@ -7,10 +7,10 @@ import { getLogs, saveLogUpdate } from "@/app/actions";
 
 interface ProfileFormData {
   userId: string;
-  aircraft: string;
+  resource: string;
   date: Date;
   PIC: string;
-  peopleonboard: number;
+  pax: number;
   departure: string;
   arrival: string;
   offblock: Date;
@@ -32,10 +32,10 @@ const UpdateLog = () => {
   const [error, setError] = useState("");
   const [formData, setFormData] = useState<ProfileFormData>({
     userId: "",
-    aircraft: "",
+    resource: "",
     date: new Date(),
     PIC: "",
-    peopleonboard: 0,
+    pax: 0,
     departure: "",
     arrival: "",
     offblock: new Date(),
@@ -60,10 +60,10 @@ const UpdateLog = () => {
     onSuccess: (data) => {
       setFormData({
         userId: data.userId || "",
-        aircraft: data.aircraft || "",
+        resource: data.resource || "",
         date: data.date || new Date(),
         PIC: data.PIC || "",
-        peopleonboard: data.peopleonboard || 0,
+        pax: data.pax || 0,
         departure: data.departure || "",
         arrival: data.arrival || "",
         offblock: data.offblock || new Date(),
