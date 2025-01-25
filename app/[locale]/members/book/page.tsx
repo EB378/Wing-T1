@@ -26,8 +26,8 @@ export default async function ResourceBookingCalPage({
   };
 
   return (
-    <div className="flex-1 w-screen flex flex-col gap-12 my-4">
-      <h2>Aircraft Booking System</h2>
+    <div className="w-screen flex flex-col text-sm items-center">
+      <h2 className="text-xl">Booking Calendar</h2>
       {/* Pass only data */}
       <ResourceBookingCal currentUser={userForCal} />
     </div>
