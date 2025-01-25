@@ -4,19 +4,20 @@ import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
 import { getLogs, saveLogUpdate } from "@/app/actions";
+import { formatISO, parseISO } from "date-fns";
 
 interface ProfileFormData {
   userId: string;
   resource: string;
-  date: Date;
+  date: string;
   pic: string;
   pax: number;
   departure: string;
   arrival: string;
-  offblock: Date;
-  takeoff: Date;
-  landing: Date;
-  onblock: Date;
+  offblock: string;
+  takeoff: string;
+  landing: string;
+  onblock: string;
   landings: number;
   flightrules: string;
   night: string;
@@ -27,21 +28,21 @@ interface ProfileFormData {
   billing_details: string;
 }
 
-const UpdateLog = () => {
+const NewLog = () => {
   const t = useTranslations("Profile");
   const [error, setError] = useState("");
   const [formData, setFormData] = useState<ProfileFormData>({
     userId: "",
     resource: "",
-    date: new Date(),
+    date: formatISO(new Date()),
     pic: "",
     pax: 0,
     departure: "",
     arrival: "",
-    offblock: new Date(),
-    takeoff: new Date(),
-    landing: new Date(),
-    onblock: new Date(),
+    offblock: formatISO(new Date()),
+    takeoff: formatISO(new Date()),
+    landing: formatISO(new Date()),
+    onblock: formatISO(new Date()),
     landings: 0,
     flightrules: "",
     night: "",
@@ -57,28 +58,8 @@ const UpdateLog = () => {
     mutate: server_getLogs,
   } = useMutation({
     mutationFn: getLogs,
-    onSuccess: (data) => {
-      setFormData({
-        userId: data.userId || "",
-        resource: data.resource || "",
-        date: data.date || new Date(),
-        pic: data.pic || "",
-        pax: data.pax || 0,
-        departure: data.departure || "",
-        arrival: data.arrival || "",
-        offblock: data.offblock || new Date(),
-        takeoff: data.takeoff || new Date(),
-        landing: data.landing || new Date(),
-        onblock: data.onblock || new Date(),
-        landings: data.landings || 0,
-        flightrules: data.flightrules || "",
-        night: data.night || "",
-        ir: data.ir || "",
-        fuel: data.fuel || 0,
-        flight_type: data.flight_type || "",
-        details: data.details || "",
-        billing_details: data.billing_details || "",
-      });
+    onSuccess: () => {
+      // Handle success
     },
     onError: () => {
       // Error handling
@@ -114,7 +95,7 @@ const UpdateLog = () => {
         <label>Aircraft</label>
         <input
           type="text"
-          name="email"
+          name="resource"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.resource}
           onChange={handleChange}
@@ -122,10 +103,10 @@ const UpdateLog = () => {
         />
         <label>Date</label>
         <input
-          type="text"
+          type="datetime-local"
           name="date"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.date.toISOString().split(', ')[0]}
+          value={formData.date.slice(0, -1)}
           onChange={handleChange}
           placeholder="Date"
         />
@@ -167,37 +148,37 @@ const UpdateLog = () => {
         />
         <label>Off Block</label>
         <input
-          type="text"
+          type="datetime-local"
           name="offblock"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.offblock.toISOString().split(', ')[0]}
+          value={formData.offblock.slice(0, -1)}
           onChange={handleChange}
           placeholder=""
         />
         <label>TakeOff</label>
         <input
-          type="text"
+          type="datetime-local"
           name="takeoff"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.takeoff.toISOString().split(', ')[0]}
+          value={formData.takeoff.slice(0, -1)}
           onChange={handleChange}
           placeholder=""
         />
         <label>Landing</label>
         <input
-          type="text"
+          type="datetime-local"
           name="landing"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.landing.toISOString().split(', ')[0]}
+          value={formData.landing.slice(0, -1)}
           onChange={handleChange}
           placeholder=""
         />
         <label>On Block</label>
         <input
-          type="text"
+          type="datetime-local"
           name="onblock"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.onblock.toISOString().split(', ')[0]}
+          value={formData.onblock.slice(0, -1)}
           onChange={handleChange}
           placeholder=""
         />
@@ -220,7 +201,7 @@ const UpdateLog = () => {
           placeholder="eg. VFR"
         />
         <label>Night flight time</label>
-        <div className="inline">
+        <div className="inline flex gap-2">
           <input
             type="checkbox"
             name="NF"
@@ -238,20 +219,20 @@ const UpdateLog = () => {
           />
         </div>
         <label>IR flight time</label>
-        <div className="inline">
+        <div className="inline flex gap-2">
           <input
             type="checkbox"
-            name="NF"
+            name="IR"
             className="bg-foreground text-background p-2 rounded border-solid border-grey"
             checked={true || false}
             onChange={handleChange}
           />
           <input
             type="text"
-            name="city"
+            name="instrument"
             className="bg-foreground text-background p-2 rounded border-solid border-grey"
             onChange={handleChange}
-            placeholder="City"
+            placeholder=""
           />
         </div>
         <label>Fuel Left(l)</label>
@@ -301,4 +282,4 @@ const UpdateLog = () => {
   );
 };
 
-export default UpdateLog;
+export default NewLog;
