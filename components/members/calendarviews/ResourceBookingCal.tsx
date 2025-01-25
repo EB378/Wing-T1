@@ -27,7 +27,7 @@ interface Event {
 }
 
 interface CalProps {
-  currentUser: { id: string; email?: string };
+  currentUser: { UserId: string; email?: string };
 }
 
 const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
@@ -71,7 +71,7 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
       details: "",
       starttime: formatISO(selection.start),
       endtime: formatISO(selection.end),
-      id: currentUser.id,
+      id: currentUser.UserId,
     });
     setModalOpen(true);
   };
@@ -85,7 +85,7 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
 
   const deletebooking = async () => {
     if (selectedEvent?.cal_id) {
-      await deleteBooking({ id: selectedEvent.cal_id });
+      await deleteBooking({ cal_id: selectedEvent.cal_id });
       closeModal();
       server_getBookings({
         cal_id: 0,
@@ -109,7 +109,7 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
             details: selectedEvent.details,
             starttime: selectedEvent.starttime,
             endtime: selectedEvent.endtime,
-            id: currentUser.id, // Assuming `user.id` is accessible from your component's props or context
+            id: currentUser.UserId, // Assuming `user.id` is accessible from your component's props or context
           });
           closeModal();
         } else {
@@ -155,21 +155,21 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
     end: booking.endtime ? parseISO(booking.endtime).toISOString() : undefined,
     extendedProps: {
       details: booking.details,
-      user: booking.cal_id,
+      id: booking.id,
     },
   }));
 
   const handleEventClick = (info: EventClickArg) => {
     setSelectedEvent({
-      cal_id: Number(info.event.id),
+      cal_id: Number(info.event.extendedProps.cal_id),
       title: info.event.title,
       details: info.event.extendedProps.details,
       starttime: info.event.startStr,
       endtime: info.event.endStr,
       id: info.event.extendedProps.id,
     });
-    console.log(info.event.extendedProps.user);
-    setIsEditable(String(info.event.extendedProps.user) === String(currentUser.id));
+    console.log(info.event.extendedProps.id);
+    setIsEditable(String(info.event.extendedProps.id) === String(currentUser.UserId));
     setModalOpen(true);
   };
 

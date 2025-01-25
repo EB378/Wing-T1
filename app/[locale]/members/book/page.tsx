@@ -21,7 +21,7 @@ export default async function ResourceBookingCalPage({
   }
 
   const userForCal = {
-    id: user.id,
+    UserId: user.id,
     email: user.email || "", // Fallback to empty string if email is undefined
   };
 

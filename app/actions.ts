@@ -219,7 +219,7 @@ export const hasOverlappingBookings = async ({
     .eq("id", id);
 
   if (excludeBookingId) {
-    query = query.not("id", 'eq', excludeBookingId);
+    query = query.not("cal_id", 'eq', excludeBookingId);
   }
 
   const { data, error } = await query;
