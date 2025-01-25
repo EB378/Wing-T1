@@ -161,33 +161,33 @@ export const signOutAction = async () => {
 };
 
 export const getBookings = async ({
-  id,
+  cal_id,
   title,
   details,
   starttime,
   endtime,
   created_at,
-  user,
+  id,
 }: {
-  id: number;
+  cal_id: number;
   title: string;
   details: string;
   starttime: string;
   endtime: string;
   created_at: string;
-  user: string;
+  id: string;
 }) => {
   const supabase = await createClient();
   let query = supabase.from("bookings").select("*");
 
   // Add filters based on provided parameters
-  if (id) query = query.eq("id", id);
+  if (cal_id) query = query.eq("id", cal_id);
   if (title) query = query.ilike("title", `%${title}%`);
   if (details) query = query.ilike("details", `%${details}%`);
   if (starttime) query = query.gte("starttime", starttime);
   if (endtime) query = query.lte("endtime", endtime);
   if (created_at) query = query.eq("created_at", created_at);
-  if (user) query = query.eq("user", user);
+  if (id) query = query.eq("id", id);
 
   const { data: bookings, error } = await query;
 
@@ -202,12 +202,12 @@ export const getBookings = async ({
 export const hasOverlappingBookings = async ({
   starttime = new Date().toISOString(), // provide default values if undefined
   endtime = new Date().toISOString(),
-  user = 'defultUser',
+  id = 'defultUser',
   excludeBookingId = null,
 }: {
   starttime?: string;
   endtime?: string;
-  user?: string;
+  id?: string;
   excludeBookingId?: number | null;
 }) => {
   const supabase = await createClient();
@@ -216,7 +216,7 @@ export const hasOverlappingBookings = async ({
     .select("*")
     .gte("endtime", starttime)
     .lte("starttime", endtime)
-    .eq("user", user);
+    .eq("id", id);
 
   if (excludeBookingId) {
     query = query.not("id", 'eq', excludeBookingId);
@@ -237,16 +237,16 @@ export const createBooking = async ({
   details,
   starttime,
   endtime,
-  user,
+  id,
 }: {
   title: string;
   details: string;
   starttime: string;
   endtime: string;
-  user: string;
+  id: string;
 }) => {
   const supabase = await createClient();
-  const isOverlapping = await hasOverlappingBookings({ starttime, endtime, user });
+  const isOverlapping = await hasOverlappingBookings({ starttime, endtime, id });
 
   if (isOverlapping) {
     throw new Error("Booking overlaps with existing booking");
@@ -257,7 +257,7 @@ export const createBooking = async ({
       details,
       starttime,
       endtime,
-      user,
+      id,
     },
   ]);
 
@@ -270,22 +270,22 @@ export const createBooking = async ({
 };
 
 export const updateBooking = async ({
-  id,
+  cal_id,
   title,
   details,
   starttime,
   endtime,
-  user,
+  id,
 }: {
-  id: number;
+  cal_id: number;
   title?: string;
   details?: string;
   starttime?: string;
   endtime?: string;
-  user?: string;
+  id?: string;
 }) => {
   const supabase = await createClient();
-  const isOverlapping = await hasOverlappingBookings({ starttime, endtime, user, excludeBookingId: id });
+  const isOverlapping = await hasOverlappingBookings({ starttime, endtime, id, excludeBookingId: cal_id });
 
   if (isOverlapping) {
     throw new Error("Booking overlaps with existing booking");
@@ -297,7 +297,7 @@ export const updateBooking = async ({
       details,
       starttime,
       endtime,
-      user,
+      id,
     })
     .match({ id });
 
@@ -309,12 +309,12 @@ export const updateBooking = async ({
   return updatedBooking;
 };
 
-export const deleteBooking = async ({ id }: { id: number }) => {
+export const deleteBooking = async ({ cal_id }: { cal_id: number }) => {
   const supabase = await createClient();
   const { data: deletedBooking, error } = await supabase
     .from("bookings")
     .delete()
-    .match({ id });
+    .match({ cal_id });
 
   if (error) {
     console.error("Error deleting booking:", error);
@@ -356,11 +356,10 @@ export const getProfile = async () => {
   const streetaddress = profile.streetaddress;
   const city = profile.city;
   const country = profile.country;
-  const postcode = profile.postcode;
+  const zip = profile.zip;
   const role = profile.role;
   const NF = profile.NF ?? false;
-  console.log("id", id);
-  console.log("1d", user?.id);
+  const IR = profile.IR ?? false;
   console.log("profile", profiles);
 
   return {
@@ -372,9 +371,10 @@ export const getProfile = async () => {
     streetaddress: streetaddress,
     city: city,
     country: country,
-    postcode: postcode,
+    zip: zip,
     role: role,
     NF: NF,
+    IR: IR,
   };
 };
 
@@ -389,12 +389,16 @@ export const saveProfileUpdate = async (formData: FormData) => {
   const streetaddress = formData.get("streetaddress") as string;
   const city = formData.get("city") as string;
   const country = formData.get("country") as string;
-  const postcode = formData.get("postcode") as string;
+  const zip = formData.get("zip") as string;
   const role = formData.get("role") as string;
   let NF = formData.get("NF") as string;
+  let IR = formData.get("IR") as string;
 
   if (!NF) {
     NF = "false";
+  }
+  if (!IR) {
+    IR = "false";
   }
 
   console.log("formData", formData);
@@ -422,16 +426,17 @@ export const saveProfileUpdate = async (formData: FormData) => {
       streetaddress: streetaddress,
       city: city,
       country: country,
-      postcode: postcode,
+      zip: zip,
       role: role,
       phone: phone,
       NF: NF,
+      IR: IR,
     });
 
   if (profileError) {
     console.error("Error updating profile data:", profileError);
-    throw new Error("Failed to update profile data");
     toast.error("Failed to update profile");
+    throw new Error("Failed to update profile data");
 
   }else {
     toast.success("Profile updated successfully");
@@ -583,7 +588,7 @@ export const saveLogUpdate = async (formData: FormData) => {
   const streetaddress = formData.get("streetaddress") as string;
   const city = formData.get("city") as string;
   const country = formData.get("country") as string;
-  const postcode = formData.get("postcode") as string;
+  const zip = formData.get("zip") as string;
   const role = formData.get("role") as string;
   const NF = formData.get("NF") as string;
 
@@ -621,7 +626,7 @@ export const saveLogUpdate = async (formData: FormData) => {
       streetaddress: streetaddress,
       city: city,
       country: country,
-      postcode: postcode,
+      zip: zip,
       role: role,
       phone: phone,
       NF: NF,
@@ -643,23 +648,27 @@ export const getAircaft = async () => {
   const supabase = await createClient();
 
 
-  const { data: aircrafts, error } = await supabase
-  .from("aircraft")
-  .select("id, aircraft, model")
+  const { data: resources, error } = await supabase
+  .from("resources")
+  .select("*")
 
   if (error) {
     console.error("Error fetching Aircraft:", error);
     throw new Error("Failed to fetch Aircraft");
     }
 
-
-  const id = aircrafts?.[0]?.id; 
-  const aircraft = aircrafts?.[0]?.aircraft;
-  const model = aircrafts?.[0]?.model;
+  const resources1 = resources[0];
+  const resource_id = resources1.id; 
+  const resource = resources1.aircraft;
+  const model = resources1.model;
+  const description = resources1.description;
+  const active = resources1.active ?? false;
 
   return {
-    id: id,
-    aircraft: aircraft,
+    resource_id: resource_id,
+    resource: resource,
     model: model,
+    description: description,
+    active: active,
   };
 };

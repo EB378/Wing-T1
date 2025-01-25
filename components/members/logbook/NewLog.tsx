@@ -178,7 +178,7 @@ const NewLog = () => {
         <label>{t("zip")}</label>
         <input
           type="text"
-          name="postcode"
+          name="zip"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.takeoff.toISOString().split(', ')[0]}
           onChange={handleChange}

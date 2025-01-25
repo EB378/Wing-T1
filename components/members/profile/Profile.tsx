@@ -14,7 +14,7 @@ interface ProfileFormData {
   streetaddress: string;
   city: string;
   country: string;
-  postcode: string;
+  zip: string;
   role: string;
   NF: boolean;
 }
@@ -31,7 +31,7 @@ const ProfileMain = () => {
     streetaddress: "",
     city: "",
     country: "",
-    postcode: "",
+    zip: "",
     role: "",
     NF:  true || false,
   });
@@ -51,7 +51,7 @@ const ProfileMain = () => {
         streetaddress: data.streetaddress || "",
         city: data.city || "",
         country: data.country || "",
-        postcode: data.postcode || "",
+        zip: data.zip || "",
         role: data.role || "",
         NF: data.NF || true || false,
       }); // Update form data with fetched profile data
@@ -107,7 +107,7 @@ const ProfileMain = () => {
         <label>{t("country")}</label>
         <input type="text" name="country" className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.country} onChange={handleChange} placeholder="Country" />
         <label>{t("zip")}</label>
-        <input type="text" name="postcode" className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.postcode} onChange={handleChange} placeholder="Post Code" />
+        <input type="text" name="zip" className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.zip} onChange={handleChange} placeholder="Post Code" />
         <label>{t("role")}</label>
         <input type="text" name="role" className="bg-foreground text-background p-2 rounded border-solid border-grey" value={formData.role} onChange={handleChange} placeholder="Role" />
         <label>{t("qualifications")}</label>

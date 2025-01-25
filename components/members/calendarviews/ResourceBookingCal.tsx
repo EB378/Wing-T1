@@ -18,12 +18,12 @@ import { formatISO, parseISO } from "date-fns";
 import { EventClickArg } from "@fullcalendar/core";
 
 interface Event {
-  id: number;
+  cal_id: number;
   title: string;
   details: string;
   starttime: string;
   endtime: string;
-  user: string;
+  id: string;
 }
 
 interface CalProps {
@@ -52,13 +52,13 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
 
   useEffect(() => {
     server_getBookings({
-      id: 0,
+      cal_id: 0,
       title: "",
       details: "",
       starttime: "",
       endtime: "",
       created_at: "",
-      user: "",
+      id: "",
     });
   }, [server_getBookings]);
 
@@ -66,12 +66,12 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
 
   const handleDateSelect = (selection: { start: Date; end: Date }) => {
     setSelectedEvent({
-      id: 0,
+      cal_id: 0,
       title: "",
       details: "",
       starttime: formatISO(selection.start),
       endtime: formatISO(selection.end),
-      user: currentUser.id,
+      id: currentUser.id,
     });
     setModalOpen(true);
   };
@@ -84,17 +84,17 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
   };
 
   const deletebooking = async () => {
-    if (selectedEvent?.id) {
-      await deleteBooking({ id: selectedEvent.id });
+    if (selectedEvent?.cal_id) {
+      await deleteBooking({ id: selectedEvent.cal_id });
       closeModal();
       server_getBookings({
-        id: 0,
+        cal_id: 0,
         title: "",
         details: "",
         starttime: "",
         endtime: "",
         created_at: "",
-        user: "",
+        id: "",
       });
     }
   };
@@ -102,36 +102,36 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
   const savebooking = async () => {
     if (selectedEvent) {
       try {
-        if (selectedEvent.id === 0) {
+        if (selectedEvent.cal_id === 0) {
           // Handle creation of a new booking
           await createBooking({
             title: selectedEvent.title,
             details: selectedEvent.details,
             starttime: selectedEvent.starttime,
             endtime: selectedEvent.endtime,
-            user: currentUser.id, // Assuming `user.id` is accessible from your component's props or context
+            id: currentUser.id, // Assuming `user.id` is accessible from your component's props or context
           });
           closeModal();
         } else {
           // Handle updating an existing booking
           await updateBooking({
-            id: selectedEvent.id, // Ensure `id` is provided for an update
+            cal_id: selectedEvent.cal_id, // Ensure `id` is provided for an update
             title: selectedEvent.title,
             details: selectedEvent.details,
             starttime: selectedEvent.starttime,
             endtime: selectedEvent.endtime,
-            user: selectedEvent.user,
+            id: selectedEvent.id,
           });
           closeModal();
         }
         server_getBookings({
-          id: 0,
+          cal_id: 0,
           title: "",
           details: "",
           starttime: "",
           endtime: "",
           created_at: "",
-          user: "",
+          id: "",
         }); // Refresh the bookings list
         setError(""); // Reset the error state upon successful operation
       } catch (error) {
@@ -147,7 +147,7 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
   
 
   const events = data?.map((booking: Event) => ({
-    id: String(booking.id),
+    cal_id: String(booking.cal_id),
     title: booking.title,
     start: booking.starttime
       ? parseISO(booking.starttime).toISOString()
@@ -155,18 +155,18 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
     end: booking.endtime ? parseISO(booking.endtime).toISOString() : undefined,
     extendedProps: {
       details: booking.details,
-      user: booking.user,
+      user: booking.cal_id,
     },
   }));
 
   const handleEventClick = (info: EventClickArg) => {
     setSelectedEvent({
-      id: Number(info.event.id),
+      cal_id: Number(info.event.id),
       title: info.event.title,
       details: info.event.extendedProps.details,
       starttime: info.event.startStr,
       endtime: info.event.endStr,
-      user: info.event.extendedProps.user,
+      id: info.event.extendedProps.id,
     });
     console.log(info.event.extendedProps.user);
     setIsEditable(String(info.event.extendedProps.user) === String(currentUser.id));
@@ -197,11 +197,11 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
       {modalOpen && selectedEvent && (
         <div className="fixed inset-0 bg-black text-black bg-opacity-50 flex items-center justify-center z-10">
 {/* ID=0 is new booking */}
-          {selectedEvent.id === 0 && (
+          {selectedEvent.cal_id === 0 && (
             <>
               <div className="bg-white p-6 rounded-lg max-w-md w-full shadow-lg">
                 <h2 className="text-xl font-bold mb-4">
-                  {selectedEvent.id === 0 ? "New Booking" : "Edit Booking"}
+                  {selectedEvent.cal_id === 0 ? "New Booking" : "Edit Booking"}
                 </h2>
                 <input
                   type="text"
@@ -238,7 +238,7 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
                   >
                     Save
                   </button>
-                  {selectedEvent.id !== 0 && (
+                  {selectedEvent.cal_id !== 0 && (
                     <button
                       className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
                       onClick={deletebooking}
@@ -257,11 +257,11 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
             </>
           )}
 {/* isEditable is true if the user is the owner of the booking */}
-          {selectedEvent.id != 0 && isEditable && (
+          {selectedEvent.cal_id != 0 && isEditable && (
             <>
               <div className="bg-white p-6 rounded-lg max-w-md w-full shadow-lg">
                 <h2 className="text-xl font-bold mb-4">
-                  {selectedEvent.id === 0 ? "New Booking" : "Edit Booking"}
+                  {selectedEvent.cal_id === 0 ? "New Booking" : "Edit Booking"}
                 </h2>
                 <input
                   type="text"
@@ -292,7 +292,7 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
                   >
                     Save
                   </button>
-                  {selectedEvent.id !== 0 && (
+                  {selectedEvent.cal_id !== 0 && (
                     <button
                       className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
                       onClick={deletebooking}
@@ -311,11 +311,11 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
             </>
           )}
 {/* !isEditable is true if the user is not the owner of the booking */}
-          {selectedEvent.id != 0 && !isEditable && (
+          {selectedEvent.cal_id != 0 && !isEditable && (
             <>
               <div className="bg-white p-6 rounded-lg max-w-md w-full shadow-lg">
                 <h2 className="text-xl font-bold mb-4">
-                  {selectedEvent.id === 0 ? "New Booking" : "Edit Booking"}
+                  {selectedEvent.cal_id === 0 ? "New Booking" : "Edit Booking"}
                 </h2>
                 <input
                   type="text"
