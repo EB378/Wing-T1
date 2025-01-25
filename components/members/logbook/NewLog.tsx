@@ -6,25 +6,25 @@ import { useMutation } from "@tanstack/react-query";
 import { getLogs, saveLogUpdate } from "@/app/actions";
 
 interface ProfileFormData {
-  userId: string;
-  aircraft: string;
-  date: Date;
-  PIC: string;
-  peopleonboard: number;
-  departure: string;
-  arrival: string;
-  offblock: Date;
-  takeoff: Date;
-  landing: Date;
-  onblock: Date;
-  landings: number;
-  flightrules: string;
-  night: string;
-  ir: string;
-  fuel: number;
-  flight_type: string;
-  details: string;
-  billing_details: string;
+  userId: String,
+  resource: String,
+  date: Date,
+  pic: String,
+  pax: Number,
+  departure: String,
+  arrival: String,
+  offblock: Date,
+  takeoff: Date,
+  landing: Date,
+  onblock: Date,
+  landings: Number,
+  flightrules: String,
+  night: String,
+  ir: String,
+  fuel: Number,
+  flight_type: String,
+  details: String,
+  billing_details: String,
 }
 
 const NewLog = () => {
@@ -32,10 +32,10 @@ const NewLog = () => {
   const [error, setError] = useState("");
   const [formData, setFormData] = useState<ProfileFormData>({
     userId: "",
-    aircraft: "",
+    resource: "",
     date: new Date(),
     PIC: "",
-    peopleonboard: 0,
+    pax: 0,
     departure: "",
     arrival: "",
     offblock: new Date(),
@@ -60,10 +60,10 @@ const NewLog = () => {
     onSuccess: (data) => {
       setFormData({
         userId: data.userId || "",
-        aircraft: data.aircraft || "",
+        resource: data.resource || "",
         date: data.date || new Date(),
         PIC: data.PIC || "",
-        peopleonboard: data.peopleonboard || 0,
+        pax: data.pax || 0,
         departure: data.departure || "",
         arrival: data.arrival || "",
         offblock: data.offblock || new Date(),
