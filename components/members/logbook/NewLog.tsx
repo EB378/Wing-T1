@@ -117,9 +117,9 @@ const NewLog = () => {
           type="text"
           name="email"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.aircraft}
+          value={formData.resource}
           onChange={handleChange}
-          placeholder="aircraft"
+          placeholder="resource"
         />
         <label>{t("phone")}</label>
         <input
@@ -135,7 +135,7 @@ const NewLog = () => {
           type="text"
           name="username"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.PIC}
+          value={formData.pic}
           onChange={handleChange}
           placeholder="Username"
         />
@@ -144,7 +144,7 @@ const NewLog = () => {
           type="text"
           name="fullname"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.peopleonboard}
+          value={formData.pax}
           onChange={handleChange}
           placeholder="Full Name"
         />
