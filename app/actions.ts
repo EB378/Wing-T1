@@ -402,6 +402,8 @@ export const saveProfileUpdate = async (formData: FormData) => {
   }
 
   console.log("formData", formData);
+  console.log("NFF", NF);
+  console.log("IR", IR);
 
   const { data: { user }, error: UserIdError } = await supabase.auth.getUser()
 
@@ -415,6 +417,16 @@ export const saveProfileUpdate = async (formData: FormData) => {
     console.error("Error updating user data:", userError);
     throw new Error("Failed to update user data");
   }
+  // Fetch the user's profile id
+  const { data: profileData, error: profileFetchError } = await supabase
+    .from("profiles")
+    .select("id")
+
+  if (!profileData || profileData.length === 0) {
+    throw new Error("Profile data not found");
+  }
+  const id = profileData[0].id;
+  
 
 
   // Update the rest of the profile data in the profiles table in the public schema
@@ -431,20 +443,16 @@ export const saveProfileUpdate = async (formData: FormData) => {
       phone: phone,
       NF: NF,
       IR: IR,
-    });
+    }).match({ id });
 
   if (profileError) {
     console.error("Error updating profile data:", profileError);
-    toast.error("Failed to update profile");
     throw new Error("Failed to update profile data");
-
-  }else {
-    toast.success("Profile updated successfully");
   }
 
   encodedRedirect(
     "success",
-    `/${locale}/members/profile`,
+    `/${locale}/members/profile#updated`,
     "Profile updated successfully",
   );
 };
@@ -460,7 +468,7 @@ export const getLogs = async () => {
   // Add filters based on provided parameters
 
   const { data: logs, error } = await query;
-  console.log("logs", logs);
+  console.log("resources", logs);
 
   if (error) {
     console.error("Error fetching logs:", error);
@@ -470,10 +478,10 @@ export const getLogs = async () => {
   const log = logs[0];
   const id = log.id;
   const userId = log.userId;
-  const aircraft = log.aircraft;
+  const resource = log.resource;
   const date = log.date;
-  const PIC = log.PIC;
-  const peopleonboard = log.peopleonboard;
+  const pic = log.pic;
+  const pax = log.pax;
   const departure = log.departure;
   const arrival = log.arrival;
   const offblock = log.offblock;
@@ -493,10 +501,10 @@ export const getLogs = async () => {
   return {
     id: id,
     userId: userId,
-    aircraft: aircraft,
+    resource: resource,
     date: date,
-    PIC: PIC,
-    peopleonboard: peopleonboard,
+    pic: pic,
+    pax: pax,
     departure: departure,
     arrival: arrival,
     offblock: offblock,

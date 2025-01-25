@@ -17,6 +17,7 @@ interface ProfileFormData {
   zip: string;
   role: string;
   NF: boolean;
+  IR: boolean;
 }
 
 const ProfileMain = () => {
@@ -34,6 +35,7 @@ const ProfileMain = () => {
     zip: "",
     role: "",
     NF:  true || false,
+    IR:  true || false,
   });
 
   const {
@@ -54,6 +56,7 @@ const ProfileMain = () => {
         zip: data.zip || "",
         role: data.role || "",
         NF: data.NF || true || false,
+        IR: data.IR || true || false,
       }); // Update form data with fetched profile data
     },
     onError: () => {
@@ -84,10 +87,12 @@ const ProfileMain = () => {
     }
   };
 
-  const checked = formData.NF === true? true : false;
+  const checkedNF = formData.NF === true? true : false;
+  const checkedIR = formData.IR === true? true : false;
   console.log(formData);
   console.log("abcd224njdjkdkssnk");
   console.log(formData.NF);
+  console.log(formData.IR);
   return (
     <div className="bg-background p-4 rounded-lg shadow-md border-solid border-foreground border-2">
       <h2 className="font-bold text-2xl mb-4">{t("profileUpdate")}</h2>
@@ -113,14 +118,16 @@ const ProfileMain = () => {
         <label>{t("qualifications")}</label>
         <div>
           <table>
-            <tr>
-              <th>NF</th>
-              <th><input type="checkbox" name="NF" className="bg-foreground text-background p-2 rounded border-solid border-grey" checked={checked} onChange={handleChange} /></th>
-            </tr>
-            <tr>
-              <th>IR</th>
-              <th><input type="checkbox" name="NF" className="bg-foreground text-background p-2 rounded border-solid border-grey" checked={checked} onChange={handleChange} /></th>
-            </tr>
+            <thead>
+              <tr>
+                <th>NF</th>
+                <th><input type="checkbox" name="NF" className="bg-foreground text-background p-2 rounded border-solid border-grey" checked={checkedNF} onChange={handleChange} /></th>
+              </tr>
+              <tr>
+                <th>IR</th>
+                <th><input type="checkbox" name="IR" className="bg-foreground text-background p-2 rounded border-solid border-grey" checked={checkedIR} onChange={handleChange} /></th>
+              </tr>
+            </thead>
           </table>
         </div>
        

@@ -76,7 +76,7 @@
   },
   "Logbook": {
     "logbook": "Logbook",
-    "aircraft": "Aircraft",
+    "resource": "Aircraft",
     "date": "Date",
     "PIC": "PIC",
     "peopleonboard": "PAX",

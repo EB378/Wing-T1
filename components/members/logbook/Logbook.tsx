@@ -7,10 +7,10 @@ import { getLogs } from "@/app/actions";
 
 interface ProfileFormData {
   userId: String,
-  aircraft: String,
+  resource: String,
   date: Date,
-  PIC: String,
-  peopleonboard: Number,
+  pic: String,
+  pax: Number,
   departure: String,
   arrival: String,
   offblock: Date,
@@ -32,10 +32,10 @@ const Logbook = () => {
   
   const [formData, setFormData] = useState<ProfileFormData>({
     userId: "",
-    aircraft: "",
+    resource: "",
     date: new Date(),
-    PIC: "",
-    peopleonboard: 0,
+    pic: "",
+    pax: 0,
     departure: "",
     arrival: "",
     offblock: new Date(),
@@ -62,10 +62,10 @@ const Logbook = () => {
       setFormData({
 
         userId: data.userId || "",
-        aircraft: data.aircraft || "",
+        resource: data.resource || "",
         date: data.date || new Date(),
-        PIC: data.PIC || "",
-        peopleonboard: data.peopleonboard || 0,
+        pic: data.pic || "",
+        pax: data.pax || 0,
         departure: data.departure || "",
         arrival: data.arrival || "",
         offblock: data.offblock || new Date(),
@@ -101,7 +101,7 @@ const Logbook = () => {
           <thead>
             <tr>
               <th className="py-2 px-4 border-b-2 border-grey">{t("date")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("aircraft")}</th>
+              <th className="py-2 px-4 border-b-2 border-grey">{t("resource")}</th>
               <th className="py-2 px-4 border-b-2 border-grey">{t("PIC")}</th>
               <th className="py-2 px-4 border-b-2 border-grey">{t("peopleonboard")}</th>
               <th className="py-2 px-4 border-b-2 border-grey">{t("departure")}</th>
@@ -124,9 +124,9 @@ const Logbook = () => {
             {logs.map((log, index) => (
               <tr key={index}>
                 <td className="py-2 px-4 border-b border-grey">{log.date}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.aircraft}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.PIC}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.peopleonboard}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.resource}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.pic}</td>
+                <td className="py-2 px-4 border-b border-grey">{log.pax}</td>
                 <td className="py-2 px-4 border-b border-grey">{log.departure}</td>
                 <td className="py-2 px-4 border-b border-grey">{log.arrival}</td>
                 <td className="py-2 px-4 border-b border-grey">{log.offblock}</td>
