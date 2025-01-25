@@ -9,7 +9,7 @@ interface ProfileFormData {
   userId: string;
   resource: string;
   date: Date;
-  PIC: string;
+  pic: string;
   pax: number;
   departure: string;
   arrival: string;
@@ -34,7 +34,7 @@ const UpdateLog = () => {
     userId: "",
     resource: "",
     date: new Date(),
-    PIC: "",
+    pic: "",
     pax: 0,
     departure: "",
     arrival: "",
@@ -62,7 +62,7 @@ const UpdateLog = () => {
         userId: data.userId || "",
         resource: data.resource || "",
         date: data.date || new Date(),
-        PIC: data.PIC || "",
+        pic: data.pic || "",
         pax: data.pax || 0,
         departure: data.departure || "",
         arrival: data.arrival || "",
