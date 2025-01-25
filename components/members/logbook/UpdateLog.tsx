@@ -110,176 +110,186 @@ const UpdateLog = () => {
 
   return (
     <div className="bg-background p-4 rounded-lg shadow-md border-solid border-foreground border-2">
-      <h2 className="font-bold text-2xl mb-4">{t("profileUpdate")}</h2>
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-2">
-        <label>{t("email")}</label>
+        <label>Aircraft</label>
         <input
           type="text"
           name="email"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.aircraft}
+          value={formData.resource}
           onChange={handleChange}
           placeholder="aircraft"
         />
-        <label>{t("phone")}</label>
+        <label>Date</label>
         <input
           type="text"
-          name="phone"
+          name="date"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.date.toISOString().split(', ')[0]}
           onChange={handleChange}
-          placeholder="Phone"
+          placeholder="Date"
         />
-        <label>{t("username")}</label>
+        <label>PIC</label>
         <input
           type="text"
           name="username"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.PIC}
+          value={formData.pic}
           onChange={handleChange}
-          placeholder="Username"
+          placeholder="PIC"
         />
-        <label>{t("fullname")}</label>
+        <label>Full Name</label>
         <input
           type="text"
           name="fullname"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.peopleonboard}
+          value={formData.pax}
           onChange={handleChange}
           placeholder="Full Name"
         />
-        <label>{t("address")}</label>
+        <label>Departure i.e. EFNU</label>
         <input
           type="text"
-          name="streetaddress"
+          name="departure"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.departure}
           onChange={handleChange}
-          placeholder="Street Address"
+          placeholder="eg. EFNU"
         />
-        <label>{t("city")}</label>
+        <label>Arrival i.e. EFTU</label>
         <input
           type="text"
-          name="city"
+          name="arrival"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.arrival}
           onChange={handleChange}
-          placeholder="City"
+          placeholder="eg. EFTU"
         />
-        <label>{t("country")}</label>
+        <label>Off Block</label>
         <input
           type="text"
-          name="country"
+          name="offblock"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.offblock.toISOString().split(', ')[0]}
           onChange={handleChange}
-          placeholder="Country"
+          placeholder=""
         />
-        <label>{t("zip")}</label>
+        <label>TakeOff</label>
         <input
           type="text"
-          name="zip"
+          name="takeoff"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.takeoff.toISOString().split(', ')[0]}
           onChange={handleChange}
-          placeholder="Post Code"
+          placeholder=""
         />
-        <label>{t("role")}</label>
+        <label>Landing</label>
         <input
           type="text"
-          name="role"
+          name="landing"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.landing.toISOString().split(', ')[0]}
           onChange={handleChange}
-          placeholder="Role"
+          placeholder=""
         />
+        <label>On Block</label>
         <input
           type="text"
-          name="role"
+          name="onblock"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.onblock.toISOString().split(', ')[0]}
           onChange={handleChange}
-          placeholder="Role"
+          placeholder=""
         />
-        <label>{t("city")}</label>
+        <label>Landings</label>
         <input
           type="text"
-          name="city"
+          name="landings"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.landings}
           onChange={handleChange}
-          placeholder="City"
+          placeholder=""
         />
-        <label>{t("city")}</label>
+        <label>Flight Rules</label>
         <input
           type="text"
-          name="city"
+          name="flightrules"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.flightrules}
           onChange={handleChange}
-          placeholder="City"
+          placeholder="eg. VFR"
         />
+        <label>Night flight time</label>
+        <div classname="inline">
+          <input
+            type="checkbox"
+            name="NF"
+            className="bg-foreground text-background p-2 rounded border-solid border-grey"
+            checked={formData.night = true || false}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="night"
+            className="bg-foreground text-background p-2 rounded border-solid border-grey"
+            value={formData.night}
+            onChange={handleChange}
+            placeholder=""
+          />
+        </div>
+        <label>IR flight time</label>
+        <div classname="inline">
+          <input
+            type="checkbox"
+            name="NF"
+            className="bg-foreground text-background p-2 rounded border-solid border-grey"
+            checked={formData.ir = true || false}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="city"
+            className="bg-foreground text-background p-2 rounded border-solid border-grey"
+            value={formData.ir}
+            onChange={handleChange}
+            placeholder="City"
+          />
+        </div>
+        <label>Fuel Left(l)</label>
         <input
           type="text"
-          name="city"
-          className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.night}
-          onChange={handleChange}
-          placeholder="City"
-        />
-        <input
-          type="checkbox"
-          name="NF"
-          className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          checked={true || false}
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="city"
-          className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.ir}
-          onChange={handleChange}
-          placeholder="City"
-        />
-        <input
-          type="checkbox"
-          name="NF"
-          className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          checked={true || false}
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="city"
+          name="fuel"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.fuel}
           onChange={handleChange}
-          placeholder="City"
+          placeholder="fuel(l)"
         />
+        <label>flight Type</label>
         <input
           type="text"
-          name="city"
+          name="flight_type"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.flight_type}
           onChange={handleChange}
-          placeholder="City"
+          placeholder="eg. Local"
         />
+        <label>Details</label>
         <input
           type="text"
-          name="city"
+          name="details"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.details}
           onChange={handleChange}
-          placeholder="City"
+          placeholder="Details"
         />
+        <label>Billing Details</label>
         <input
           type="text"
-          name="city"
+          name="billing_details"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.billing_details}
           onChange={handleChange}
-          placeholder="City"
+          placeholder="Billing details"
         />
         <button
           type="submit"
