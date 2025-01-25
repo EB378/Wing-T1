@@ -225,7 +225,7 @@ const UpdateLog = () => {
             type="checkbox"
             name="NF"
             className="bg-foreground text-background p-2 rounded border-solid border-grey"
-            checked={formData.night = true || false}
+            checked={formData.night = "true" || false}
             onChange={handleChange}
           />
           <input
