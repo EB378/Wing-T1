@@ -175,7 +175,31 @@ const ResourceBookingCal: React.FC<CalProps> = ({ currentUser }) => {
 
   return (
     <>
-      <div className="m-10 text-black bg-white rounded p-4 h-full">
+      <div className="sm:hidden block text-black bg-white rounded p-4 h-auto">
+        <FullCalendar
+          timeZone="local"
+          nowIndicator={true}
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          initialView="timeGridDay"
+          headerToolbar={{
+            left: "",
+            center: "title prev,next today",
+            right: "",
+          }}
+          editable={true}
+          selectable={true}
+          scrollTime={new Date().toLocaleTimeString('it-IT')}
+          eventClick={handleEventClick}          
+          select={handleDateSelect}
+          events={events || []}
+          height="auto"
+        />
+      </div>
+
+
+
+
+      <div className="hidden sm:block mx-2 text-black bg-white rounded p-4 h-full">
         <FullCalendar
           timeZone="local"
           nowIndicator={true}
