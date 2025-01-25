@@ -23,7 +23,7 @@ export default async function Layout({
         return redirect(`/${locale}/sign-in`);
       }
     return (
-        <div className="w-screen flex flex-col gap-12 items-start">
+        <div className="w-screen flex flex-col gap-1 items-start">
             <Navbar locale={""}>
                 <HeaderAuth
                     params={{
