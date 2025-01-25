@@ -178,7 +178,7 @@ export const getBookings = async ({
   id: string;
 }) => {
   const supabase = await createClient();
-  let query = supabase.from("bookings").select("*");
+  let query = supabase.from("cal").select("*");
 
   // Add filters based on provided parameters
   if (cal_id) query = query.eq("id", cal_id);
@@ -212,7 +212,7 @@ export const hasOverlappingBookings = async ({
 }) => {
   const supabase = await createClient();
   let query = supabase
-    .from("bookings")
+    .from("cal")
     .select("*")
     .gte("endtime", starttime)
     .lte("starttime", endtime)
@@ -251,7 +251,7 @@ export const createBooking = async ({
   if (isOverlapping) {
     throw new Error("Booking overlaps with existing booking");
   }
-  const { data: booking, error } = await supabase.from("bookings").insert([
+  const { data: booking, error } = await supabase.from("cal").insert([
     {
       title,
       details,
@@ -291,7 +291,7 @@ export const updateBooking = async ({
     throw new Error("Booking overlaps with existing booking");
   }
   const { data: updatedBooking, error } = await supabase
-    .from("bookings")
+    .from("cal")
     .update({
       title,
       details,
@@ -312,7 +312,7 @@ export const updateBooking = async ({
 export const deleteBooking = async ({ cal_id }: { cal_id: number }) => {
   const supabase = await createClient();
   const { data: deletedBooking, error } = await supabase
-    .from("bookings")
+    .from("cal")
     .delete()
     .match({ cal_id });
 
@@ -455,7 +455,7 @@ export const getLogs = async () => {
 
 
 
-  let query = supabase.from("logs").select("*");
+  let query = supabase.from("logbook").select("*");
 
   // Add filters based on provided parameters
 
@@ -541,7 +541,7 @@ export const saveLogNew = async (formData: FormData) => {
 
   console.log("formData", formData);
 
-  const { data: logs, error } = await supabase.from("logs").insert([
+  const { data: logs, error } = await supabase.from("logbook").insert([
     {
       userId: userId,
       aircraft: aircraft,
