@@ -61,7 +61,7 @@
   },
   "Logbook": {
     "logbook": "Lentopäiväkirja",
-    "aircraft": "Lentokone",
+    "resource": "Lentokone",
     "date": "Päivämäärä",
     "PIC": "PIC",
     "peopleonboard": "PAX",
@@ -79,5 +79,18 @@
     "flight_type": "Lennon tyyppi",
     "details": "Yksityiskohdat",
     "billing_details": "Laskutustiedot"
+  },
+  "Profile": {
+    "profileUpdate": "Päivitä profiili",
+    "email": "Sähköposti",
+    "Phone": "Puhelinn",
+    "username": "Käyttäjätunnus",
+    "fullname": "Koko nimi",
+    "address": "Osoite",
+    "city": "Kaupunki",
+    "country": "Maa",
+    "zip": "ZIP",
+    "role": "Rooli",
+    "qualifications": "Pätevyys"
   }
 }
