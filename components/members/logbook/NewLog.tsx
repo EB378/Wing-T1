@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
 import { getLogs, saveLogUpdate } from "@/app/actions";
-import { formatISO, parseISO } from "date-fns";
+import { formatISO, parseISO, addMinutes } from "date-fns";
 
 interface ProfileFormData {
   userId: string;
@@ -31,18 +31,19 @@ interface ProfileFormData {
 const NewLog = () => {
   const t = useTranslations("Profile");
   const [error, setError] = useState("");
+  const now = new Date();
   const [formData, setFormData] = useState<ProfileFormData>({
     userId: "",
     resource: "",
-    date: formatISO(new Date()),
+    date: formatISO(now).slice(0, 10),
     pic: "",
     pax: 0,
     departure: "",
     arrival: "",
-    offblock: formatISO(new Date()),
-    takeoff: formatISO(new Date()),
-    landing: formatISO(new Date()),
-    onblock: formatISO(new Date()),
+    offblock: formatISO(now),
+    takeoff: formatISO(addMinutes(now, 10)).slice(0, 10),
+    landing: formatISO(addMinutes(now, 20)).slice(0, 10),
+    onblock: formatISO(addMinutes(now, 30)).slice(0, 10),
     landings: 0,
     flightrules: "",
     night: "",
@@ -98,17 +99,16 @@ const NewLog = () => {
           name="resource"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.resource}
-          onChange={handleChange}
+          onChange={(e) => setFormData({ ...formData, resource: e.target.value })}
           placeholder="aircraft"
         />
         <label>Date</label>
         <input
-          type="datetime-local"
+          type="date"
           name="date"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.date.slice(0, -1)}
-          onChange={handleChange}
-          placeholder="Date"
+          value={formData.date}
+          onChange={(e) => setFormData({ ...formData, date: e.target.value })}
         />
         <label>PIC</label>
         <input
@@ -148,38 +148,38 @@ const NewLog = () => {
         />
         <label>Off Block</label>
         <input
-          type="datetime-local"
+          type="date"
           name="offblock"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.offblock.slice(0, -1)}
-          onChange={handleChange}
+          value={formatISO(new Date(formData.offblock), { representation: 'date' })}
+          onChange={(e) => setFormData({ ...formData, offblock: new Date(e.target.value).toISOString() })}
           placeholder=""
         />
         <label>TakeOff</label>
         <input
-          type="datetime-local"
+          type="date"
           name="takeoff"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.takeoff.slice(0, -1)}
-          onChange={handleChange}
+          value={formatISO(new Date(formData.takeoff), { representation: 'date' })}
+          onChange={(e) => setFormData({ ...formData, takeoff: new Date(e.target.value).toISOString() })}
           placeholder=""
         />
         <label>Landing</label>
         <input
-          type="datetime-local"
+          type="date-local"
           name="landing"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.landing.slice(0, -1)}
-          onChange={handleChange}
+          value={formatISO(new Date(formData.landing), { representation: 'date' })}
+          onChange={(e) => setFormData({ ...formData, landing: new Date(e.target.value).toISOString() })}
           placeholder=""
         />
         <label>On Block</label>
         <input
-          type="datetime-local"
+          type="date-local"
           name="onblock"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.onblock.slice(0, -1)}
-          onChange={handleChange}
+          value={formatISO(new Date(formData.onblock), { representation: 'date' })}
+          onChange={(e) => setFormData({ ...formData, onblock: new Date(e.target.value).toISOString() })}
           placeholder=""
         />
         <label>Landings</label>
