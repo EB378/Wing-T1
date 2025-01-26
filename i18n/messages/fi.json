@@ -1,8 +1,8 @@
 {
   "HomePage": {
-    "Affordable Aircraft Rentals": "Edulliset lentokonevuokraukset",
+    "Affordable Aircraft Rentals": "Edulliset lentokone-<br/>vuokraukset",
     "Explore the beauty of Southern Finland from the skies": "Koe Etelä-Suomen kauneus taivaalta.",
-    "Book Your Flight": "Varaa Lentosi",
+    "CTA": "Varaa Lentosi",
     "Contact Us": "Ota Yhteyttä",
     "In Southern Finland": "Etelä-Suomessa",
     "Flexible Booking": "Joustavat Varaukset",
@@ -51,7 +51,7 @@
   "NavbarLinks": {
     "contact": "Yhteystiedot",
     "recource-selction": "Lentokonemallit",
-    "bookFlight": "Varaa lento",
+    "bookDiscoveryFlight": "Varaa lento",
     "members": "Jäsenet",
     "bookings": "Varauskirja",
     "logbook": "Lentopäiväkirja",
