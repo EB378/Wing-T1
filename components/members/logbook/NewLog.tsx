@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
-import { getLogs, saveLogUpdate } from "@/app/actions";
+import { getLogs, saveLogNew } from "@/app/actions";
 import { formatISO, parseISO, addMinutes } from "date-fns";
 
 interface ProfileFormData {
@@ -28,12 +28,16 @@ interface ProfileFormData {
   billing_details: string;
 }
 
-const NewLog = () => {
+interface LogProps {
+  currentUser: { UserId: string };
+}
+
+const NewLog: React.FC<LogProps> = ({ currentUser }) => {
   const t = useTranslations("Profile");
   const [error, setError] = useState("");
   const now = new Date();
   const [formData, setFormData] = useState<ProfileFormData>({
-    userId: "",
+    userId: currentUser.UserId,
     resource: "",
     date: formatISO(now).slice(0, 10),
     pic: "",
@@ -86,7 +90,7 @@ const NewLog = () => {
       return;
     }
     try {
-      await saveLogUpdate(new FormData(e.target as HTMLFormElement));
+      await saveLogNew(new FormData(e.target as HTMLFormElement));
       // Handle success (e.g., show a success message or redirect)
     } catch (error) {
       console.error("Error updating profile:", error);
