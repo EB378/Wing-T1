@@ -41,9 +41,9 @@ const NewLog = () => {
     departure: "",
     arrival: "",
     offblock: formatISO(now),
-    takeoff: formatISO(addMinutes(now, 10)).slice(0, 10),
-    landing: formatISO(addMinutes(now, 20)).slice(0, 10),
-    onblock: formatISO(addMinutes(now, 30)).slice(0, 10),
+    takeoff: formatISO(now).slice(0, 10),
+    landing: formatISO(now).slice(0, 10),
+    onblock: formatISO(now).slice(0, 10),
     landings: 0,
     flightrules: "",
     night: "",
@@ -81,6 +81,10 @@ const NewLog = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.takeoff || !formData.offblock || !formData.landing || !formData.onblock) {
+      alert('All fields are required.');
+      return;
+    }
     try {
       await saveLogUpdate(new FormData(e.target as HTMLFormElement));
       // Handle success (e.g., show a success message or redirect)
@@ -113,22 +117,22 @@ const NewLog = () => {
         <label>PIC</label>
         <input
           type="text"
-          name="username"
+          name="pic"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.pic}
           onChange={handleChange}
           placeholder="PIC"
         />
-        <label>Full Name</label>
+        <label>PAX</label>
         <input
           type="text"
-          name="fullname"
+          name="pax"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.pax}
           onChange={handleChange}
-          placeholder="Full Name"
+          placeholder="Pax"
         />
-        <label>Departure i.e. EFNU</label>
+        <label>Departure</label>
         <input
           type="text"
           name="departure"
@@ -137,7 +141,7 @@ const NewLog = () => {
           onChange={handleChange}
           placeholder="eg. EFNU"
         />
-        <label>Arrival i.e. EFTU</label>
+        <label>Arrival</label>
         <input
           type="text"
           name="arrival"
@@ -148,39 +152,39 @@ const NewLog = () => {
         />
         <label>Off Block</label>
         <input
-          type="date"
+          type="datetime-local"
           name="offblock"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formatISO(new Date(formData.offblock), { representation: 'date' })}
-          onChange={(e) => setFormData({ ...formData, offblock: new Date(e.target.value).toISOString() })}
+          value={formData.offblock}
+          onChange={(e) => setFormData({ ...formData, offblock: e.target.value })}
           placeholder=""
         />
         <label>TakeOff</label>
         <input
-          type="date"
+          type="datetime-local"
           name="takeoff"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formatISO(new Date(formData.takeoff), { representation: 'date' })}
-          onChange={(e) => setFormData({ ...formData, takeoff: new Date(e.target.value).toISOString() })}
+          value={formData.takeoff}
+          onChange={(e) => setFormData({ ...formData, takeoff: e.target.value })}
           placeholder=""
         />
         <label>Landing</label>
         <input
-          type="date-local"
+          type="datetime-local"
           name="landing"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formatISO(new Date(formData.landing), { representation: 'date' })}
-          onChange={(e) => setFormData({ ...formData, landing: new Date(e.target.value).toISOString() })}
-          placeholder=""
+          value={formData.landing}
+          onChange={(e) => setFormData({ ...formData, landing: e.target.value })}
+          placeholder={now.toISOString()}
         />
         <label>On Block</label>
         <input
-          type="date-local"
+          type="datetime-local"
           name="onblock"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formatISO(new Date(formData.onblock), { representation: 'date' })}
-          onChange={(e) => setFormData({ ...formData, onblock: new Date(e.target.value).toISOString() })}
-          placeholder=""
+          value={formData.onblock}
+          onChange={(e) => setFormData({ ...formData, onblock: e.target.value })}
+          placeholder={now.toISOString()}
         />
         <label>Landings</label>
         <input
