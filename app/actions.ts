@@ -530,7 +530,7 @@ export const saveLogNew = async (formData: FormData) => {
   const aircraft = formData.get("aircraft") as string;
   const date = formData.get("date") as string;
   const PIC = formData.get("PIC") as string;
-  const peopleonboard = parseInt(formData.get("peopleonboard") as string);
+  const peopleonboard = parseInt(formData.get("pax") as string);
   const departure = formData.get("departure") as string;
   const arrival = formData.get("arrival") as string;
   const offblock = parseInt(formData.get("offblock") as string);
