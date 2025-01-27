@@ -19,9 +19,13 @@ export default async function ProtectedPage({
     return redirect(`/${locale}/sign-in`);
   }
 
+  const userForLog = {
+    UserId: user.id,
+  };
+
   return (
     <div className="flex-1 w-screen flex flex-col gap-12">
-      <LogbookPage />
+      <LogbookPage currentUser={userForLog} />
     </div>
   );
 }
