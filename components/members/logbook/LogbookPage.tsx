@@ -7,7 +7,12 @@ import UpdateLog from "@/components/members/logbook/UpdateLog";
 import ToggleButtons from "@/components/members/logbook/ToggleButtons";
 import { useTranslations } from "next-intl";
 
-const LogbookPage = () => {
+
+interface LogProps {
+  currentUser: { UserId: string };
+}
+
+const LogbookPage: React.FC<LogProps> = ({ currentUser }) => {
   const [activeComponent, setActiveComponent] = useState<string>("logbook");
   const t = useTranslations("Logbook");
 
@@ -16,7 +21,9 @@ const LogbookPage = () => {
       case "newLog":
         return (
           <>
-            <NewLog />
+            <NewLog currentUser={{
+              UserId: ""
+            }} />
             <Logbook />
           </>
         );
