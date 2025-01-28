@@ -3,20 +3,22 @@
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
-import { getLogs, saveLogUpdate } from "@/app/actions";
+import { getLogs, saveLogNew } from "@/app/actions";
+import { formatISO } from "date-fns";
 
 interface ProfileFormData {
-  userId: string;
+  id: string;
+  logid: number;
   resource: string;
-  date: Date;
+  date: string;
   pic: string;
   pax: number;
   departure: string;
   arrival: string;
-  offblock: Date;
-  takeoff: Date;
-  landing: Date;
-  onblock: Date;
+  offblock: string;
+  takeoff: string;
+  landing: string;
+  onblock: string;
   landings: number;
   flightrules: string;
   night: string;
@@ -27,21 +29,27 @@ interface ProfileFormData {
   billing_details: string;
 }
 
-const UpdateLog = () => {
-  const t = useTranslations("Profile");
-  const [error, setError] = useState("");
+interface LogProps {
+  currentUser: { UserId: string };
+  logid: number;
+}
+
+const UpdateLog: React.FC<LogProps> = ({ currentUser, logid }) => {
+  const t = useTranslations("Logbook");
+  const now = new Date();
   const [formData, setFormData] = useState<ProfileFormData>({
-    userId: "",
+    id: currentUser.UserId,
+    logid: logid,
     resource: "",
-    date: new Date(),
+    date: formatISO(now).slice(0, 10),
     pic: "",
     pax: 0,
     departure: "",
     arrival: "",
-    offblock: new Date(),
-    takeoff: new Date(),
-    landing: new Date(),
-    onblock: new Date(),
+    offblock: formatISO(now),
+    takeoff: formatISO(now).slice(0, 10),
+    landing: formatISO(now).slice(0, 10),
+    onblock: formatISO(now).slice(0, 10),
     landings: 0,
     flightrules: "",
     night: "",
@@ -58,27 +66,10 @@ const UpdateLog = () => {
   } = useMutation({
     mutationFn: getLogs,
     onSuccess: (data) => {
-      setFormData({
-        userId: data.userId || "",
-        resource: data.resource || "",
-        date: data.date || new Date(),
-        pic: data.pic || "",
-        pax: data.pax || 0,
-        departure: data.departure || "",
-        arrival: data.arrival || "",
-        offblock: data.offblock || new Date(),
-        takeoff: data.takeoff || new Date(),
-        landing: data.landing || new Date(),
-        onblock: data.onblock || new Date(),
-        landings: data.landings || 0,
-        flightrules: data.flightrules || "",
-        night: data.night || "",
-        ir: data.ir || "",
-        fuel: data.fuel || 0,
-        flight_type: data.flight_type || "",
-        details: data.details || "",
-        billing_details: data.billing_details || "",
-      });
+      const log = data.find(log => log.logid === logid);
+      if (log) {
+        setFormData(log);
+      }
     },
     onError: () => {
       // Error handling
@@ -99,8 +90,17 @@ const UpdateLog = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.takeoff || !formData.offblock || !formData.landing || !formData.onblock) {
+      alert('All fields are required.');
+      return;
+    }
+
+    const form = new FormData(e.target as HTMLFormElement);
+    form.append('id', currentUser.UserId);
+
     try {
-      await saveLogUpdate(new FormData(e.target as HTMLFormElement));
+      await saveLogNew(form);
       // Handle success (e.g., show a success message or redirect)
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -114,40 +114,39 @@ const UpdateLog = () => {
         <label>Aircraft</label>
         <input
           type="text"
-          name="email"
+          name="resource"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.resource}
-          onChange={handleChange}
+          onChange={(e) => setFormData({ ...formData, resource: e.target.value })}
           placeholder="aircraft"
         />
         <label>Date</label>
         <input
-          type="text"
+          type="date"
           name="date"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.date.toISOString().split(', ')[0]}
-          onChange={handleChange}
-          placeholder="Date"
+          value={formData.date}
+          onChange={(e) => setFormData({ ...formData, date: e.target.value })}
         />
         <label>PIC</label>
         <input
           type="text"
-          name="username"
+          name="pic"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.pic}
           onChange={handleChange}
           placeholder="PIC"
         />
-        <label>Full Name</label>
+        <label>PAX</label>
         <input
           type="text"
-          name="fullname"
+          name="pax"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
           value={formData.pax}
           onChange={handleChange}
-          placeholder="Full Name"
+          placeholder="Pax"
         />
-        <label>Departure i.e. EFNU</label>
+        <label>Departure</label>
         <input
           type="text"
           name="departure"
@@ -156,7 +155,7 @@ const UpdateLog = () => {
           onChange={handleChange}
           placeholder="eg. EFNU"
         />
-        <label>Arrival i.e. EFTU</label>
+        <label>Arrival</label>
         <input
           type="text"
           name="arrival"
@@ -167,39 +166,39 @@ const UpdateLog = () => {
         />
         <label>Off Block</label>
         <input
-          type="text"
+          type="datetime-local"
           name="offblock"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.offblock.toISOString().split(', ')[0]}
-          onChange={handleChange}
+          value={formData.offblock}
+          onChange={(e) => setFormData({ ...formData, offblock: e.target.value })}
           placeholder=""
         />
         <label>TakeOff</label>
         <input
-          type="text"
+          type="datetime-local"
           name="takeoff"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.takeoff.toISOString().split(', ')[0]}
-          onChange={handleChange}
+          value={formData.takeoff}
+          onChange={(e) => setFormData({ ...formData, takeoff: e.target.value })}
           placeholder=""
         />
         <label>Landing</label>
         <input
-          type="text"
+          type="datetime-local"
           name="landing"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.landing.toISOString().split(', ')[0]}
-          onChange={handleChange}
-          placeholder=""
+          value={formData.landing}
+          onChange={(e) => setFormData({ ...formData, landing: e.target.value })}
+          placeholder={now.toISOString()}
         />
         <label>On Block</label>
         <input
-          type="text"
+          type="datetime-local"
           name="onblock"
           className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.onblock.toISOString().split(', ')[0]}
-          onChange={handleChange}
-          placeholder=""
+          value={formData.onblock}
+          onChange={(e) => setFormData({ ...formData, onblock: e.target.value })}
+          placeholder={now.toISOString()}
         />
         <label>Landings</label>
         <input
@@ -220,7 +219,7 @@ const UpdateLog = () => {
           placeholder="eg. VFR"
         />
         <label>Night flight time</label>
-        <div className="inline">
+        <div className="inline flex gap-2">
           <input
             type="checkbox"
             name="NF"
@@ -238,21 +237,20 @@ const UpdateLog = () => {
           />
         </div>
         <label>IR flight time</label>
-        <div className="inline">
+        <div className="inline flex gap-2">
           <input
             type="checkbox"
-            name="NF"
+            name="IR"
             className="bg-foreground text-background p-2 rounded border-solid border-grey"
             checked={true || false}
             onChange={handleChange}
           />
           <input
             type="text"
-            name="city"
+            name="instrument"
             className="bg-foreground text-background p-2 rounded border-solid border-grey"
-            value={formData.ir}
             onChange={handleChange}
-            placeholder="City"
+            placeholder=""
           />
         </div>
         <label>Fuel Left(l)</label>
