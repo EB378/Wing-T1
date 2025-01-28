@@ -4,10 +4,10 @@ import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
 import { getLogs, saveLogNew } from "@/app/actions";
-import { formatISO, parseISO, addMinutes } from "date-fns";
+import { formatISO } from "date-fns";
 
 interface ProfileFormData {
-  userId: string;
+  id: string;
   resource: string;
   date: string;
   pic: string;
@@ -34,10 +34,9 @@ interface LogProps {
 
 const NewLog: React.FC<LogProps> = ({ currentUser }) => {
   const t = useTranslations("Profile");
-  const [error, setError] = useState("");
   const now = new Date();
   const [formData, setFormData] = useState<ProfileFormData>({
-    userId: currentUser.UserId,
+    id: currentUser.UserId,
     resource: "",
     date: formatISO(now).slice(0, 10),
     pic: "",
@@ -85,12 +84,17 @@ const NewLog: React.FC<LogProps> = ({ currentUser }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+  
     if (!formData.takeoff || !formData.offblock || !formData.landing || !formData.onblock) {
       alert('All fields are required.');
       return;
     }
+  
+    const form = new FormData(e.target as HTMLFormElement);
+    form.append('id', currentUser.UserId);
+  
     try {
-      await saveLogNew(new FormData(e.target as HTMLFormElement));
+      await saveLogNew(form);
       // Handle success (e.g., show a success message or redirect)
     } catch (error) {
       console.error("Error updating profile:", error);
