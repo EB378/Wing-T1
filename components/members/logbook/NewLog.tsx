@@ -33,7 +33,7 @@ interface LogProps {
 }
 
 const NewLog: React.FC<LogProps> = ({ currentUser }) => {
-  const t = useTranslations("Profile");
+  const t = useTranslations("Logbook");
   const now = new Date();
   const [formData, setFormData] = useState<ProfileFormData>({
     id: currentUser.UserId,
