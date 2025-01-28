@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { use } from "react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { log } from "console";
 
 const getLocaleFromHeaders = async () => {
   const referer = (await headers()).get("referer");
@@ -475,68 +476,27 @@ export const getLogs = async () => {
     throw new Error("Failed to fetch logs");
   }
 
-  const log = logs[0];
-  const id = log.id;
-  const userId = log.userId;
-  const resource = log.resource;
-  const date = log.date;
-  const pic = log.pic;
-  const pax = log.pax;
-  const departure = log.departure;
-  const arrival = log.arrival;
-  const offblock = log.offblock;
-  const takeoff = log.takeoff;
-  const landing = log.landing;
-  const onblock = log.onblock;
-  const landings = log.landings;
-  const flightrules = log.flightrules;
-  const night = log.night;
-  const ir = log.ir;
-  const fuel = log.fuel;
-  const flight_type = log.flight_type;
-  const details = log.details;
-  const billing_details = log.billing_details;
-
   
-  return {
-    id: id,
-    userId: userId,
-    resource: resource,
-    date: date,
-    pic: pic,
-    pax: pax,
-    departure: departure,
-    arrival: arrival,
-    offblock: offblock,
-    takeoff: takeoff,
-    landing: landing,
-    onblock: onblock,
-    landings: landings,
-    flightrules: flightrules,
-    night: night,
-    ir: ir,
-    fuel: fuel,
-    flight_type: flight_type,
-    details: details,
-    billing_details: billing_details,
-  }; // Assuming bookings is an array of booking records
+  return logs; // Assuming bookings is an array of booking records
 };
 
 export const saveLogNew = async (formData: FormData) => {
   const supabase = await createClient();
   const locale = await getLocaleFromHeaders();
 
-  const userId = formData.get("userId") as string;
-  const aircraft = formData.get("aircraft") as string;
+  const logid = formData.get("logid") as string;
+
+  const id = formData.get("id") as string;
+  const resource = formData.get("resource") as string;
   const date = formData.get("date") as string;
-  const PIC = formData.get("PIC") as string;
-  const peopleonboard = parseInt(formData.get("pax") as string);
+  const pic = formData.get("pic") as string;
+  const pax = parseInt(formData.get("pax") as string);
   const departure = formData.get("departure") as string;
   const arrival = formData.get("arrival") as string;
-  const offblock = parseInt(formData.get("offblock") as string);
-  const takeoff = parseInt(formData.get("takeoff") as string);
-  const landing = parseInt(formData.get("landing") as string);
-  const onblock = parseInt(formData.get("onblock") as string);
+  const offblock = formData.get("offblock") as string;
+  const takeoff = formData.get("takeoff") as string;
+  const landing = formData.get("landing") as string;
+  const onblock = formData.get("onblock") as string;
   const landings = parseInt(formData.get("landings") as string);
   const flightrules = formData.get("flightrules") as string;
   const night = formData.get("night") as string;
@@ -548,14 +508,16 @@ export const saveLogNew = async (formData: FormData) => {
 
 
   console.log("formData", formData);
+  console.log("formData", formData);
 
   const { data: logs, error } = await supabase.from("logbook").insert([
     {
-      userId: userId,
-      aircraft: aircraft,
+      id: id,
+      logid: logid,
+      resource: resource,
       date: date,
-      PIC: PIC,
-      peopleonboard: peopleonboard,
+      pic: pic,
+      pax: pax,
       departure: departure,
       arrival: arrival,
       offblock: offblock,
@@ -574,8 +536,8 @@ export const saveLogNew = async (formData: FormData) => {
   ]);
 
   if (error) {
-    console.error("Error creating booking:", error);
-    throw new Error("Failed to create booking");
+    console.error("Error creating Log entry:", error);
+    throw new Error("Failed to create Logbook Entry");
   }
 
   encodedRedirect(
@@ -583,6 +545,7 @@ export const saveLogNew = async (formData: FormData) => {
     `/${locale}/members/logbook`,
     "Profile updated successfully",
   );
+  return logs;
 };
 
 export const saveLogUpdate = async (formData: FormData) => {
