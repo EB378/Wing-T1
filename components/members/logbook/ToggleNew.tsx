@@ -5,7 +5,7 @@ interface ToggleButtonsProps {
   setActiveComponent: (component: string) => void;
 }
 
-const ToggleButtons: React.FC<ToggleButtonsProps> = ({ activeComponent, setActiveComponent }) => {
+const ToggleNew: React.FC<ToggleButtonsProps> = ({ activeComponent, setActiveComponent }) => {
   const defaultComponent = 'default'; // Define your default component
 
   const handleToggle = (component: string) => {
@@ -20,14 +20,8 @@ const ToggleButtons: React.FC<ToggleButtonsProps> = ({ activeComponent, setActiv
       >
         New Log
       </button>
-      <button
-        className={`btn ${activeComponent === "updateLog" ? "btn-active" : ""}`}
-        onClick={() => handleToggle("updateLog")}
-      >
-        Update Log
-      </button>
     </div>
   );
 };
 
-export default ToggleButtons;
+export default ToggleNew;
