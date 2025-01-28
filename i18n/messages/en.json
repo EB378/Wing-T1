@@ -93,6 +93,7 @@
     "fuel": "Fuel Remaining",
     "flight_type": "Flight Type",
     "details": "Details",
+    "options": "Options",
     "billing_details": "Billing details"
   }
 }
