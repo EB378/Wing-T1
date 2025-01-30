@@ -5,7 +5,8 @@ import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
 import { getLogs, saveLogNew } from "@/app/actions";
 import { formatISO } from "date-fns";
-import Select from "@/components/ui/select";
+import RescoucesSelect from "@/components/ui/rescouces-select";
+import PicSelect from "@/components/ui/pic-select";
 
 interface ProfileFormData {
   id: string;
@@ -104,10 +105,10 @@ const NewLog: React.FC<LogProps> = ({ currentUser }) => {
   };
 
   return (
-    <div className="bg-background p-4 rounded-lg shadow-md border-solid border-foreground border-2">
+    <div className="bg-background p-4 mx-4 rounded-lg shadow-md">
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-2">
         <label>Aircraft</label>
-        <Select
+        <RescoucesSelect
           name="resource"
           value={formData.resource || ""}
           onChange={(e) => setFormData({ ...formData, resource: e.target.value })}
@@ -121,13 +122,10 @@ const NewLog: React.FC<LogProps> = ({ currentUser }) => {
           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
         />
         <label>PIC</label>
-        <input
-          type="text"
+        <PicSelect
           name="pic"
-          className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.pic}
-          onChange={handleChange}
-          placeholder="PIC"
+          value={formData.pic || "PIC"}
+          onChange={(e) => setFormData({ ...formData, pic: e.target.value })}
         />
         <label>PAX</label>
         <input
