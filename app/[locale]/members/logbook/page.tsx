@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import React from "react";
 import LogbookPage from "@/components/members/logbook/LogbookPage";
+import Link from "next/link";
 
 export default async function ProtectedPage({
   params,
@@ -25,6 +26,7 @@ export default async function ProtectedPage({
 
   return (
     <div className="flex-1 w-screen flex flex-col gap-12">
+      <Link href={`/${locale}/members/logbook/new`}>New Log</Link>
       <LogbookPage currentUser={userForLog} />
     </div>
   );
