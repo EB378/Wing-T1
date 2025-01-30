@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
 import { getLogs, saveLogNew } from "@/app/actions";
 import { formatISO } from "date-fns";
+import Select from "@/components/ui/select";
 
 interface ProfileFormData {
   id: string;
@@ -33,7 +34,7 @@ interface LogProps {
 }
 
 const NewLog: React.FC<LogProps> = ({ currentUser }) => {
-  const t = useTranslations("Logbook");
+  const t = useTranslations("Profile");
   const now = new Date();
   const [formData, setFormData] = useState<ProfileFormData>({
     id: currentUser.UserId,
@@ -106,13 +107,10 @@ const NewLog: React.FC<LogProps> = ({ currentUser }) => {
     <div className="bg-background p-4 rounded-lg shadow-md border-solid border-foreground border-2">
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-2">
         <label>Aircraft</label>
-        <input
-          type="text"
+        <Select
           name="resource"
-          className="bg-foreground text-background p-2 rounded border-solid border-grey"
-          value={formData.resource}
+          value={formData.resource || ""}
           onChange={(e) => setFormData({ ...formData, resource: e.target.value })}
-          placeholder="aircraft"
         />
         <label>Date</label>
         <input
