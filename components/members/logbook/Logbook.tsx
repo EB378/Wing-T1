@@ -4,79 +4,42 @@ import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
 import { getLogs } from "@/app/actions";
-import UpdateLog from "@/components/members/logbook/UpdateLog";
-import ToggleUpdate from "@/components/members/logbook/ToggleUpdate";
+import Select from "@/components/ui/select";
 
 interface ProfileFormData {
-  id: number;
-  userId: String,
-  resource: String,
-  date: Date,
-  pic: String,
-  pax: Number,
-  departure: String,
-  arrival: String,
-  offblock: Date,
-  takeoff: Date,
-  landing: Date,
-  onblock: Date,
-  landings: Number,
-  flightrules: String,
-  night: String,
-  ir: String,
-  fuel: Number,
-  flight_type: String,
-  details: String,
-  billing_details: String,
+  logid: number;
+  id: string;
+  resource: string;
+  date: Date;
+  pic: string;
+  pax: number;
+  departure: string;
+  arrival: string;
+  offblock: Date;
+  takeoff: Date;
+  landing: Date;
+  onblock: Date;
+  landings: number;
+  flightrules: string;
+  night: string;
+  ir: string;
+  fuel: number;
+  flight_type: string;
+  details: string;
+  billing_details: string;
 }
 
 interface LogProps {
   currentUser: { UserId: string };
-  logid: number;
+  log_id: number;
 }
 
-const Logbook: React.FC<LogProps> = ({ currentUser, logid}) => {
+const Logbook: React.FC<LogProps> = ({ currentUser, log_id }) => {
   const t = useTranslations("Logbook");
   const [activeComponent, setActiveComponent] = useState<string>("logbook");
-  const renderComponent = () => {
-    switch (activeComponent) {
-      case "newLog":
-        return (
-          <>
-            <UpdateLog currentUser={{
-              UserId: currentUser.UserId
-            }} logid={formData.id} />
-          </>
-        );
-      default:
-        return;
-    }
-  };
-  
-  const [formData, setFormData] = useState<ProfileFormData>({
-    id: 0,
-    userId: "",
-    resource: "",
-    date: new Date(),
-    pic: "",
-    pax: 0,
-    departure: "",
-    arrival: "",
-    offblock: new Date(),
-    takeoff: new Date(),
-    landing: new Date(),
-    onblock: new Date(),
-    landings: 0,
-    flightrules: "",
-    night: "",
-    ir: "",
-    fuel: 0,
-    flight_type: "",
-    details: "",
-    billing_details: "",
-  });
-
+  const [editingRow, setEditingRow] = useState<number | null>(null);
   const [logs, setLogs] = useState<ProfileFormData[]>([]);
+  const [editFormData, setEditFormData] = useState<ProfileFormData | null>(null);
 
   const {
     data,
@@ -84,7 +47,6 @@ const Logbook: React.FC<LogProps> = ({ currentUser, logid}) => {
   } = useMutation({
     mutationFn: getLogs,
     onSuccess: (data) => {
-      console.log("Fetched data:", data);
       if (Array.isArray(data)) {
         setLogs(data);
       } else {
@@ -100,67 +62,256 @@ const Logbook: React.FC<LogProps> = ({ currentUser, logid}) => {
     server_getLogs();
   }, [server_getLogs]);
 
-  console.log("formdata", formData);
-  console.log("getlogs", server_getLogs);
-  console.log("Logdata", logs);
+  const handleEditClick = (index: number) => {
+    setEditingRow(index);
+    setEditFormData({ ...logs[index] });
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    if (editFormData) {
+      setEditFormData({ ...editFormData, [e.target.name]: e.target.value });
+    }
+  };
+
+  const handleSave = (index: number) => {
+    const updatedLogs = [...logs];
+    updatedLogs[index] = editFormData!;
+    setLogs(updatedLogs);
+    setEditingRow(null);
+  };
 
   return (
     <div className="bg-background px-4 pb-4 rounded-lg shadow-md">
-      <div className="flex flex-col">
-        {renderComponent()}
-      </div>
       <div className="overflow-x-auto">
         <table className="max-w-full bg-foreground rounded text-background text-sm">
           <thead>
             <tr>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("date")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("resource")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("PIC")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("peopleonboard")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("departure")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("arrival")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("offblock")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("takeoff")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("landing")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("onblock")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("landings")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("flightrules")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("night")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("ir")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("fuel")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("flight_type")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("details")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("billing_details")}</th>
-              <th className="py-2 px-4 border-b-2 border-grey">{t("options")}</th>
+              {[
+                "date",
+                "resource",
+                "PIC",
+                "peopleonboard",
+                "departure",
+                "arrival",
+                "offblock",
+                "takeoff",
+                "landing",
+                "onblock",
+                "landings",
+                "flightrules",
+                "night",
+                "ir",
+                "fuel",
+                "flight_type",
+                "details",
+                "billing_details",
+                "options",
+              ].map((header, i) => (
+                <th key={i} className="py-2 px-4 border-b-2 border-grey">
+                  {t(header)}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
             {logs.map((log, index) => (
               <tr key={index}>
-                <td className="py-2 px-4 border-b border-grey">
-                  <tr className="py-2 px-4 border-b border-grey"><ToggleUpdate id={log.id} activeComponent={activeComponent} setActiveComponent={setActiveComponent} /></tr>
-                  <tr className="py-2 px-4 border-b border-grey">{log.billing_details}</tr>
-                </td>
-                <td className="py-2 px-4 border-b border-grey">{log.date.toString()}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.resource}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.pic}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.pax.toString()}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.departure}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.arrival}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.offblock.toString()}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.takeoff.toString()}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.landing.toString()}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.onblock.toString()}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.landings.toString()}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.flightrules}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.night}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.ir}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.fuel.toString()}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.flight_type}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.details}</td>
-                <td className="py-2 px-4 border-b border-grey">{log.billing_details}</td>
+                {editingRow === index ? (
+                  <>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="date"
+                        name="date"
+                        value={editFormData?.date.toString().slice(0, 10) || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                    <Select
+                        name="resource"
+                        value={editFormData?.resource || ""}
+                        onChange={handleChange}
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="text"
+                        name="pic"
+                        value={editFormData?.pic || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="text"
+                        name="pax"
+                        value={editFormData?.pax || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="text"
+                        name="departure"
+                        value={editFormData?.departure || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="text"
+                        name="arrival"
+                        value={editFormData?.arrival || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="datetime-local"
+                        name="offblock"
+                        value={editFormData?.offblock.toString() || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="datetime-local"
+                        name="takeoff"
+                        value={editFormData?.takeoff.toString() || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="datetime-local"
+                        name="landing"
+                        value={editFormData?.landing.toString() || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="datetime-local"
+                        name="onblock"
+                        value={editFormData?.onblock.toString() || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="text"
+                        name="landings"
+                        value={editFormData?.landings || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="text"
+                        name="flightrules"
+                        value={editFormData?.flightrules || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="text"
+                        name="night"
+                        value={editFormData?.night || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="text"
+                        name="ir"
+                        value={editFormData?.ir || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="text"
+                        name="fuel"
+                        value={editFormData?.fuel || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="text"
+                        name="flight_type"
+                        value={editFormData?.flight_type || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="text"
+                        name="details"
+                        value={editFormData?.details || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <input
+                        type="text"
+                        name="billing_details"
+                        value={editFormData?.billing_details || ""}
+                        onChange={handleChange}
+                        className="w-full bg-white"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <button onClick={() => handleSave(index)} className="bg-green-500 text-white px-2 py-1 rounded">
+                        Save
+                      </button>
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <td className="py-2 px-4 border-b border-grey">{log.date.toString()}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.resource}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.pic}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.pax.toString()}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.departure}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.arrival}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.offblock.toString()}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.takeoff.toString()}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.landing.toString()}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.onblock.toString()}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.landings.toString()}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.flightrules}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.night}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.ir}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.fuel.toString()}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.flight_type}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.details}</td>
+                    <td className="py-2 px-4 border-b border-grey">{log.billing_details}</td>
+                    <td className="py-2 px-4 border-b border-grey">
+                      <button onClick={() => handleEditClick(index)} className="bg-blue-500 text-white px-2 py-1 rounded">
+                        Edit
+                      </button>
+                    </td>
+                  </>
+                )}
               </tr>
-              
             ))}
           </tbody>
         </table>
