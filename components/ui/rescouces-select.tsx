@@ -6,7 +6,7 @@ interface RescoucesOption {
   name: string;
 }
 
-const Select: React.FC<{ name: string; value: string; onChange: (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void; }> = ({ name, value, onChange }) => {
+const RescoucesSelect: React.FC<{ name: string; value: string; onChange: (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void; }> = ({ name, value, onChange }) => {
   const [options, setOptions] = useState<RescoucesOption[]>([]);
   const [customOption, setCustomOption] = useState("");
   const [isCustom, setIsCustom] = useState(false);
@@ -60,4 +60,4 @@ const Select: React.FC<{ name: string; value: string; onChange: (event: React.Ch
   );
 };
 
-export default Select;
+export default RescoucesSelect;
