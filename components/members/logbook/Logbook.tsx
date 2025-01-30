@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
-import { getLogs } from "@/app/actions";
-import Select from "@/components/ui/select";
+import { getLogs, saveLogUpdate } from "@/app/actions";
+import RescoucesSelect from "@/components/ui/rescouces-select";
 
 interface ProfileFormData {
   logid: number;
@@ -36,7 +36,6 @@ interface LogProps {
 
 const Logbook: React.FC<LogProps> = ({ currentUser, log_id }) => {
   const t = useTranslations("Logbook");
-  const [activeComponent, setActiveComponent] = useState<string>("logbook");
   const [editingRow, setEditingRow] = useState<number | null>(null);
   const [logs, setLogs] = useState<ProfileFormData[]>([]);
   const [editFormData, setEditFormData] = useState<ProfileFormData | null>(null);
@@ -73,11 +72,25 @@ const Logbook: React.FC<LogProps> = ({ currentUser, log_id }) => {
     }
   };
 
-  const handleSave = (index: number) => {
+  const handleSave = async (index: number) => {
     const updatedLogs = [...logs];
     updatedLogs[index] = editFormData!;
     setLogs(updatedLogs);
     setEditingRow(null);
+  
+    try {
+      if (editFormData) {
+        const formData = new FormData();
+        Object.entries(editFormData).forEach(([key, value]) => {
+          formData.append(key, value.toString());
+        });
+        await saveLogUpdate(formData);
+      }
+      // Handle success (e.g., show a success message or redirect)
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      // Handle error (e.g., show an error message)
+    }
   };
 
   return (
@@ -128,7 +141,7 @@ const Logbook: React.FC<LogProps> = ({ currentUser, log_id }) => {
                       />
                     </td>
                     <td className="py-2 px-4 border-b border-grey">
-                    <Select
+                    <RescoucesSelect
                         name="resource"
                         value={editFormData?.resource || ""}
                         onChange={handleChange}
