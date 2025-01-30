@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
 import { getLogs, saveLogUpdate } from "@/app/actions";
 import RescoucesSelect from "@/components/ui/rescouces-select";
+import PicSelect from "@/components/ui/pic-select";
 
 interface ProfileFormData {
   logid: number;
@@ -137,10 +138,10 @@ const Logbook: React.FC<LogProps> = ({ currentUser, log_id }) => {
                         name="date"
                         value={editFormData?.date.toString().slice(0, 10) || ""}
                         onChange={handleChange}
-                        className="w-full bg-white"
+                        className="w-full bg-white text-ellipsis"
                       />
                     </td>
-                    <td className="py-2 px-4 border-b border-grey">
+                    <td className="py-2 px-4 border-b border-grey ">
                     <RescoucesSelect
                         name="resource"
                         value={editFormData?.resource || ""}
@@ -148,13 +149,9 @@ const Logbook: React.FC<LogProps> = ({ currentUser, log_id }) => {
                       />
                     </td>
                     <td className="py-2 px-4 border-b border-grey">
-                      <input
-                        type="text"
-                        name="pic"
-                        value={editFormData?.pic || ""}
-                        onChange={handleChange}
-                        className="w-full bg-white"
-                      />
+                      <PicSelect name={""} value={""} onChange={function (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>): void {
+                        throw new Error("Function not implemented.");
+                      } }/>
                     </td>
                     <td className="py-2 px-4 border-b border-grey">
                       <input
@@ -162,7 +159,7 @@ const Logbook: React.FC<LogProps> = ({ currentUser, log_id }) => {
                         name="pax"
                         value={editFormData?.pax || ""}
                         onChange={handleChange}
-                        className="w-full bg-white"
+                        className="w-full bg-white text-ellipsis"
                       />
                     </td>
                     <td className="py-2 px-4 border-b border-grey">
@@ -284,11 +281,11 @@ const Logbook: React.FC<LogProps> = ({ currentUser, log_id }) => {
                     </td>
                     <td className="py-2 px-4 border-b border-grey">
                       <input
-                        type="text"
+                        type="text-box"
                         name="billing_details"
                         value={editFormData?.billing_details || ""}
                         onChange={handleChange}
-                        className="w-full bg-white"
+                        className="w-full bg-white "
                       />
                     </td>
                     <td className="py-2 px-4 border-b border-grey">
