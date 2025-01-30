@@ -548,6 +548,7 @@ export const saveLogUpdate = async (formData: FormData) => {
   const supabase = await createClient();
   const locale = await getLocaleFromHeaders();
 
+  const logid = formData.get("logid") as string;
   const id = formData.get("id") as string;
   const resource = formData.get("resource") as string;
   const date = formData.get("date") as string;
@@ -594,7 +595,7 @@ export const saveLogUpdate = async (formData: FormData) => {
       details: details,
       billing_details: billing_details,
     },
-  ]).match({ id });;
+  ]).match({ logid });;
 
   if (error) {
     console.error("Error creating Log entry:", error);
@@ -603,7 +604,7 @@ export const saveLogUpdate = async (formData: FormData) => {
 
   encodedRedirect(
     "success",
-    `/${locale}/members`,
+    `/${locale}/members/logbook`,
     "Log updated successfully",
   );
 };
