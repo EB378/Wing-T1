@@ -484,8 +484,6 @@ export const saveLogNew = async (formData: FormData) => {
   const supabase = await createClient();
   const locale = await getLocaleFromHeaders();
 
-  const logid = formData.get("logid") as string;
-
   const id = formData.get("id") as string;
   const resource = formData.get("resource") as string;
   const date = formData.get("date") as string;
@@ -508,12 +506,10 @@ export const saveLogNew = async (formData: FormData) => {
 
 
   console.log("formData", formData);
-  console.log("formData", formData);
 
   const { data: logs, error } = await supabase.from("logbook").insert([
     {
       id: id,
-      logid: logid,
       resource: resource,
       date: date,
       pic: pic,
@@ -615,31 +611,23 @@ export const saveLogUpdate = async (formData: FormData) => {
   );
 };
 
-export const getAircaft = async () => {
+export const getResources = async () => {
   const supabase = await createClient();
 
 
-  const { data: resources, error } = await supabase
-  .from("resources")
-  .select("*")
+
+  let query = supabase.from("resources").select("*");
+
+  // Add filters based on provided parameters
+
+  const { data: resources, error } = await query;
+  console.log("resources", resources);
 
   if (error) {
-    console.error("Error fetching Aircraft:", error);
-    throw new Error("Failed to fetch Aircraft");
-    }
+    console.error("Error fetching resources:", error);
+    throw new Error("Failed to fetch resources");
+  }
 
-  const resources1 = resources[0];
-  const resource_id = resources1.id; 
-  const resource = resources1.aircraft;
-  const model = resources1.model;
-  const description = resources1.description;
-  const active = resources1.active ?? false;
-
-  return {
-    resource_id: resource_id,
-    resource: resource,
-    model: model,
-    description: description,
-    active: active,
-  };
+  
+  return resources; // Assuming bookings is an array of booking records
 };
