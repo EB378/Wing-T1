@@ -22,7 +22,6 @@ interface ProfileFormData {
 
 const ProfileMain = () => {
   const t = useTranslations("Profile");
-  const [error, setError] = useState("");
   const [formData, setFormData] = useState<ProfileFormData>({
     id: 0,
     fullname: "",
@@ -34,8 +33,8 @@ const ProfileMain = () => {
     country: "",
     zip: "",
     role: "",
-    NF:  true || false,
-    IR:  true || false,
+    NF:  false,
+    IR:  false,
   });
 
   const {
@@ -55,8 +54,8 @@ const ProfileMain = () => {
         country: data.country || "",
         zip: data.zip || "",
         role: data.role || "",
-        NF: data.NF || true || false,
-        IR: data.IR || true || false,
+        NF: data.NF || false,
+        IR: data.IR || false,
       }); // Update form data with fetched profile data
     },
     onError: () => {
@@ -90,7 +89,6 @@ const ProfileMain = () => {
   const checkedNF = formData.NF === true? true : false;
   const checkedIR = formData.IR === true? true : false;
   console.log(formData);
-  console.log("abcd224njdjkdkssnk");
   console.log(formData.NF);
   console.log(formData.IR);
   return (
@@ -120,12 +118,12 @@ const ProfileMain = () => {
           <table>
             <thead>
               <tr>
-                <th>NF</th>
-                <th><input type="checkbox" name="NF" className="bg-foreground text-background p-2 rounded border-solid border-grey" checked={checkedNF} onChange={handleChange} /></th>
+                <td>NF</td>
+                <td><input type="checkbox" name="NF" className="bg-foreground text-background p-2 rounded border-solid border-grey" checked={checkedNF} onChange={handleChange} /></td>
               </tr>
               <tr>
-                <th>IR</th>
-                <th><input type="checkbox" name="IR" className="bg-foreground text-background p-2 rounded border-solid border-grey" checked={checkedIR} onChange={handleChange} /></th>
+                <td>IR</td>
+                <td><input type="checkbox" name="IR" className="bg-foreground text-background p-2 rounded border-solid border-grey" checked={checkedIR} onChange={handleChange} /></td>
               </tr>
             </thead>
           </table>
