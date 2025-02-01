@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import React from "react";
 import ProfileMain from "@/components/members/profile/Profile";
+import ProfileTotals from "@/components/members/profile/Totals";
 
 export default async function ProtectedPage({
   params,
@@ -23,12 +24,10 @@ export default async function ProtectedPage({
   return (
     <div className="w-screen">
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8">
-
         <ProfileMain/>
         <div>
-          {/* Empty second column */}
+          <ProfileTotals/>
         </div>
-
       </div>
     </div>
   );
