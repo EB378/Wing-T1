@@ -629,3 +629,22 @@ export const getResources = async () => {
   
   return resources; // Assuming bookings is an array of booking records
 };
+
+export const getProfileTotals = async () => {
+  const supabase = await createClient()
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+
+
+  let query = supabase.from("profiles").select("*").eq("id", user?.id);
+  const { data: profile_totals, error } = await query;
+  console.log("profile_totals:", profile_totals);
+
+  if (error) {
+    console.error("Error fetching profile_totals:", error);
+    throw new Error("Failed to fetch profile_totals");
+  }
+
+  
+  return profile_totals; 
+ 
+}
