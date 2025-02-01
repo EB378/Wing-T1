@@ -2,11 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { InfoIcon } from "lucide-react";
 import React from "react";
 
-export default async function ProtectedPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function ProtectedPage() {
   const supabase = await createClient();
   const {
     data: { user },
