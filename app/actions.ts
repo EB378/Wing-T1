@@ -4,10 +4,6 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { use } from "react";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { log } from "console";
 
 const getLocaleFromHeaders = async () => {
   const referer = (await headers()).get("referer");
@@ -359,8 +355,8 @@ export const getProfile = async () => {
   const country = profile.country;
   const zip = profile.zip;
   const role = profile.role;
-  const NF = profile.NF ?? false;
-  const IR = profile.IR ?? false;
+  const NF = profile.NF;
+  const IR = profile.IR;
   console.log("profile", profiles);
 
   return {
@@ -402,59 +398,72 @@ export const saveProfileUpdate = async (formData: FormData) => {
     IR = "false";
   }
 
-  console.log("formData", formData);
-  console.log("NFF", NF);
-  console.log("IR", IR);
+  // Fetch the authenticated user
+  const { data: userData, error: userError } = await supabase.auth.getUser();
 
-  const { data: { user }, error: UserIdError } = await supabase.auth.getUser()
+  if (userError || !userData?.user) {
+    console.error("Error fetching user:", userError);
+    throw new Error("User not authenticated");
+  }
 
-  // Update email and phone in the user table in the auth schema
-  const { data, error: userError } = await supabase.auth.updateUser({
+  const userId = userData.user.id;
+
+  console.log("Updating profile for user:", userId);
+  console.log("Form Data:", { email, phone, NF, IR });
+
+  // Update email in the auth.users table
+  const { error: updateUserError } = await supabase.auth.updateUser({
     email: email,
   });
 
-
-  if (userError) {
-    console.error("Error updating user data:", userError);
-    throw new Error("Failed to update user data");
+  if (updateUserError) {
+    console.error("Error updating user email:", updateUserError);
+    throw new Error("Failed to update user email");
   }
-  // Fetch the user's profile id
+
+  // Fetch the user's profile
   const { data: profileData, error: profileFetchError } = await supabase
     .from("profiles")
     .select("id")
+    .eq("id", userId) // Ensure we fetch the correct profile
+    .single();
 
-  if (!profileData || profileData.length === 0) {
+  if (profileFetchError || !profileData) {
+    console.error("Profile fetch error:", profileFetchError);
     throw new Error("Profile data not found");
   }
-  const id = profileData[0].id;
-  
 
+  const profileId = profileData.id;
 
-  // Update the rest of the profile data in the profiles table in the public schema
-  const { data: FormData, error: profileError } = await supabase
+  // Update profile data
+  const { error: profileUpdateError } = await supabase
     .from("profiles")
     .update({
-      username: username,
-      fullname: fullname,
-      streetaddress: streetaddress,
-      city: city,
-      country: country,
-      zip: zip,
-      role: role,
-      phone: phone,
-      NF: NF,
-      IR: IR,
-    }).match({ id });
+      username,
+      fullname,
+      streetaddress,
+      city,
+      country,
+      zip,
+      role,
+      phone,
+      NF, // Stored as boolean
+      IR, // Stored as boolean
+    })
+    .match({ id: profileId });
 
-  if (profileError) {
-    console.error("Error updating profile data:", profileError);
-    throw new Error("Failed to update profile data");
+  if (profileUpdateError) {
+    console.error("Error updating profile:", profileUpdateError);
+    throw new Error("Failed to update profile");
   }
 
+  console.log("Profile updated successfully!");
+
+  // Redirect on success
   encodedRedirect(
     "success",
     `/${locale}/members/profile#updated`,
-    "Profile updated successfully",
+    "Profile updated successfully"
   );
 };
 
